@@ -18,11 +18,15 @@ const LoginScreen = ({navigation}) => {
           <Text category="h1">Agile Calendar</Text>
         </Layout>
         <Layout style={styles.loginForm} level="1">
+        <Layout style={styles.header} level="1">
+          <Text category="h2">Logga in</Text>
+        </Layout>
           <Controller
             control={control}
             render={({onChange, onBlur, value}) => (
               <Input
                 style={styles.formInput}
+                autoCapitalize="none"
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
                 value={value}
@@ -33,12 +37,13 @@ const LoginScreen = ({navigation}) => {
             rules={{required: true}}
             defaultValue=""
           />
-          {errors.email && alert('field is required')}
+          {errors.email && <Text>E-postadress får inte vara tomt.</Text>}
           <Controller
             control={control}
             render={({onChange, onBlur, value}) => (
               <Input
                 style={styles.formInput}
+                autoCapitalize="none"
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
                 value={value}
@@ -49,7 +54,7 @@ const LoginScreen = ({navigation}) => {
             rules={{required: true}}
             defaultValue=""
           />
-          {errors.password && <Text>This is required.</Text>}
+          {errors.password && <Text>Lösenord får inte vara tomt.</Text>}
         </Layout>
         <Button style={styles.loginBtn} onPress={handleSubmit(onSubmit)}>Logga in</Button>
       </Layout>
