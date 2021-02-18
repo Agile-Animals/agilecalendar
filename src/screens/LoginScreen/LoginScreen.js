@@ -23,13 +23,7 @@ const LoginScreen = ({ navigation }) => {
       <Layout style={styles.header} level="1">
         <Text category="h1">Agile Calendar</Text>
       </Layout>
-      <Layout style={{ paddingLeft: 250 }}>
-        <Button
-          style={{ height: 1, width: 1 }}
-          accessoryLeft={SunIcon}
-          onPress={themeContext.toggleTheme}
-        ></Button>
-      </Layout>
+
       <Layout style={styles.loginForm} level="1">
         <Layout style={styles.header} level="1">
           <Text category="h2">Logga in</Text>
@@ -72,6 +66,13 @@ const LoginScreen = ({ navigation }) => {
       <Button style={styles.loginBtn} onPress={handleSubmit(onSubmit)}>
         Logga in
       </Button>
+      <Layout style={{ position: 'absolute', bottom: 0, alignSelf: 'flex-end' }}>
+        <Button
+          style={{ height: 1, width: 1 }}
+          accessoryLeft={SunIcon}
+          onPress={themeContext.toggleTheme}
+        ></Button>
+      </Layout>
     </Layout>
   );
 };
