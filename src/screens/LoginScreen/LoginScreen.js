@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView } from 'react-native';
 // import Button from '../../components/Button'
-import {Text, Layout, Button} from '@ui-kitten/components';
+import {Text, Layout, Button, Input } from '@ui-kitten/components';
 import {useForm, Controller} from 'react-hook-form';
 
 const LoginScreen = ({navigation}) => {
@@ -13,16 +13,16 @@ const LoginScreen = ({navigation}) => {
     }
   };
   return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text>Logga in</Text>
-        </View>
-        <View>
+    <Layout style={styles.container}>
+        <Layout style={styles.header} level="1">
+          <Text category="h1">Agile Calendar</Text>
+        </Layout>
+        <Layout style={styles.loginForm} level="1">
           <Controller
             control={control}
             render={({onChange, onBlur, value}) => (
-              <TextInput
-                style={styles.input}
+              <Input
+                style={styles.formInput}
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
                 value={value}
@@ -37,8 +37,8 @@ const LoginScreen = ({navigation}) => {
           <Controller
             control={control}
             render={({onChange, onBlur, value}) => (
-              <TextInput
-                style={styles.input}
+              <Input
+                style={styles.formInput}
                 onBlur={onBlur}
                 onChangeText={(value) => onChange(value)}
                 value={value}
@@ -50,9 +50,9 @@ const LoginScreen = ({navigation}) => {
             defaultValue=""
           />
           {errors.password && <Text>This is required.</Text>}
-        </View>
-        <Button onPress={handleSubmit(onSubmit)}> Login </Button>
-      </View>
+        </Layout>
+        <Button style={styles.loginBtn} onPress={handleSubmit(onSubmit)}>Logga in</Button>
+      </Layout>
   );
 };
 
@@ -60,20 +60,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
+    alignItems: "center"
   },
   heading: {
     fontSize: 28,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#000',
   },
   text: {
     margin: 2,
   },
   header: {
     alignItems: 'center',
+    padding: 20
   },
+  loginForm: {
+    maxWidth: 300,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  loginBtn: {
+    marginTop: 12,
+    width: 300
+  },
+  formInput: {
+    margin: 4
+  }
 });
 
 export default LoginScreen;

@@ -10,7 +10,7 @@ import * as eva from '@eva-design/eva';
 
 export default function App() {
   return (
-    <ApplicationProvider {...eva} theme={{ ...eva.dark, ...theme }}>
+    <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
     <NavigationContainer>
       <LoginStack />
     </NavigationContainer>
