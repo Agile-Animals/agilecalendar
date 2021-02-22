@@ -47,7 +47,7 @@ const screen = Dimensions.get("screen");
 
 const HomeScreen = () => {
   const renderItemAccessory = (props) => (
-    <Button size="tiny" onPress={handleSubmit(onSubmit)}>
+    <Button size="tiny">
       Remove
     </Button>
   );
@@ -61,17 +61,13 @@ const HomeScreen = () => {
       accessoryRight={renderItemAccessory}
     />
   );
-  const { control, handleSubmit, errors } = useForm();
-  const onSubmit = (item) => {
-    console.log( `${item.title}` );
-  };
 
   return (
     <Layout style={styles.container} level="1">
       <Layout style={styles.header} level="1">
         <Text category="h2">Översikt</Text>
       </Layout>
-      <Button style={{ width: 140 }} onPress={handleSubmit(onSubmit)}>
+      <Button style={{ width: 140 }} >
         Lägg till insats
       </Button>
       <List style={styles.container} data={data} renderItem={renderItem} />
