@@ -1,6 +1,5 @@
 import React from "react";
 import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
-// import Button from '../../components/Button'
 import { Text, Layout, Button, Input, Icon } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
 import { ThemeContext } from "../../../config/ThemeContext";
