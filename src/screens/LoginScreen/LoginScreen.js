@@ -65,7 +65,9 @@ const LoginScreen = ({ navigation }) => {
       <Button style={styles.loginBtn} onPress={handleSubmit(onSubmit)}>
         Logga in
       </Button>
-      <Layout style={{ position: 'absolute', bottom: 0, alignSelf: 'flex-end' }}>
+      <Layout
+        style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }}
+      >
         <Button
           style={{ height: 1, width: 1 }}
           accessoryLeft={SunIcon}
