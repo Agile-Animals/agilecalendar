@@ -2,12 +2,12 @@
 
 import React, { Component } from 'react';
 import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
-import firebase from '../database/firebaseDb';
+import firebase from '../../database/firebaseDb';
 
 class AddUserScreen extends Component {
   constructor() {
     super();
-    this.dbRef = firebase.firestore().collection('users');
+    this.dbRef = firebase.firestore().collection('boende');
     this.state = {
       name: '',
       email: '',

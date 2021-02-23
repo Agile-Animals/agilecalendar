@@ -11,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
   const onSubmit = (data) => {
     if (data.email === "test" && data.password === "test") {
       console.log("Succé!");
-      navigation.navigate("Home");
+      navigation.navigate("UserScreen");
     } else {
       alert("E-mail/Lösenord är felaktigt.");
     }

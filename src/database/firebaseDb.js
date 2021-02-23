@@ -2,13 +2,13 @@ import * as firebase from 'firebase';
 import firestore from 'firebase/firestore'
 
 const firebaseConfig = {
-    apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    authDomain: "reactnativefirebase-00000.firebaseapp.com",
-    databaseURL: "https://reactnativefirebase-00000.firebaseio.com",
-    projectId: "reactnativefirebase-00000",
-    storageBucket: "reactnativefirebase-00000.appspot.com",
-    messagingSenderId: "000000000000000",
-    appId: "1:000000000000000:web:000000000000000"
+    apiKey: "AIzaSyAbAASayEdJK5fb2DcG_VyGtmDLf36zj-M",
+    authDomain: "agilecalendar-86be5.firebaseapp.com",
+    databaseURL: "https://agilecalendar-86be5.firebaseio.com",
+    projectId: "agilecalendar-86be5",
+    storageBucket: "agilecalendar-86be5.appspot.com",
+    messagingSenderId: "685831181387",
+    appId: "1:685831181387:android:cf6438b804b16217a029ce"
 };
 
 firebase.initializeApp(firebaseConfig);
