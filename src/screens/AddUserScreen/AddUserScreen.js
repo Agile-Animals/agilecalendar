@@ -65,7 +65,7 @@ class AddUserScreen extends Component {
           isLoading: false
 
         });
-        this.props.navigation.navigate('UserScreen')
+        this.props.navigation.navigate('HomeScreen')
       })
       .catch((err) => {
         console.error("Error found: ", err);
