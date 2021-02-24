@@ -17,7 +17,7 @@ const LoggedInTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === "Översikt") {
+          if (route.name === "HomeScreen") {
             iconName = focused ? "ios-home" : "ios-home-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "ios-list-box" : "ios-list";
@@ -28,7 +28,7 @@ const LoggedInTabs = () => {
         },
       })}
     >
-      <Tab.Screen name="Översikt" component={HomeScreen} />
+      <Tab.Screen name="HomeScreen" component={HomeScreen} />
     </Tab.Navigator>
   );
 };
@@ -43,7 +43,7 @@ const LoginStack = () => (
       }}
     />
     <Stack.Screen
-      name="Home"
+      name="HomeScreen"
       component={LoggedInTabs}
       options={{
         header: () => null,

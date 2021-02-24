@@ -1,5 +1,5 @@
-import * as React from "react";
-import { StyleSheet, FlatList, View, Dimensions } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Dimensions, ActivityIndicator } from "react-native";
 import {
   Icon,
   Layout,
@@ -9,58 +9,61 @@ import {
   ListItem,
 } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
-import { ScreenOrientation } from 'expo';
-
-const data = [
-  {
-    id: "test 1",
-    kund: "Arne",
-    tid: "Måndag-10:15",
-    title: "Insats 1",
-    typ: "Städa",
-  },
-  {
-    id: "test 2",
-    kund: "Kerstin",
-    tid: "Tisdag-11:15",
-    title: "Insats 2",
-    typ: "Handla",
-  },
-  {
-    id: "test 3",
-    kund: "Bengt",
-    tid: "Fredag-15:15",
-    title: "Insats 3",
-    typ: "Städa",
-  },
-  {
-    id: "test 4",
-    kund: "Ove",
-    tid: "Onsdag-09:15",
-    title: "Insats 4",
-    typ: "Duscha",
-  },
-];
+import firebase from "../../database/firebaseDb";
 
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const renderItemAccessory = (props) => (
     <Button size="tiny">
       Remove
     </Button>
   );
 
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [insatser, setInsatser] = useState([]); // Initial empty array of users
+
+  useEffect(() => {
+    const subscriber = firebase.firestore()
+      .collection('insatser')
+      .onSnapshot(querySnapshot => {
+        const insatser = [];
+  
+        querySnapshot.forEach(documentSnapshot => {
+          insatser.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+  
+        setInsatser(insatser);
+        setLoading(false);
+      });
+
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
   const renderItemIcon = (props, { item }) => <Icon {...props} name="shopping-cart" />;
   const renderItem = ({ item, index }) => (
     <ListItem
-      title={`${item.title}`}
-      description={`${item.kund}`}
+      title={`${item.residentName}`}
+      description={`${item.insatsType}`}
       accessoryLeft={renderItemIcon}
       accessoryRight={renderItemAccessory}
+      onPress={() => {
+        navigation.navigate("UserDetailScreen", {
+          userkey: item.index
+        });
+      }}
     />
   );
+
 
   return (
     <Layout style={styles.container} level="1">
@@ -70,7 +73,7 @@ const HomeScreen = () => {
       <Button style={{ width: 140 }} >
         Lägg till insats
       </Button>
-      <List style={styles.container} data={data} renderItem={renderItem} />
+      <List style={styles.container} data={insatser} renderItem={renderItem} />
     </Layout>
   );
 };
@@ -81,7 +84,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: window.width * 1,
     height: window.width * 1,
-    // alignItems: "center",
   },
   header: {
     alignItems: "center",

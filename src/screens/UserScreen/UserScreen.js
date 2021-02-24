@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
-import { Button } from "@ui-kitten/components";
+import { Button, List, ListItem } from "@ui-kitten/components";
 
 class UserScreen extends Component {
   constructor() {
