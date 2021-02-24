@@ -13,6 +13,9 @@ class AddUserScreen extends Component {
       isLoading: false
     };
   }
+  // time: some sort of dropdown one time for every hour 08:00 - 16:00
+  // insatsType: dropdown menu
+  // residentName, helperName.
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
