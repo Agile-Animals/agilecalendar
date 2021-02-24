@@ -1,13 +1,18 @@
 import React, { Component } from "react";
-import { StyleSheet, ScrollView, ActivityIndicator, View } from "react-native";
-import { ListItem } from "react-native-elements";
+import {
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  View,
+  Text,
+} from "react-native";
 import firebase from "../../database/firebaseDb";
 import { Button } from "@ui-kitten/components";
 
 class UserScreen extends Component {
   constructor() {
     super();
-    this.firestoreRef = firebase.firestore().collection("boende");
+    this.firestoreRef = firebase.firestore().collection("insatser");
     this.state = {
       isLoading: true,
       userArr: [],
@@ -25,13 +30,14 @@ class UserScreen extends Component {
   getCollection = (querySnapshot) => {
     const userArr = [];
     querySnapshot.forEach((res) => {
-      const { name, email, mobile } = res.data();
+      const { residentName, time, helperName, insatsType } = res.data();
       userArr.push({
         key: res.id,
         res,
-        name,
-        email,
-        mobile,
+        residentName,
+        time,
+        helperName,
+        insatsType,
       });
     });
     this.setState({
@@ -49,31 +55,20 @@ class UserScreen extends Component {
       );
     }
     return (
-      <ScrollView style={styles.container}>
-        {this.state.userArr.map((item, i) => {
-          return (
-            <ListItem
-              key={i}
-              chevron
-              bottomDivider
-              title={item.name}
-              subtitle={item.email}
-              onPress={() => {
-                this.props.navigation.navigate("UserDetailScreen", {
-                  userkey: item.key,
-                });
-              }}
-            />
-          );
-        })}
-        <Button
+      <View>
+        <Button style={styles.button}
           onPress={() => {
             this.props.navigation.navigate("AddUserScreen");
           }}
         >
-          Add User
+          Ny Insats
         </Button>
-      </ScrollView>
+        {this.state.userArr.map((item, index) => (
+          <View key={index}>
+            <Text>{item.residentName}</Text>
+          </View>
+        ))}
+      </View>
     );
   }
 }
@@ -91,7 +86,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: 'black',
+    backgroundColor: "black",
+  },
+  button: {
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
   },
 });
 
