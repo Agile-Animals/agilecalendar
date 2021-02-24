@@ -57,7 +57,7 @@ const LoginStack = () => (
       <Stack.Screen 
         name="UserScreen" 
         component={UserScreen} 
-        options={{ title: 'Users List' }}
+        options={{ title: 'Översikt' }}
       />
       <Stack.Screen 
        name="UserDetailScreen" 
