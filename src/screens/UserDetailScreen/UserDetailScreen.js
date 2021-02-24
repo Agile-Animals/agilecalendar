@@ -14,9 +14,10 @@ class UserDetailScreen extends Component {
   constructor() {
     super();
     this.state = {
-      name: "",
-      email: "",
-      mobile: "",
+      residentName: "",
+      time: "",
+      helperName: "",
+      insatsType: "",
       isLoading: true,
     };
   }
@@ -24,16 +25,17 @@ class UserDetailScreen extends Component {
   componentDidMount() {
     const dbRef = firebase
       .firestore()
-      .collection("boende")
+      .collection("insatser")
       .doc(this.props.route.params.userkey);
     dbRef.get().then((res) => {
       if (res.exists) {
         const user = res.data();
         this.setState({
           key: res.id,
-          name: user.name,
-          email: user.email,
-          mobile: user.mobile,
+          residentName: user.residentName,
+          time: user.time,
+          helperName: user.helperName,
+          insatsType: user.insatsType,
           isLoading: false,
         });
       } else {
@@ -54,20 +56,23 @@ class UserDetailScreen extends Component {
     });
     const updateDBRef = firebase
       .firestore()
-      .collection("boende")
+      .collection("insatser")
       .doc(this.state.key);
     updateDBRef
       .set({
-        name: this.state.name,
-        email: this.state.email,
-        mobile: this.state.mobile,
+        residentName: this.state.residentName,
+        time: this.state.time,
+        helperName: this.state.helperName,
+        insatsType: this.state.insatsType,
+
       })
       .then((docRef) => {
         this.setState({
           key: "",
-          name: "",
-          email: "",
-          mobile: "",
+          residentName: "",
+          time: "",
+          helperName: "",
+          insatsType: "",
           isLoading: false,
         });
         this.props.navigation.navigate("UserScreen");
@@ -83,7 +88,7 @@ class UserDetailScreen extends Component {
   deleteUser() {
     const dbRef = firebase
       .firestore()
-      .collection("boende")
+      .collection("insatser")
       .doc(this.props.route.params.userkey);
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
@@ -121,27 +126,40 @@ class UserDetailScreen extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"Name"}
-            value={this.state.name}
-            onChangeText={(val) => this.inputValueUpdate(val, "name")}
+            placeholder={"helperName"}
+            value={this.state.helperName}
+            onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
         <View style={styles.inputGroup}>
           <TextInput
             multiline={true}
             numberOfLines={4}
-            placeholder={"Email"}
-            value={this.state.email}
-            onChangeText={(val) => this.inputValueUpdate(val, "email")}
+            placeholder={"insatsType"}
+            value={this.state.insatsType}
+
+
+            onChangeText={(val) => this.inputValueUpdate(val, "insatsType")}
           />
         </View>
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"Mobile"}
-            value={this.state.mobile}
-            onChangeText={(val) => this.inputValueUpdate(val, "mobile")}
+            placeholder={"residentName"}
+            value={this.state.residentName}
+            onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
         </View>
+
+
+        <View style={styles.inputGroup}>
+          <TextInput
+            placeholder={"time"}
+            value={this.state.time}
+            onChangeText={(val) => this.inputValueUpdate(val, "time")}
+          />
+        </View>
+
+
         <View style={styles.button}>
           <Button
             title="Update"

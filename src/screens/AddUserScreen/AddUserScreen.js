@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
+import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Text } from 'react-native';
 import firebase from '../../database/firebaseDb';
+import { IndexPath, Layout, Select, SelectItem } from '@ui-kitten/components';
+import DropdownMenu from 'react-native-dropdown-menu';
+
+
+// class AddUserScreen extends Component {
+
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       text: ''
+//     };
+//   }
+  
+
+
+
 
 class AddUserScreen extends Component {
   constructor() {
     super();
-    this.dbRef = firebase.firestore().collection('boende');
+    this.dbRef = firebase.firestore().collection('insatser');
     this.state = {
-      name: '',
-      email: '',
-      mobile: '',
+      helperName: '',
+      insatsType: '',
+      residentName: '',
+      time: '',
       isLoading: false
     };
   }
   // time: some sort of dropdown one time for every hour 08:00 - 16:00
   // insatsType: dropdown menu
   // residentName, helperName.
+
+
+
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
@@ -24,22 +44,26 @@ class AddUserScreen extends Component {
   }
 
   storeUser() {
-    if(this.state.name === ''){
+    if(this.state.helperName === ''){
      alert('Fill at least your name!')
     } else {
       this.setState({
         isLoading: true,
       });      
       this.dbRef.add({
-        name: this.state.name,
-        email: this.state.email,
-        mobile: this.state.mobile,
+        helperName: this.state.helperName,
+        insatsType: this.state.insatsType,
+        residentName: this.state.residentName,
+        time: this.state.time,
+
       }).then((res) => {
         this.setState({
-          name: '',
-          email: '',
-          mobile: '',
-          isLoading: false,
+          helperName: '',
+          insatsType: '',
+          residentName: '',
+          time: '',
+          isLoading: false
+
         });
         this.props.navigation.navigate('UserScreen')
       })
@@ -53,6 +77,8 @@ class AddUserScreen extends Component {
   }
 
   render() {
+
+    var data = [['städa','tvätta']];
     if(this.state.isLoading){
       return(
         <View style={styles.preloader}>
@@ -60,31 +86,57 @@ class AddUserScreen extends Component {
         </View>
       )
     }
+    
     return (
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-              placeholder={'Name'}
-              value={this.state.name}
-              onChangeText={(val) => this.inputValueUpdate(val, 'name')}
+              placeholder={'helperName'}
+              value={this.state.helperName}
+              onChangeText={(val) => this.inputValueUpdate(val, 'helperName')}
           />
         </View>
+
+        <View style={{flex: 1}}>
+          <View style={{height: 64}} />
+          <DropdownMenu
+            style={{flex: 1}}
+            bgColor={'white'}
+            tintColor={'#666666'}
+            activityTintColor={'green'}
+            // arrowImg={}      
+            // checkImage={}   
+            // optionTextStyle={{color: '#333333'}}
+            // titleStyle={{color: '#333333'}} 
+            // maxHeight={300} 
+            value={(selection, row) => this.setState({insatsType: data[selection][row]})}
+            data={data}
+            onChangeText={(data) => this.inputValueUpdate(this.data, 'insatsType')}
+          >
+          </DropdownMenu>
+        </View>
+
+
         <View style={styles.inputGroup}>
           <TextInput
               multiline={true}
               numberOfLines={4}
-              placeholder={'Email'}
-              value={this.state.email}
-              onChangeText={(val) => this.inputValueUpdate(val, 'email')}
+              placeholder={'residentName'}
+              value={this.state.residentName}
+              onChangeText={(val) => this.inputValueUpdate(val, 'residentName')}
           />
         </View>
+
+
         <View style={styles.inputGroup}>
           <TextInput
-              placeholder={'Mobile'}
-              value={this.state.mobile}
-              onChangeText={(val) => this.inputValueUpdate(val, 'mobile')}
+              placeholder={'time'}
+              value={this.state.time}
+              onChangeText={(val) => this.inputValueUpdate(val, 'time')}
           />
         </View>
+
+
         <View style={styles.button}>
           <Button
             title='Add User'
@@ -97,10 +149,12 @@ class AddUserScreen extends Component {
   }
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 35
+    padding: 35,
+    minHeight: 128,
   },
   inputGroup: {
     flex: 1,

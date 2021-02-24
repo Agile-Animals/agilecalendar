@@ -70,7 +70,9 @@ const HomeScreen = ({ navigation }) => {
       <Layout style={styles.header} level="1">
         <Text category="h2">Översikt</Text>
       </Layout>
-      <Button style={{ width: 140 }} >
+      <Button style={{ width: 140 }} onPress={() => {
+            navigation.navigate("AddUserScreen");
+          }}>
         Lägg till insats
       </Button>
       <List style={styles.container} data={insatser} renderItem={renderItem} />
