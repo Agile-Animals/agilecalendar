@@ -1,5 +1,3 @@
-// screens/AddUserScreen.js
-
 import React, { Component } from 'react';
 import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View } from 'react-native';
 import firebase from '../../database/firebaseDb';
