@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "685831181387",
+    "firebase_url": "https://agilecalendar-86be5-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "agilecalendar-86be5",
+    "storage_bucket": "agilecalendar-86be5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685831181387:android:cf6438b804b16217a029ce",
+        "android_client_info": {
+          "package_name": "se.com.agilecalendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685831181387-qqr6bu60f6076p7fgvmpc5obcfpkid71.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz7sb85fXfPgBUdSEyQMI_-L2LEpVC7VM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685831181387-qqr6bu60f6076p7fgvmpc5obcfpkid71.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
