@@ -15,28 +15,24 @@ const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
 const HomeScreen = ({ navigation }) => {
-  const renderItemAccessory = (props) => (
-    <Button size="tiny">
-      Remove
-    </Button>
-  );
 
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [insatser, setInsatser] = useState([]); // Initial empty array of users
 
   useEffect(() => {
-    const subscriber = firebase.firestore()
-      .collection('insatser')
-      .onSnapshot(querySnapshot => {
+    const subscriber = firebase
+      .firestore()
+      .collection("insatser")
+      .onSnapshot((querySnapshot) => {
         const insatser = [];
-  
-        querySnapshot.forEach(documentSnapshot => {
+
+        querySnapshot.forEach((documentSnapshot) => {
           insatser.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
         });
-  
+
         setInsatser(insatser);
         setLoading(false);
       });
@@ -49,30 +45,33 @@ const HomeScreen = ({ navigation }) => {
     return <ActivityIndicator />;
   }
 
-  const renderItemIcon = (props, { item }) => <Icon {...props} name="shopping-cart" />;
+  const renderItemIcon = (props, { item }) => (
+    <Icon {...props} name="shopping-cart" />
+  );
+
   const renderItem = ({ item, index }) => (
     <ListItem
       title={`${item.residentName}`}
       description={`${item.insatsType}`}
-      accessoryLeft={renderItemIcon}
-      accessoryRight={renderItemAccessory}
       onPress={() => {
         navigation.navigate("UserDetailScreen", {
-          userkey: item.index
+          userkey: item.key
         });
       }}
     />
   );
-
 
   return (
     <Layout style={styles.container} level="1">
       <Layout style={styles.header} level="1">
         <Text category="h2">Översikt</Text>
       </Layout>
-      <Button style={{ width: 140 }} onPress={() => {
-            navigation.navigate("AddUserScreen");
-          }}>
+      <Button
+        style={{ width: 140 }}
+        onPress={() => {
+          navigation.navigate("AddUserScreen");
+        }}
+      >
         Lägg till insats
       </Button>
       <List style={styles.container} data={insatser} renderItem={renderItem} />

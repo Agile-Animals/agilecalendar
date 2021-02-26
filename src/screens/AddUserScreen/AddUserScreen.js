@@ -1,22 +1,7 @@
 import React, { Component } from 'react';
 import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Text } from 'react-native';
 import firebase from '../../database/firebaseDb';
-import { IndexPath, Layout, Select, SelectItem } from '@ui-kitten/components';
 import DropdownMenu from 'react-native-dropdown-menu';
-
-
-// class AddUserScreen extends Component {
-
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       text: ''
-//     };
-//   }
-  
-
-
-
 
 class AddUserScreen extends Component {
   constructor() {
@@ -24,18 +9,13 @@ class AddUserScreen extends Component {
     this.dbRef = firebase.firestore().collection('insatser');
     this.state = {
       helperName: '',
-      insatsType: '',
+      insatsType: 'Fritext',
       residentName: '',
       time: '',
+      freeText: '',
       isLoading: false
     };
   }
-  // time: some sort of dropdown one time for every hour 08:00 - 16:00
-  // insatsType: dropdown menu
-  // residentName, helperName.
-
-
-
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
@@ -43,7 +23,7 @@ class AddUserScreen extends Component {
     this.setState(state);
   }
 
-  storeUser() {
+  storeInsats() {
     if(this.state.helperName === ''){
      alert('Fill at least your name!')
     } else {
@@ -55,6 +35,7 @@ class AddUserScreen extends Component {
         insatsType: this.state.insatsType,
         residentName: this.state.residentName,
         time: this.state.time,
+        freeText : this.state.freeText,
 
       }).then((res) => {
         this.setState({
@@ -62,6 +43,7 @@ class AddUserScreen extends Component {
           insatsType: '',
           residentName: '',
           time: '',
+          freeText: '',
           isLoading: false
 
         });
@@ -78,7 +60,8 @@ class AddUserScreen extends Component {
 
   render() {
 
-    var data = [['städa','tvätta']];
+    var data = [['Fritext', 'Städa','Tvätta']];
+    
     if(this.state.isLoading){
       return(
         <View style={styles.preloader}>
@@ -96,26 +79,6 @@ class AddUserScreen extends Component {
               onChangeText={(val) => this.inputValueUpdate(val, 'helperName')}
           />
         </View>
-
-        <View style={{flex: 1}}>
-          <View style={{height: 64}} />
-          <DropdownMenu
-            style={{flex: 1}}
-            bgColor={'white'}
-            tintColor={'#666666'}
-            activityTintColor={'green'}
-            // arrowImg={}      
-            // checkImage={}   
-            // optionTextStyle={{color: '#333333'}}
-            // titleStyle={{color: '#333333'}} 
-            // maxHeight={300} 
-            value={(selection, row) => this.setState({insatsType: data[selection][row]})}
-            data={data}
-            onChangeText={(data) => this.inputValueUpdate(this.data, 'insatsType')}
-          >
-          </DropdownMenu>
-        </View>
-
 
         <View style={styles.inputGroup}>
           <TextInput
@@ -136,11 +99,36 @@ class AddUserScreen extends Component {
           />
         </View>
 
+        <View style={styles.Dropdown}>
+          <View style={{height: 64}} />
+          <DropdownMenu
+            style={{flex: 1, marginBottom: 95,}}
+            bgColor={'white'}
+            tintColor={'#666666'}
+            activityTintColor={'green'}
+            // arrowImg={}      
+            // checkImage={}   
+            // optionTextStyle={{color: '#333333'}}
+            // titleStyle={{color: '#333333'}} 
+            // maxHeight={300} 
+            handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
+            data={data}
+          >
+          </DropdownMenu>
+        </View>
+
+        <View style={styles.inputGroup}>
+          <TextInput
+              placeholder={'Fritext...'}
+              value={this.state.freeText}
+              onChangeText={(val) => this.inputValueUpdate(val, 'freeText')}
+          />
+        </View>
 
         <View style={styles.button}>
           <Button
-            title='Add User'
-            onPress={() => this.storeUser()} 
+            title='Spara Insats'
+            onPress={() => this.storeInsats()} 
             color="#19AC52"
           />
         </View>
@@ -148,7 +136,6 @@ class AddUserScreen extends Component {
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -171,6 +158,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  Dropdown: {
+    flex: 1,
+    marginBottom: 250,
   }
 })
 

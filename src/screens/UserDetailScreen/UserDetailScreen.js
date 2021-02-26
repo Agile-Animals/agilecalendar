@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
+import DropdownMenu from 'react-native-dropdown-menu';
 
 class UserDetailScreen extends Component {
   constructor() {
@@ -18,6 +19,7 @@ class UserDetailScreen extends Component {
       time: "",
       helperName: "",
       insatsType: "",
+      freeText: "",
       isLoading: true,
     };
   }
@@ -36,6 +38,7 @@ class UserDetailScreen extends Component {
           time: user.time,
           helperName: user.helperName,
           insatsType: user.insatsType,
+          freeText: user.freeText,
           isLoading: false,
         });
       } else {
@@ -64,7 +67,7 @@ class UserDetailScreen extends Component {
         time: this.state.time,
         helperName: this.state.helperName,
         insatsType: this.state.insatsType,
-
+        freeText: this.state.freeText,
       })
       .then((docRef) => {
         this.setState({
@@ -73,9 +76,10 @@ class UserDetailScreen extends Component {
           time: "",
           helperName: "",
           insatsType: "",
+          freeText: "",
           isLoading: false,
         });
-        this.props.navigation.navigate("UserScreen");
+        this.props.navigation.navigate("HomeScreen");
       })
       .catch((error) => {
         console.error("Error: ", error);
@@ -92,7 +96,7 @@ class UserDetailScreen extends Component {
       .doc(this.props.route.params.userkey);
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
-      this.props.navigation.navigate("UserScreen");
+      this.props.navigation.navigate("HomeScreen");
     });
   }
 
@@ -115,6 +119,8 @@ class UserDetailScreen extends Component {
   };
 
   render() {
+    var data = [['Fritext', 'Städa','Tvätta']];
+
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
@@ -131,17 +137,7 @@ class UserDetailScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        <View style={styles.inputGroup}>
-          <TextInput
-            multiline={true}
-            numberOfLines={4}
-            placeholder={"insatsType"}
-            value={this.state.insatsType}
-
-
-            onChangeText={(val) => this.inputValueUpdate(val, "insatsType")}
-          />
-        </View>
+        
         <View style={styles.inputGroup}>
           <TextInput
             placeholder={"residentName"}
@@ -159,6 +155,31 @@ class UserDetailScreen extends Component {
           />
         </View>
 
+        <View style={styles.Dropdown}>
+          <View style={{height: 64}} />
+          <DropdownMenu
+            style={{flex: 1, marginBottom: 95,}}
+            bgColor={'white'}
+            tintColor={'#666666'}
+            activityTintColor={'green'}
+            // arrowImg={}      
+            // checkImage={}   
+            // optionTextStyle={{color: '#333333'}}
+            // titleStyle={{color: '#333333'}} 
+            // maxHeight={300} 
+            handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
+            data={data}
+          >
+          </DropdownMenu>
+        </View>
+
+        <View style={styles.inputGroup}>
+          <TextInput
+              placeholder={this.state.freeText}
+              value={this.state.freeText}
+              onChangeText={(val) => this.inputValueUpdate(val, 'freeText')}
+          />
+        </View>
 
         <View style={styles.button}>
           <Button
@@ -203,6 +224,10 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 7,
   },
+  Dropdown: {
+    flex: 1,
+    marginBottom: 250,
+  }
 });
 
 export default UserDetailScreen;
