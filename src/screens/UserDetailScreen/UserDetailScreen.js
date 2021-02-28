@@ -119,7 +119,7 @@ class UserDetailScreen extends Component {
   };
 
   render() {
-    var data = [['Fritext', 'Städa','Tvätta']];
+    var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
 
     if (this.state.isLoading) {
       return (
