@@ -10,7 +10,6 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { default as theme } from "./config/custom-theme.json";
 import { ThemeContext } from "./config/ThemeContext";
 
-
 const App = () => {
   const [theme, setTheme] = React.useState("light");
 
