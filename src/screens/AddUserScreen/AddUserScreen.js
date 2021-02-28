@@ -60,7 +60,7 @@ class AddUserScreen extends Component {
 
   render() {
 
-    var data = [['Fritext', 'Städa','Tvätta']];
+    var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
     
     if(this.state.isLoading){
       return(
@@ -82,8 +82,6 @@ class AddUserScreen extends Component {
 
         <View style={styles.inputGroup}>
           <TextInput
-              multiline={true}
-              numberOfLines={4}
               placeholder={'residentName'}
               value={this.state.residentName}
               onChangeText={(val) => this.inputValueUpdate(val, 'residentName')}
@@ -141,14 +139,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 35,
-    minHeight: 128,
   },
   inputGroup: {
     flex: 1,
     padding: 0,
     marginBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
+    borderBottomColor: "#cccccc",
   },
   preloader: {
     left: 0,
