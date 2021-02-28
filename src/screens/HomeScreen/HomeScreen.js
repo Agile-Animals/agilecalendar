@@ -11,11 +11,11 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
 
-const window = Dimensions.get("window");
-const screen = Dimensions.get("screen");
+// these need to be updated upon fliping or they serve no real purpose
+// const window = Dimensions.get("window");
+// const screen = Dimensions.get("screen");
 
 const HomeScreen = ({ navigation }) => {
-
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [insatser, setInsatser] = useState([]); // Initial empty array of users
 
@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
       description={`${item.insatsType}`}
       onPress={() => {
         navigation.navigate("UserDetailScreen", {
-          userkey: item.key
+          userkey: item.key,
         });
       }}
     />
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    width: window.width * 1,
-    height: window.width * 1,
+    // width: window.width * 1,
+    // height: window.width * 1,
   },
   header: {
     alignItems: "center",
