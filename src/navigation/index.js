@@ -4,9 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LoginScreen from "../screens/LoginScreen";
 import HomeScreen from "../screens/HomeScreen";
-import AddUserScreen from '../screens/AddInsatsScreen';
-import UserScreen from '../screens/InsatsScreen';
-import UserDetailScreen from '../screens/InsatsDetailScreen';
+import AddInsatsScreen from "../screens/AddInsatsScreen";
+import InsatsDetailScreen from "../screens/InsatsDetailScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -49,21 +48,16 @@ const LoginStack = () => (
         header: () => null,
       }}
     />
-    <Stack.Screen 
-        name="AddInsatsScreen" 
-        component={AddInsatsScreen} 
-        options={{ title: 'Add Insats' }}
-      />
-      <Stack.Screen 
-        name="InsatsScreen" 
-        component={InsatsScreen} 
-        options={{ title: 'Översikt' }}
-      />
-      <Stack.Screen 
-       name="InsatsDetailScreen" 
-       component={InsatsDetailScreen} 
-       options={{ title: 'Insats Detail' }}
-      />
+    <Stack.Screen
+      name="AddInsatsScreen"
+      component={AddInsatsScreen}
+      options={{ title: "Add Insats" }}
+    />
+    <Stack.Screen
+      name="InsatsDetailScreen"
+      component={InsatsDetailScreen}
+      options={{ title: "Insats Detail" }}
+    />
   </Stack.Navigator>
 );
 
