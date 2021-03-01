@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, ActivityIndicator } from "react-native";
+import { StyleSheet, Dimensions, ActivityIndicator, Modal } from "react-native";
 import {
   Icon,
   Layout,
@@ -7,6 +7,7 @@ import {
   Button,
   List,
   ListItem,
+  Calendar,
 } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
@@ -18,6 +19,8 @@ import firebase from "../../database/firebaseDb";
 const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [insatser, setInsatser] = useState([]); // Initial empty array of users
+  const [date, setDate] = useState(new Date());
+  const [modalState, setModalState] = useState(false);
 
   useEffect(() => {
     const subscriber = firebase
@@ -65,16 +68,41 @@ const HomeScreen = ({ navigation }) => {
     <Layout style={styles.container} level="1">
       <Layout style={styles.header} level="1">
         <Text category="h2">Översikt</Text>
+        <Text category="h6">Valt Datum: {date.toLocaleDateString()}</Text>
       </Layout>
-      <Button
-        style={{ width: 140 }}
-        onPress={() => {
-          navigation.navigate("AddInsatsScreen");
-        }}
-      >
-        Lägg till insats
-      </Button>
+      <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Button
+          style={{ height: 40, width: 140 }}
+          onPress={() => {
+            navigation.navigate("AddInsatsScreen");
+          }}
+        >
+          Lägg till insats
+        </Button>
+        <Button
+          style={{
+            height: 40,
+            width: 84,
+          }}
+          onPress={() => {
+            setModalState(true);
+          }}
+        >
+          Datum
+        </Button>
+      </Layout>
       <List style={styles.container} data={insatser} renderItem={renderItem} />
+      <Layout style={{ flex: 1 }}>
+        <Modal visible={modalState} animationType="slide">
+          <Calendar
+            date={date}
+            onSelect={(nextDate) => {
+              setDate(nextDate);
+              setModalState(false);
+            }}
+          />
+        </Modal>
+      </Layout>
     </Layout>
   );
 };
