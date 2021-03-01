@@ -3,7 +3,7 @@ import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Tex
 import firebase from '../../database/firebaseDb';
 import DropdownMenu from 'react-native-dropdown-menu';
 
-class AddUserScreen extends Component {
+class AddInsatsScreen extends Component {
   constructor() {
     super();
     this.dbRef = firebase.firestore().collection('insatser');
@@ -162,4 +162,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AddUserScreen;
+export default AddInsatsScreen;

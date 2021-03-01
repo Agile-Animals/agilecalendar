@@ -54,8 +54,8 @@ const HomeScreen = ({ navigation }) => {
       title={`${item.residentName}`}
       description={`${item.insatsType}`}
       onPress={() => {
-        navigation.navigate("UserDetailScreen", {
-          userkey: item.key,
+        navigation.navigate("InsatsDetailScreen", {
+          insatskey: item.key,
         });
       }}
     />
@@ -69,7 +69,7 @@ const HomeScreen = ({ navigation }) => {
       <Button
         style={{ width: 140 }}
         onPress={() => {
-          navigation.navigate("AddUserScreen");
+          navigation.navigate("AddInsatsScreen");
         }}
       >
         Lägg till insats

@@ -11,7 +11,7 @@ import {
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from 'react-native-dropdown-menu';
 
-class UserDetailScreen extends Component {
+class InsatsDetailScreen extends Component {
   constructor() {
     super();
     this.state = {
@@ -28,17 +28,17 @@ class UserDetailScreen extends Component {
     const dbRef = firebase
       .firestore()
       .collection("insatser")
-      .doc(this.props.route.params.userkey);
+      .doc(this.props.route.params.insatskey);
     dbRef.get().then((res) => {
       if (res.exists) {
-        const user = res.data();
+        const insats = res.data();
         this.setState({
           key: res.id,
-          residentName: user.residentName,
-          time: user.time,
-          helperName: user.helperName,
-          insatsType: user.insatsType,
-          freeText: user.freeText,
+          residentName: insats.residentName,
+          time: insats.time,
+          helperName: insats.helperName,
+          insatsType: insats.insatsType,
+          freeText: insats.freeText,
           isLoading: false,
         });
       } else {
@@ -53,7 +53,7 @@ class UserDetailScreen extends Component {
     this.setState(state);
   };
 
-  updateUser() {
+  updateInsats() {
     this.setState({
       isLoading: true,
     });
@@ -89,11 +89,11 @@ class UserDetailScreen extends Component {
       });
   }
 
-  deleteUser() {
+  deleteInsats() {
     const dbRef = firebase
       .firestore()
       .collection("insatser")
-      .doc(this.props.route.params.userkey);
+      .doc(this.props.route.params.insatskey);
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
       this.props.navigation.navigate("HomeScreen");
@@ -102,10 +102,10 @@ class UserDetailScreen extends Component {
 
   openTwoButtonAlert = () => {
     Alert.alert(
-      "Delete User",
+      "Delete Insats",
       "Are you sure?",
       [
-        { text: "Yes", onPress: () => this.deleteUser() },
+        { text: "Yes", onPress: () => this.deleteInsats() },
         {
           text: "No",
           onPress: () => console.log("No item was removed"),
@@ -184,7 +184,7 @@ class UserDetailScreen extends Component {
         <View style={styles.button}>
           <Button
             title="Update"
-            onPress={() => this.updateUser()}
+            onPress={() => this.updateInsats()}
             color="#19AC52"
           />
         </View>
@@ -230,4 +230,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default UserDetailScreen;
+export default InsatsDetailScreen;

@@ -9,13 +9,13 @@ import {
 import firebase from "../../database/firebaseDb";
 import { Button, List, ListItem } from "@ui-kitten/components";
 
-class UserScreen extends Component {
+class InsatsScreen extends Component {
   constructor() {
     super();
     this.firestoreRef = firebase.firestore().collection("insatser");
     this.state = {
       isLoading: true,
-      userArr: [],
+      insatsArr: [],
     };
   }
 
@@ -28,10 +28,10 @@ class UserScreen extends Component {
   }
 
   getCollection = (querySnapshot) => {
-    const userArr = [];
+    const insatsArr = [];
     querySnapshot.forEach((res) => {
       const { residentName, time, helperName, insatsType } = res.data();
-      userArr.push({
+      insatsArr.push({
         key: res.id,
         res,
         residentName,
@@ -41,7 +41,7 @@ class UserScreen extends Component {
       });
     });
     this.setState({
-      userArr,
+      insatsArr,
       isLoading: false,
     });
   };
@@ -58,12 +58,12 @@ class UserScreen extends Component {
       <View>
         <Button style={styles.button}
           onPress={() => {
-            this.props.navigation.navigate("AddUserScreen");
+            this.props.navigation.navigate("AddInsatsScreen");
           }}
         >
           Ny Insats
         </Button>
-        {this.state.userArr.map((item, index) => (
+        {this.state.insatsArr.map((item, index) => (
           <View key={index}>
             <Text>{item.residentName}</Text>
           </View>
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserScreen;
+export default InsatsScreen;
