@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Text } from 'react-native';
 import firebase from '../../database/firebaseDb';
 import DropdownMenu from 'react-native-dropdown-menu';
+import CalendarPicker from 'react-native-calendar-picker';
+
 
 class AddInsatsScreen extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.dbRef = firebase.firestore().collection('insatser');
     this.state = {
@@ -12,9 +14,15 @@ class AddInsatsScreen extends Component {
       insatsType: 'Fritext',
       residentName: '',
       time: '',
+      onDateChange: '',
       freeText: '',
       isLoading: false
     };
+    // super(props);
+    // this.state = {
+    //   selectedStartDate: null,
+    // };
+    // this.onDateChange = this.onDateChange.bind(this);
   }
 
   inputValueUpdate = (val, prop) => {
@@ -35,6 +43,7 @@ class AddInsatsScreen extends Component {
         insatsType: this.state.insatsType,
         residentName: this.state.residentName,
         time: this.state.time,
+        onDateChange:this.state.onDateChange,
         freeText : this.state.freeText,
 
       }).then((res) => {
@@ -43,6 +52,7 @@ class AddInsatsScreen extends Component {
           insatsType: '',
           residentName: '',
           time: '',
+          onDateChange:'',
           freeText: '',
           isLoading: false
 
@@ -58,10 +68,19 @@ class AddInsatsScreen extends Component {
     }
   }
 
+
+  
+  // onDateChange(date) {
+  //   this.setState({
+  //     selectedStartDate: date.toJSON().substring(0,10),
+  //   });
+  // }
+
   render() {
 
     var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
-    
+    const { selectedStartDate } = date;
+    const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     if(this.state.isLoading){
       return(
         <View style={styles.preloader}>
@@ -96,6 +115,22 @@ class AddInsatsScreen extends Component {
               onChangeText={(val) => this.inputValueUpdate(val, 'time')}
           />
         </View>
+
+        
+        <View style={styles.inputGroup}>
+          <CalendarPicker
+            onDateChange={this.onDateChange}
+            // value={this.state.onDateChange}
+            handler={() => this.setState({date: this.onDateChange})}
+
+
+          />
+
+          <View>
+            <Text>SELECTED DATE:{ startDate }</Text>
+          </View>
+        </View>
+
 
         <View style={styles.Dropdown}>
           <View style={{height: 64}} />
@@ -159,7 +194,14 @@ const styles = StyleSheet.create({
   Dropdown: {
     flex: 1,
     marginBottom: 250,
-  }
+  },
+  button: {
+    flex: 1,
+    padding: 0,
+    marginBottom: 40,
+    borderBottomWidth: 1,
+
+  },
 })
 
 export default AddInsatsScreen;
