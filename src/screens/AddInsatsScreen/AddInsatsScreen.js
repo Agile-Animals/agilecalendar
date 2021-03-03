@@ -14,7 +14,7 @@ class AddInsatsScreen extends Component {
       insatsType: 'Fritext',
       residentName: '',
       time: '',
-      date: '',
+      date: new Date().toJSON().substring(0,10),
       freeText: '',
       isLoading: false
     };
