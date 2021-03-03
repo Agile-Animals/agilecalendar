@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
-import DropdownMenu from 'react-native-dropdown-menu';
+import DropdownMenu from "react-native-dropdown-menu";
 
 class InsatsDetailScreen extends Component {
   constructor() {
@@ -119,7 +119,7 @@ class InsatsDetailScreen extends Component {
   };
 
   render() {
-    var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
+    var data = [["Fritext", "Städa", "Tvätta", "Handla", "Duscha"]];
 
     if (this.state.isLoading) {
       return (
@@ -137,7 +137,7 @@ class InsatsDetailScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        
+
         <View style={styles.inputGroup}>
           <TextInput
             placeholder={"residentName"}
@@ -145,7 +145,6 @@ class InsatsDetailScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
         </View>
-
 
         <View style={styles.inputGroup}>
           <TextInput
@@ -156,28 +155,29 @@ class InsatsDetailScreen extends Component {
         </View>
 
         <View style={styles.Dropdown}>
-          <View style={{height: 64}} />
+          <View style={{ height: 64 }} />
           <DropdownMenu
-            style={{flex: 1, marginBottom: 95,}}
-            bgColor={'white'}
-            tintColor={'#666666'}
-            activityTintColor={'green'}
-            // arrowImg={}      
-            // checkImage={}   
+            style={{ flex: 1, marginBottom: 95 }}
+            bgColor={"white"}
+            tintColor={"#666666"}
+            activityTintColor={"green"}
+            // arrowImg={}
+            // checkImage={}
             // optionTextStyle={{color: '#333333'}}
-            // titleStyle={{color: '#333333'}} 
-            // maxHeight={300} 
-            handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
+            // titleStyle={{color: '#333333'}}
+            // maxHeight={300}
+            handler={(selection, row) =>
+              this.setState({ insatsType: data[selection][row] })
+            }
             data={data}
-          >
-          </DropdownMenu>
+          ></DropdownMenu>
         </View>
 
         <View style={styles.inputGroup}>
           <TextInput
-              placeholder={this.state.freeText}
-              value={this.state.freeText}
-              onChangeText={(val) => this.inputValueUpdate(val, 'freeText')}
+            placeholder={this.state.freeText}
+            value={this.state.freeText}
+            onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
           />
         </View>
 
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   Dropdown: {
     flex: 1,
     marginBottom: 250,
-  }
+  },
 });
 
 export default InsatsDetailScreen;
