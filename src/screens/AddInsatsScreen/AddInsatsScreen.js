@@ -1,30 +1,24 @@
-import React, { Component } from "react";
-import {
-  Button,
-  StyleSheet,
-  TextInput,
-  ScrollView,
-  ActivityIndicator,
-  View,
-  Text,
-} from "react-native";
-import firebase from "../../database/firebaseDb";
-import DropdownMenu from "react-native-dropdown-menu";
-import CalendarPicker from "react-native-calendar-picker";
+import React, { Component } from 'react';
+import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Text } from 'react-native';
+import firebase from '../../database/firebaseDb';
+import DropdownMenu from 'react-native-dropdown-menu';
+import CalendarPicker from 'react-native-calendar-picker';
+
 
 class AddInsatsScreen extends Component {
   constructor(props) {
-    super();
-    this.dbRef = firebase.firestore().collection("insatser");
+    super(props);
+    this.dbRef = firebase.firestore().collection('insatser');
     this.state = {
-      helperName: "",
-      insatsType: "Fritext",
-      residentName: "",
-      time: "",
-      date: new Date().toJSON().substring(0, 10),
-      freeText: "",
-      isLoading: false,
+      helperName: '',
+      insatsType: 'Fritext',
+      residentName: '',
+      time: '',
+      selectedStartDate: "",
+      freeText: '',
+      isLoading: false
     };
+
     this.onDateChange = this.onDateChange.bind(this);
   }
 
@@ -32,129 +26,139 @@ class AddInsatsScreen extends Component {
     const state = this.state;
     state[prop] = val;
     this.setState(state);
-  };
-
-  onDateChange(date) {
-    this.setState({
-      selectedStartDate: date.toJSON().substring(0, 10),
-    });
-    this.inputValueUpdate(date.toJSON().substring(0, 10), "date");
   }
 
   storeInsats() {
-    if (this.state.helperName === "") {
-      alert("Fill at least your name!");
+    if(this.state.helperName === ''){
+     alert('Fill at least your name!')
     } else {
       this.setState({
         isLoading: true,
-      });
-      this.dbRef
-        .add({
-          helperName: this.state.helperName,
-          insatsType: this.state.insatsType,
-          residentName: this.state.residentName,
-          time: this.state.time,
-          date: this.state.date,
-          freeText: this.state.freeText,
+      });      
+      this.dbRef.add({
+        helperName: this.state.helperName,
+        insatsType: this.state.insatsType,
+        residentName: this.state.residentName,
+        time: this.state.time,
+        selectedStartDate: this.state.selectedStartDate,
+        freeText : this.state.freeText,
+
+      }).then((res) => {
+        this.setState({
+          helperName: '',
+          insatsType: '',
+          residentName: '',
+          time: '',
+          freeText: '',
+          isLoading: false
+
         })
-        .then((res) => {
-          this.setState({
-            helperName: "",
-            insatsType: "",
-            residentName: "",
-            time: "",
-            date: "",
-            freeText: "",
-            isLoading: false,
-          });
-          this.props.navigation.navigate("HomeScreen");
-        })
-        .catch((err) => {
-          console.error("Error found: ", err);
-          this.setState({
-            isLoading: false,
-          });
+
+        this.props.navigation.navigate('HomeScreen')
+      })
+      .catch((err) => {
+        console.error("Error found: ", err);
+        this.setState({
+          isLoading: false,
         });
+      });
     }
   }
 
-  render() {
-    var data = [["Fritext", "Städa", "Tvätta", "Handla", "Duscha"]];
-    const { selectedStartDate } = this.state;
-    const startDate = selectedStartDate ? selectedStartDate.toString() : "";
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
-        </View>
-      );
-    }
 
+
+
+  
+  
+  onDateChange(date) {
+    this.setState({
+      selectedStartDate: date.toJSON().substring(0,10),
+    });
+  }
+
+  render() {
+
+    var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
+    const { selectedStartDate } = this.state;
+    const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+    if(this.state.isLoading){
+      return(
+        <View style={styles.preloader}>
+          <ActivityIndicator size="large" color="#9E9E9E"/>
+        </View>
+      )
+    }
+    
     return (
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"helperName"}
-            value={this.state.helperName}
-            onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
+              placeholder={'helperName'}
+              value={this.state.helperName}
+              onChangeText={(val) => this.inputValueUpdate(val, 'helperName')}
           />
         </View>
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"residentName"}
-            value={this.state.residentName}
-            onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
+              placeholder={'residentName'}
+              value={this.state.residentName}
+              onChangeText={(val) => this.inputValueUpdate(val, 'residentName')}
           />
         </View>
+
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"time"}
-            value={this.state.time}
-            onChangeText={(val) => this.inputValueUpdate(val, "time")}
+              placeholder={'time'}
+              value={this.state.time}
+              onChangeText={(val) => this.inputValueUpdate(val, 'time')}
           />
         </View>
 
+        
         <View style={styles.inputGroup}>
-          <CalendarPicker onDateChange={this.onDateChange} />
+          <CalendarPicker
+            onDateChange={this.onDateChange}
+          />
 
           <View>
-            <Text>SELECTED DATE:{startDate}</Text>
+            <Text>SELECTED DATE:{ startDate }</Text>
           </View>
         </View>
 
+
         <View style={styles.Dropdown}>
-          <View style={{ height: 64 }} />
+          <View style={{height: 64}} />
           <DropdownMenu
-            style={{ flex: 1, marginBottom: 95 }}
-            bgColor={"white"}
-            tintColor={"#666666"}
-            activityTintColor={"green"}
-            // arrowImg={}
-            // checkImage={}
+            style={{flex: 1, marginBottom: 95,}}
+            bgColor={'white'}
+            tintColor={'#666666'}
+            activityTintColor={'green'}
+            // arrowImg={}      
+            // checkImage={}   
             // optionTextStyle={{color: '#333333'}}
-            // titleStyle={{color: '#333333'}}
-            // maxHeight={300}
-            handler={(selection, row) =>
-              this.setState({ insatsType: data[selection][row] })
-            }
+            // titleStyle={{color: '#333333'}} 
+            // maxHeight={300} 
+            handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
             data={data}
-          ></DropdownMenu>
+          >
+          </DropdownMenu>
         </View>
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"Fritext..."}
-            value={this.state.freeText}
-            onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
+              placeholder={'Fritext...'}
+              value={this.state.freeText}
+              onChangeText={(val) => this.inputValueUpdate(val, 'freeText')}
           />
         </View>
 
         <View style={styles.button}>
           <Button
-            title="Spara Insats"
-            onPress={() => this.storeInsats()}
+            title='Spara Insats'
+            onPress={() => this.storeInsats()} 
+
             color="#19AC52"
           />
         </View>
@@ -180,9 +184,9 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   Dropdown: {
     flex: 1,
@@ -191,9 +195,10 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     padding: 0,
-    marginBottom: 40,
+    marginBottom: 49,
     borderBottomWidth: 1,
+
   },
-});
+})
 
 export default AddInsatsScreen;

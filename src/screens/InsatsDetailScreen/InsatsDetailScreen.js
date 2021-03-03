@@ -7,23 +7,27 @@ import {
   ScrollView,
   ActivityIndicator,
   View,
+  Text 
 } from "react-native";
 import firebase from "../../database/firebaseDb";
-import DropdownMenu from "react-native-dropdown-menu";
+import DropdownMenu from 'react-native-dropdown-menu';
+import CalendarPicker from 'react-native-calendar-picker';
 
 class InsatsDetailScreen extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       residentName: "",
       time: "",
-      date: "",
+      selectedStartDate: "",
       helperName: "",
       insatsType: "",
       freeText: "",
       isLoading: true,
     };
+    this.onDateChange = this.onDateChange.bind(this);
   }
+
 
   componentDidMount() {
     const dbRef = firebase
@@ -37,7 +41,7 @@ class InsatsDetailScreen extends Component {
           key: res.id,
           residentName: insats.residentName,
           time: insats.time,
-          date: insats.date,
+          selectedStartDate: insats.selectedStartDate,
           helperName: insats.helperName,
           insatsType: insats.insatsType,
           freeText: insats.freeText,
@@ -67,7 +71,7 @@ class InsatsDetailScreen extends Component {
       .set({
         residentName: this.state.residentName,
         time: this.state.time,
-        date: this.state.date,
+        selectedStartDate: this.state.selectedStartDate,
         helperName: this.state.helperName,
         insatsType: this.state.insatsType,
         freeText: this.state.freeText,
@@ -77,7 +81,6 @@ class InsatsDetailScreen extends Component {
           key: "",
           residentName: "",
           time: "",
-          date: "",
           helperName: "",
           insatsType: "",
           freeText: "",
@@ -122,9 +125,19 @@ class InsatsDetailScreen extends Component {
     );
   };
 
-  render() {
-    var data = [["Fritext", "Städa", "Tvätta", "Handla", "Duscha"]];
 
+  onDateChange(date) {
+    this.setState({
+      selectedStartDate: date.toJSON().substring(0,10),
+    });
+  }
+
+
+
+  render() {
+    var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
+    const { selectedStartDate } = this.state;
+    const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
@@ -136,60 +149,63 @@ class InsatsDetailScreen extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"Hjälpare"}
+            placeholder={"helperName"}
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-
+        
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"Boende"}
+            placeholder={"residentName"}
             value={this.state.residentName}
             onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
         </View>
 
+
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"Tid"}
+            placeholder={"time"}
             value={this.state.time}
             onChangeText={(val) => this.inputValueUpdate(val, "time")}
           />
         </View>
 
+
         <View style={styles.inputGroup}>
-          <TextInput
-            placeholder={"År-Månad-Dag"}
-            value={this.state.date}
-            onChangeText={(val) => this.inputValueUpdate(val, "date")}
+          <CalendarPicker
+            onDateChange={this.onDateChange}
           />
+
+          <View>
+            <Text>SELECTED DATE:{ startDate }</Text>
+          </View>
         </View>
 
         <View style={styles.Dropdown}>
-          <View style={{ height: 64 }} />
+          <View style={{height: 64}} />
           <DropdownMenu
-            style={{ flex: 1, marginBottom: 95 }}
-            bgColor={"white"}
-            tintColor={"#666666"}
-            activityTintColor={"green"}
-            // arrowImg={}
-            // checkImage={}
+            style={{flex: 1, marginBottom: 95,}}
+            bgColor={'white'}
+            tintColor={'#666666'}
+            activityTintColor={'green'}
+            // arrowImg={}      
+            // checkImage={}   
             // optionTextStyle={{color: '#333333'}}
-            // titleStyle={{color: '#333333'}}
-            // maxHeight={300}
-            handler={(selection, row) =>
-              this.setState({ insatsType: data[selection][row] })
-            }
+            // titleStyle={{color: '#333333'}} 
+            // maxHeight={300} 
+            handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
             data={data}
-          ></DropdownMenu>
+          >
+          </DropdownMenu>
         </View>
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={this.state.freeText}
-            value={this.state.freeText}
-            onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
+              placeholder={this.state.freeText}
+              value={this.state.freeText}
+              onChangeText={(val) => this.inputValueUpdate(val, 'freeText')}
           />
         </View>
 
@@ -200,7 +216,7 @@ class InsatsDetailScreen extends Component {
             color="#19AC52"
           />
         </View>
-        <View>
+        <View style={styles.button}>
           <Button
             title="Delete"
             onPress={this.openTwoButtonAlert}
@@ -239,6 +255,13 @@ const styles = StyleSheet.create({
   Dropdown: {
     flex: 1,
     marginBottom: 250,
+  },
+  button: {
+    flex: 1,
+    padding: 0,
+    marginBottom: 49,
+    borderBottomWidth: 1,
+
   },
 });
 

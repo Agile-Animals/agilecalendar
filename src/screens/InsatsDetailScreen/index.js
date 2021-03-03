@@ -1,3 +1,3 @@
-import InsatsDetailScreen from "./InsatsDetailScreen";
+import InsatsDetailScreen from './InsatsDetailScreen'
 
-export default InsatsDetailScreen;
+export default InsatsDetailScreen
