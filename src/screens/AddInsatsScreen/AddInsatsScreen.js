@@ -114,7 +114,6 @@ class AddInsatsScreen extends Component {
         <View style={styles.inputGroup}>
           <CalendarPicker
             onDateChange={this.onDateChange}
-            
           />
 
           <View>
