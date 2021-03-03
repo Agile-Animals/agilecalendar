@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
   const renderItem = ({ item, index }) => (
     <ListItem
       title={`${item.residentName}`}
-      description={`${item.insatsType}`}
+      description={`${item.insatsType + " " + item.date}`}
       onPress={() => {
         navigation.navigate("InsatsDetailScreen", {
           insatskey: item.key,
