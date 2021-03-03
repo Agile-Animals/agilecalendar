@@ -17,6 +17,7 @@ class InsatsDetailScreen extends Component {
     this.state = {
       residentName: "",
       time: "",
+      date: "",
       helperName: "",
       insatsType: "",
       freeText: "",
@@ -36,6 +37,7 @@ class InsatsDetailScreen extends Component {
           key: res.id,
           residentName: insats.residentName,
           time: insats.time,
+          date: insats.date,
           helperName: insats.helperName,
           insatsType: insats.insatsType,
           freeText: insats.freeText,
@@ -65,6 +67,7 @@ class InsatsDetailScreen extends Component {
       .set({
         residentName: this.state.residentName,
         time: this.state.time,
+        date: this.state.date,
         helperName: this.state.helperName,
         insatsType: this.state.insatsType,
         freeText: this.state.freeText,
@@ -74,6 +77,7 @@ class InsatsDetailScreen extends Component {
           key: "",
           residentName: "",
           time: "",
+          date: "",
           helperName: "",
           insatsType: "",
           freeText: "",
@@ -132,7 +136,7 @@ class InsatsDetailScreen extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"helperName"}
+            placeholder={"Hjälpare"}
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
@@ -140,7 +144,7 @@ class InsatsDetailScreen extends Component {
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"residentName"}
+            placeholder={"Boende"}
             value={this.state.residentName}
             onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
@@ -148,9 +152,17 @@ class InsatsDetailScreen extends Component {
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"time"}
+            placeholder={"Tid"}
             value={this.state.time}
             onChangeText={(val) => this.inputValueUpdate(val, "time")}
+          />
+        </View>
+
+        <View style={styles.inputGroup}>
+          <TextInput
+            placeholder={"År-Månad-Dag"}
+            value={this.state.date}
+            onChangeText={(val) => this.inputValueUpdate(val, "date")}
           />
         </View>
 
