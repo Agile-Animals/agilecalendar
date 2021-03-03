@@ -14,21 +14,24 @@ class AddInsatsScreen extends Component {
       insatsType: 'Fritext',
       residentName: '',
       time: '',
-      onDateChange: '',
+      date: '',
       freeText: '',
       isLoading: false
     };
-    // super(props);
-    // this.state = {
-    //   selectedStartDate: null,
-    // };
-    // this.onDateChange = this.onDateChange.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
   }
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
     state[prop] = val;
     this.setState(state);
+  }
+
+  onDateChange(date) {
+    this.setState({
+      selectedStartDate: date.toJSON().substring(0,10),
+    });
+    this.inputValueUpdate(date.toJSON().substring(0,10), 'date');
   }
 
   storeInsats() {
@@ -43,7 +46,7 @@ class AddInsatsScreen extends Component {
         insatsType: this.state.insatsType,
         residentName: this.state.residentName,
         time: this.state.time,
-        onDateChange:this.state.onDateChange,
+        date: this.state.date,
         freeText : this.state.freeText,
 
       }).then((res) => {
@@ -52,7 +55,7 @@ class AddInsatsScreen extends Component {
           insatsType: '',
           residentName: '',
           time: '',
-          onDateChange:'',
+          date: '',
           freeText: '',
           isLoading: false
 
@@ -69,17 +72,10 @@ class AddInsatsScreen extends Component {
   }
 
 
-  
-  // onDateChange(date) {
-  //   this.setState({
-  //     selectedStartDate: date.toJSON().substring(0,10),
-  //   });
-  // }
-
   render() {
 
     var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
-    const { selectedStartDate } = date;
+    const { selectedStartDate } = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     if(this.state.isLoading){
       return(
@@ -107,7 +103,6 @@ class AddInsatsScreen extends Component {
           />
         </View>
 
-
         <View style={styles.inputGroup}>
           <TextInput
               placeholder={'time'}
@@ -115,22 +110,17 @@ class AddInsatsScreen extends Component {
               onChangeText={(val) => this.inputValueUpdate(val, 'time')}
           />
         </View>
-
         
         <View style={styles.inputGroup}>
           <CalendarPicker
             onDateChange={this.onDateChange}
-            // value={this.state.onDateChange}
-            handler={() => this.setState({date: this.onDateChange})}
-
-
+            
           />
 
           <View>
             <Text>SELECTED DATE:{ startDate }</Text>
           </View>
         </View>
-
 
         <View style={styles.Dropdown}>
           <View style={{height: 64}} />
