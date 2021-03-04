@@ -74,6 +74,12 @@ class AddInsatsScreen extends Component {
   render() {
 
     var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
+    var timeData = [
+      [
+        "08:00", "09:00", "10:00", "11:00", "12:00",
+        "13:00", "14:00", "15:00", "16:00", "17:00"
+      ],
+    ];
     const { date } = this.state;
     const startDate = date ? date.toString() : '';
     if(this.state.isLoading){
@@ -111,13 +117,41 @@ class AddInsatsScreen extends Component {
           />
         </View>
 
-        
+        <View style={styles.timeDropdown}>
+          <View style={styles.timeFrom}>
+            <Text>Från:</Text>
+            <DropdownMenu
+              style={{ flex: 1 }}
+              bgColor={"white"}
+              tintColor={"#666666"}
+              activityTintColor={"green"}
+              handler={(selection, row) =>
+                this.setState({ insatsType: data[selection][row] })
+              }
+              data={timeData}
+            ></DropdownMenu>
+          </View>
+
+          <View style={styles.timeTo}>
+            <Text>Till:</Text>
+            <DropdownMenu
+              style={{ flex: 1 }}
+              bgColor={"white"}
+              tintColor={"#666666"}
+              activityTintColor={"green"}
+              handler={(selection, row) =>
+                this.setState({ insatsType: data[selection][row] })
+              }
+              data={timeData}
+            ></DropdownMenu>
+          </View>
+        </View>
+
         <View style={styles.inputGroup}>
           <CalendarPicker
             onDateChange={this.onDateChange}
           />
         </View>
-
 
         <View style={styles.Dropdown}>
           <View style={{height: 64}} />
@@ -126,11 +160,6 @@ class AddInsatsScreen extends Component {
             bgColor={'white'}
             tintColor={'#666666'}
             activityTintColor={'green'}
-            // arrowImg={}      
-            // checkImage={}   
-            // optionTextStyle={{color: '#333333'}}
-            // titleStyle={{color: '#333333'}} 
-            // maxHeight={300} 
             handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
             data={data}
           >
@@ -182,6 +211,18 @@ const styles = StyleSheet.create({
   Dropdown: {
     flex: 1,
     marginBottom: 250,
+  },
+  timeDropdown: {
+    flex: 1,
+    marginBottom: 250,
+    flexDirection: 'row',
+  },
+  timeFrom: {
+    width: 120,
+    paddingRight: 20,
+  },
+  timeTo: {
+    width: 100,
   },
   button: {
     flex: 1,
