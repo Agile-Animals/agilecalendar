@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Button,
   StyleSheet,
   TextInput,
   ScrollView,
@@ -13,6 +12,7 @@ import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
 import { ThemeContext } from "../../../config/ThemeContext";
+import { Button } from "@ui-kitten/components";
 
 class AddInsatsScreen extends Component {
   constructor(props) {
@@ -22,15 +22,20 @@ class AddInsatsScreen extends Component {
       helperName: "",
       insatsType: "Fritext",
       residentName: "",
-      fromTime: "",
-      toTime: "",
+      fromTime: "08:00",
+      toTime: "09:00",
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
       isLoading: false,
+      modalVisible: false,
     };
 
     this.onDateChange = this.onDateChange.bind(this);
   }
+
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  };
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
@@ -81,6 +86,7 @@ class AddInsatsScreen extends Component {
     this.setState({
       date: date.toJSON().substring(0, 10),
     });
+    this.setModalVisible(false);
   }
 
   render() {
@@ -99,7 +105,7 @@ class AddInsatsScreen extends Component {
         "17:00",
       ],
     ];
-    const { date } = this.state;
+    const { date, modalVisible } = this.state;
     const startDate = date ? date.toString() : "";
     if (this.state.isLoading) {
       return (
@@ -113,7 +119,7 @@ class AddInsatsScreen extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"helperName"}
+            placeholder={"Hjälpare"}
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
@@ -121,11 +127,20 @@ class AddInsatsScreen extends Component {
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"residentName"}
+            placeholder={"Boende"}
             value={this.state.residentName}
             onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
         </View>
+        <Button
+          style={{
+            height: 40,
+            width: 84,
+          }}
+          onPress={() => this.setModalVisible(true)}
+        >
+          Datum
+        </Button>
 
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
@@ -155,49 +170,50 @@ class AddInsatsScreen extends Component {
               data={timeData}
             ></DropdownMenu>
           </View>
-           {/* <Button
-          style={{
-            height: 40,
-            width: 84,
+
+          <View style={styles.insatsTyp}>
+            <Text>Insats typ:</Text>
+            <DropdownMenu
+              style={{ flex: 1 }}
+              bgColor={"white"}
+              tintColor={"#666666"}
+              activityTintColor={"green"}
+              handler={(selection, row) =>
+                this.setState({ insatsType: data[selection][row] })
+              }
+              data={data}
+            ></DropdownMenu>
+          </View>
+          <View style={styles.freeText}>
+            <TextInput
+              placeholder={"Fritext..."}
+              value={this.state.freeText}
+              onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
+            />
+          </View>
+        </View>
+
+        <Modal
+          animationType="slide"
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            this.setModalVisible(!modalVisible);
           }}
-          onPress={() => this.setModalVisible(!modalVisible)}
         >
-          Datum
-        </Button> */}
-        </View>
+          <View style={styles.inputGroup}>
+            <CalendarPicker onDateChange={this.onDateChange} />
+          </View>
+        </Modal>
 
-        <View style={styles.inputGroup}>
-          <CalendarPicker onDateChange={this.onDateChange} />
-        </View>
-
-        <View style={styles.Dropdown}>
-          <View style={{ height: 64 }} />
-          <DropdownMenu
-            style={{ flex: 1, marginBottom: 95 }}
-            bgColor={"white"}
-            tintColor={"#666666"}
-            activityTintColor={"green"}
-            handler={(selection, row) =>
-              this.setState({ insatsType: data[selection][row] })
-            }
-            data={data}
-          ></DropdownMenu>
-        </View>
-
-        <View style={styles.inputGroup}>
-          <TextInput
-            placeholder={"Fritext..."}
-            value={this.state.freeText}
-            onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
-          />
-        </View>
 
         <View style={styles.button}>
           <Button
-            title="Spara Insats"
+            style={{ width: 120, backgroundColor: "#19AC52" }}
             onPress={() => this.storeInsats()}
-            color="#19AC52"
-          />
+          >
+            Spara Insats
+          </Button>
         </View>
       </ScrollView>
     );
@@ -245,7 +261,19 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     marginBottom: 49,
-    borderBottomWidth: 1,
+    alignSelf: "flex-end",
+  },
+  insatsTyp: {
+    width: 120,
+    paddingLeft: 20,
+  },
+  freeText: {
+    flex: 1,
+    marginBottom: 49,
+    paddingLeft: 40,
+    paddingTop: 10,
+    flexDirection: "row",
+    alignSelf: "flex-end",
   },
 });
 
