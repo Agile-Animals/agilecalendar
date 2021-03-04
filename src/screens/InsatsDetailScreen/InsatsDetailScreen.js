@@ -19,7 +19,7 @@ class InsatsDetailScreen extends Component {
     this.state = {
       residentName: "",
       time: "",
-      selectedStartDate: "",
+      date: "",
       helperName: "",
       insatsType: "",
       freeText: "",
@@ -41,7 +41,7 @@ class InsatsDetailScreen extends Component {
           key: res.id,
           residentName: insats.residentName,
           time: insats.time,
-          selectedStartDate: insats.selectedStartDate,
+          date: insats.date,
           helperName: insats.helperName,
           insatsType: insats.insatsType,
           freeText: insats.freeText,
@@ -71,7 +71,7 @@ class InsatsDetailScreen extends Component {
       .set({
         residentName: this.state.residentName,
         time: this.state.time,
-        selectedStartDate: this.state.selectedStartDate,
+        date: this.state.date,
         helperName: this.state.helperName,
         insatsType: this.state.insatsType,
         freeText: this.state.freeText,
@@ -81,6 +81,7 @@ class InsatsDetailScreen extends Component {
           key: "",
           residentName: "",
           time: "",
+          date: "",
           helperName: "",
           insatsType: "",
           freeText: "",
@@ -128,8 +129,9 @@ class InsatsDetailScreen extends Component {
 
   onDateChange(date) {
     this.setState({
-      selectedStartDate: date.toJSON().substring(0,10),
+      selectedStartDate: date.toJSON().substring(0, 10),
     });
+    this.inputValueUpdate(date.toJSON().substring(0, 10), "date");
   }
 
 
@@ -177,10 +179,6 @@ class InsatsDetailScreen extends Component {
           <CalendarPicker
             onDateChange={this.onDateChange}
           />
-
-          <View>
-            <Text>SELECTED DATE:{ startDate }</Text>
-          </View>
         </View>
 
         <View style={styles.Dropdown}>
