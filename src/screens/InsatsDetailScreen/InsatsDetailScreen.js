@@ -12,13 +12,15 @@ import {
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
+import { ThemeContext } from "../../../config/ThemeContext";
 
 class InsatsDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       residentName: "",
-      time: "",
+      fromTime: "",
+      toTime: "",
       date: "",
       helperName: "",
       insatsType: "",
@@ -39,7 +41,8 @@ class InsatsDetailScreen extends Component {
         this.setState({
           key: res.id,
           residentName: insats.residentName,
-          time: insats.time,
+          fromTime: insats.fromTime,
+          toTime: insats.toTime,
           date: insats.date,
           helperName: insats.helperName,
           insatsType: insats.insatsType,
@@ -51,6 +54,10 @@ class InsatsDetailScreen extends Component {
       }
     });
   }
+
+  // setModalVisible = (visible) => {
+  //   this.setState({ modalVisible: visible });
+  // }
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
@@ -69,7 +76,8 @@ class InsatsDetailScreen extends Component {
     updateDBRef
       .set({
         residentName: this.state.residentName,
-        time: this.state.time,
+        fromTime: this.state.fromTime,
+        toTime: this.state.toTime,
         date: this.state.date,
         helperName: this.state.helperName,
         insatsType: this.state.insatsType,
@@ -79,7 +87,8 @@ class InsatsDetailScreen extends Component {
         this.setState({
           key: "",
           residentName: "",
-          time: "",
+          fromTime: "",
+          toTime: "",
           helperName: "",
           insatsType: "",
           freeText: "",
@@ -165,14 +174,6 @@ class InsatsDetailScreen extends Component {
           />
         </View>
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            placeholder={"time"}
-            value={this.state.time}
-            onChangeText={(val) => this.inputValueUpdate(val, "time")}
-          />
-        </View>
-
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
             <Text>Från:</Text>
@@ -182,7 +183,7 @@ class InsatsDetailScreen extends Component {
               tintColor={"#666666"}
               activityTintColor={"green"}
               handler={(selection, row) =>
-                this.setState({ insatsType: data[selection][row] })
+                this.setState({ fromTime: timeData[selection][row] })
               }
               data={timeData}
             ></DropdownMenu>
@@ -196,11 +197,22 @@ class InsatsDetailScreen extends Component {
               tintColor={"#666666"}
               activityTintColor={"green"}
               handler={(selection, row) =>
-                this.setState({ insatsType: data[selection][row] })
+                this.setState({ toTime: timeData[selection][row] })
               }
               data={timeData}
             ></DropdownMenu>
           </View>
+          {/* <Button
+          style={{
+            height: 40,
+            width: 84,
+          }}
+          onPress={() => {
+            setModalState(true);
+          }}
+        >
+          Datum
+        </Button> */}
         </View>
 
         <View style={styles.inputGroup}>
@@ -235,8 +247,6 @@ class InsatsDetailScreen extends Component {
             onPress={() => this.updateInsats()}
             color="#19AC52"
           />
-        </View>
-        <View style={styles.button}>
           <Button
             title="Delete"
             onPress={this.openTwoButtonAlert}
@@ -269,9 +279,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  button: {
-    marginBottom: 7,
-  },
   Dropdown: {
     flex: 1,
     marginBottom: 250,
@@ -292,7 +299,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     marginBottom: 49,
-    borderBottomWidth: 1,
+    width: 120,
+    flexDirection: 'row',
+    flexBasis: 20
   },
 });
 

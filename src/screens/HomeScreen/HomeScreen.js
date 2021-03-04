@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, ActivityIndicator, Modal } from "react-native";
+import { StyleSheet, Dimensions, ActivityIndicator } from "react-native";
 import {
   Icon,
   Layout,
@@ -48,13 +48,9 @@ const HomeScreen = ({ navigation }) => {
     return <ActivityIndicator />;
   }
 
-  const renderItemIcon = (props, { item }) => (
-    <Icon {...props} name="shopping-cart" />
-  );
-
   const renderItem = ({ item, index }) => (
     <ListItem
-      title={`${item.residentName}`}
+      title={`${item.residentName}` + "\t\t\t\t" + `${item.fromTime}` + "-" + `${item.toTime}`}
       description={`${item.insatsType + " " + item.date}`}
       onPress={() => {
         navigation.navigate("InsatsDetailScreen", {

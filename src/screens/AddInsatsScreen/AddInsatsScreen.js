@@ -1,22 +1,32 @@
-import React, { Component } from 'react';
-import { Button, StyleSheet, TextInput, ScrollView, ActivityIndicator, View, Text } from 'react-native';
-import firebase from '../../database/firebaseDb';
-import DropdownMenu from 'react-native-dropdown-menu';
-import CalendarPicker from 'react-native-calendar-picker';
-
+import React, { Component } from "react";
+import {
+  Button,
+  StyleSheet,
+  TextInput,
+  ScrollView,
+  ActivityIndicator,
+  View,
+  Text,
+  Modal,
+} from "react-native";
+import firebase from "../../database/firebaseDb";
+import DropdownMenu from "react-native-dropdown-menu";
+import CalendarPicker from "react-native-calendar-picker";
+import { ThemeContext } from "../../../config/ThemeContext";
 
 class AddInsatsScreen extends Component {
   constructor(props) {
     super(props);
-    this.dbRef = firebase.firestore().collection('insatser');
+    this.dbRef = firebase.firestore().collection("insatser");
     this.state = {
-      helperName: '',
-      insatsType: 'Fritext',
-      residentName: '',
-      time: '',
+      helperName: "",
+      insatsType: "Fritext",
+      residentName: "",
+      fromTime: "",
+      toTime: "",
       date: new Date().toJSON().substring(0, 10),
-      freeText: '',
-      isLoading: false
+      freeText: "",
+      isLoading: false,
     };
 
     this.onDateChange = this.onDateChange.bind(this);
@@ -26,94 +36,94 @@ class AddInsatsScreen extends Component {
     const state = this.state;
     state[prop] = val;
     this.setState(state);
-  }
+  };
 
   storeInsats() {
-    if(this.state.helperName === ''){
-     alert('Fill at least your name!')
+    if (this.state.helperName === "") {
+      alert("Fill at least your name!");
     } else {
       this.setState({
         isLoading: true,
-      });      
-      this.dbRef.add({
-        helperName: this.state.helperName,
-        insatsType: this.state.insatsType,
-        residentName: this.state.residentName,
-        time: this.state.time,
-        date: this.state.date,
-        freeText : this.state.freeText,
-
-      }).then((res) => {
-        this.setState({
-          helperName: '',
-          insatsType: '',
-          residentName: '',
-          time: '',
-          freeText: '',
-          isLoading: false
-
-        })
-
-        this.props.navigation.navigate('HomeScreen')
-      })
-      .catch((err) => {
-        console.error("Error found: ", err);
-        this.setState({
-          isLoading: false,
-        });
       });
+      this.dbRef
+        .add({
+          helperName: this.state.helperName,
+          insatsType: this.state.insatsType,
+          residentName: this.state.residentName,
+          fromTime: this.state.fromTime,
+          toTime: this.state.toTime,
+          date: this.state.date,
+          freeText: this.state.freeText,
+        })
+        .then((res) => {
+          this.setState({
+            helperName: "",
+            insatsType: "",
+            residentName: "",
+            fromTime: "",
+            toTime: "",
+            freeText: "",
+            isLoading: false,
+          });
+
+          this.props.navigation.navigate("HomeScreen");
+        })
+        .catch((err) => {
+          console.error("Error found: ", err);
+          this.setState({
+            isLoading: false,
+          });
+        });
     }
   }
 
   onDateChange(date) {
     this.setState({
-      date: date.toJSON().substring(0,10),
+      date: date.toJSON().substring(0, 10),
     });
   }
 
   render() {
-
-    var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
+    var data = [["Fritext", "Städa", "Tvätta", "Handla", "Duscha"]];
     var timeData = [
       [
-        "08:00", "09:00", "10:00", "11:00", "12:00",
-        "13:00", "14:00", "15:00", "16:00", "17:00"
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
       ],
     ];
     const { date } = this.state;
-    const startDate = date ? date.toString() : '';
-    if(this.state.isLoading){
-      return(
+    const startDate = date ? date.toString() : "";
+    if (this.state.isLoading) {
+      return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E"/>
+          <ActivityIndicator size="large" color="#9E9E9E" />
         </View>
-      )
+      );
     }
-    
+
     return (
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-              placeholder={'helperName'}
-              value={this.state.helperName}
-              onChangeText={(val) => this.inputValueUpdate(val, 'helperName')}
+            placeholder={"helperName"}
+            value={this.state.helperName}
+            onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
 
         <View style={styles.inputGroup}>
           <TextInput
-              placeholder={'residentName'}
-              value={this.state.residentName}
-              onChangeText={(val) => this.inputValueUpdate(val, 'residentName')}
-          />
-        </View>
-
-
-        <View style={styles.inputGroup}>
-          <TextInput
-              placeholder={'time'}
-              value={this.state.time}
-              onChangeText={(val) => this.inputValueUpdate(val, 'time')}
+            placeholder={"residentName"}
+            value={this.state.residentName}
+            onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
         </View>
 
@@ -126,7 +136,7 @@ class AddInsatsScreen extends Component {
               tintColor={"#666666"}
               activityTintColor={"green"}
               handler={(selection, row) =>
-                this.setState({ insatsType: data[selection][row] })
+                this.setState({ fromTime: timeData[selection][row] })
               }
               data={timeData}
             ></DropdownMenu>
@@ -140,45 +150,52 @@ class AddInsatsScreen extends Component {
               tintColor={"#666666"}
               activityTintColor={"green"}
               handler={(selection, row) =>
-                this.setState({ insatsType: data[selection][row] })
+                this.setState({ toTime: timeData[selection][row] })
               }
               data={timeData}
             ></DropdownMenu>
           </View>
+           {/* <Button
+          style={{
+            height: 40,
+            width: 84,
+          }}
+          onPress={() => this.setModalVisible(!modalVisible)}
+        >
+          Datum
+        </Button> */}
         </View>
 
         <View style={styles.inputGroup}>
-          <CalendarPicker
-            onDateChange={this.onDateChange}
-          />
+          <CalendarPicker onDateChange={this.onDateChange} />
         </View>
 
         <View style={styles.Dropdown}>
-          <View style={{height: 64}} />
+          <View style={{ height: 64 }} />
           <DropdownMenu
-            style={{flex: 1, marginBottom: 95,}}
-            bgColor={'white'}
-            tintColor={'#666666'}
-            activityTintColor={'green'}
-            handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
+            style={{ flex: 1, marginBottom: 95 }}
+            bgColor={"white"}
+            tintColor={"#666666"}
+            activityTintColor={"green"}
+            handler={(selection, row) =>
+              this.setState({ insatsType: data[selection][row] })
+            }
             data={data}
-          >
-          </DropdownMenu>
+          ></DropdownMenu>
         </View>
 
         <View style={styles.inputGroup}>
           <TextInput
-              placeholder={'Fritext...'}
-              value={this.state.freeText}
-              onChangeText={(val) => this.inputValueUpdate(val, 'freeText')}
+            placeholder={"Fritext..."}
+            value={this.state.freeText}
+            onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
           />
         </View>
 
         <View style={styles.button}>
           <Button
-            title='Spara Insats'
-            onPress={() => this.storeInsats()} 
-
+            title="Spara Insats"
+            onPress={() => this.storeInsats()}
             color="#19AC52"
           />
         </View>
@@ -204,9 +221,9 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center'
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
   },
   Dropdown: {
     flex: 1,
@@ -215,7 +232,7 @@ const styles = StyleSheet.create({
   timeDropdown: {
     flex: 1,
     marginBottom: 250,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   timeFrom: {
     width: 120,
@@ -229,8 +246,7 @@ const styles = StyleSheet.create({
     padding: 0,
     marginBottom: 49,
     borderBottomWidth: 1,
-
   },
-})
+});
 
 export default AddInsatsScreen;
