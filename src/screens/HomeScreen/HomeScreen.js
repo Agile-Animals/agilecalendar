@@ -20,7 +20,6 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [insatser, setInsatser] = useState([]); // Initial empty array of users
   const [date, setDate] = useState(new Date());
-  const [modalState, setModalState] = useState(false);
 
   useEffect(() => {
     const subscriber = firebase
@@ -75,17 +74,7 @@ const HomeScreen = ({ navigation }) => {
         >
           Lägg till insats
         </Button>
-        {/* <Button
-          style={{
-            height: 40,
-            width: 84,
-          }}
-          onPress={() => {
-            setModalState(true);
-          }}
-        >
-          Datum
-        </Button> */}
+        
       </Layout>
       <List style={styles.container} data={insatser} renderItem={renderItem} />
       {/* behöver byta namn på variablen ifall detta ska användas */}
