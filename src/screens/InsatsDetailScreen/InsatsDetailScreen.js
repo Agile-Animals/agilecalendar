@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import {
   Alert,
-  Button,
   StyleSheet,
   TextInput,
   ScrollView,
   ActivityIndicator,
   View,
   Text,
+  Modal,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
 import { ThemeContext } from "../../../config/ThemeContext";
+import { Button } from "@ui-kitten/components";
 
 class InsatsDetailScreen extends Component {
   constructor(props) {
@@ -48,6 +49,7 @@ class InsatsDetailScreen extends Component {
           insatsType: insats.insatsType,
           freeText: insats.freeText,
           isLoading: false,
+          modalVisible: false,
         });
       } else {
         console.log("Document does not exist!");
@@ -55,9 +57,9 @@ class InsatsDetailScreen extends Component {
     });
   }
 
-  // setModalVisible = (visible) => {
-  //   this.setState({ modalVisible: visible });
-  // }
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  };
 
   inputValueUpdate = (val, prop) => {
     const state = this.state;
@@ -137,17 +139,26 @@ class InsatsDetailScreen extends Component {
     this.setState({
       date: date.toJSON().substring(0, 10),
     });
+    this.setModalVisible(false);
   }
 
   render() {
     var data = [["Fritext", "Städa", "Tvätta", "Handla", "Duscha"]];
     var timeData = [
       [
-        "08:00", "09:00", "10:00", "11:00", "12:00",
-        "13:00", "14:00", "15:00", "16:00", "17:00"
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
       ],
     ];
-    const { date } = this.state;
+    const { date, modalVisible } = this.state;
     const startDate = date ? date.toString() : "";
     if (this.state.isLoading) {
       return (
@@ -160,7 +171,7 @@ class InsatsDetailScreen extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"helperName"}
+            placeholder={"Hjälpare"}
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
@@ -168,11 +179,20 @@ class InsatsDetailScreen extends Component {
 
         <View style={styles.inputGroup}>
           <TextInput
-            placeholder={"residentName"}
+            placeholder={"Boende"}
             value={this.state.residentName}
             onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
         </View>
+        <Button
+          style={{
+            height: 40,
+            width: 84,
+          }}
+          onPress={() => this.setModalVisible(true)}
+        >
+          Datum
+        </Button>
 
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
@@ -202,56 +222,55 @@ class InsatsDetailScreen extends Component {
               data={timeData}
             ></DropdownMenu>
           </View>
-          {/* <Button
-          style={{
-            height: 40,
-            width: 84,
-          }}
-          onPress={() => {
-            setModalState(true);
+
+          <View style={styles.insatsTyp}>
+            <Text>Insats typ:</Text>
+            <DropdownMenu
+              style={{ flex: 1 }}
+              bgColor={"white"}
+              tintColor={"#666666"}
+              activityTintColor={"green"}
+              handler={(selection, row) =>
+                this.setState({ insatsType: data[selection][row] })
+              }
+              data={data}
+            ></DropdownMenu>
+          </View>
+          <View style={styles.freeText}>
+            <TextInput
+              placeholder={this.state.freeText}
+              value={this.state.freeText}
+              onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
+            />
+          </View>
+        </View>
+
+        <Modal
+          animationType="slide"
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            this.setModalVisible(!modalVisible);
           }}
         >
-          Datum
-        </Button> */}
-        </View>
-
-        <View style={styles.inputGroup}>
-          <CalendarPicker onDateChange={this.onDateChange} />
-        </View>
-
-        <View style={styles.Dropdown}>
-          <View style={{ height: 64 }} />
-          <DropdownMenu
-            style={{ flex: 1, marginBottom: 95 }}
-            bgColor={"white"}
-            tintColor={"#666666"}
-            activityTintColor={"green"}
-            handler={(selection, row) =>
-              this.setState({ insatsType: data[selection][row] })
-            }
-            data={data}
-          ></DropdownMenu>
-        </View>
-
-        <View style={styles.inputGroup}>
-          <TextInput
-            placeholder={this.state.freeText}
-            value={this.state.freeText}
-            onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
-          />
-        </View>
+          <View style={styles.inputGroup}>
+            <CalendarPicker onDateChange={this.onDateChange} />
+          </View>
+        </Modal>
 
         <View style={styles.button}>
           <Button
-            title="Update"
+            style={{ width: 120, backgroundColor: "#19AC52" }}
             onPress={() => this.updateInsats()}
-            color="#19AC52"
-          />
+          >
+            Update
+          </Button>
           <Button
-            title="Delete"
+            style={{ width: 120, backgroundColor: "red" }}
             onPress={this.openTwoButtonAlert}
-            color="#E37399"
-          />
+          >
+            Delete
+          </Button>
         </View>
       </ScrollView>
     );
@@ -286,7 +305,7 @@ const styles = StyleSheet.create({
   timeDropdown: {
     flex: 1,
     marginBottom: 250,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   timeFrom: {
     width: 120,
@@ -295,13 +314,23 @@ const styles = StyleSheet.create({
   timeTo: {
     width: 100,
   },
+  insatsTyp: {
+    width: 120,
+    paddingLeft: 20,
+  },
   button: {
     flex: 1,
-    padding: 0,
     marginBottom: 49,
-    width: 120,
-    flexDirection: 'row',
-    flexBasis: 20
+    flexDirection: "row",
+    alignSelf: "flex-end",
+  },
+  freeText: {
+    flex: 1,
+    marginBottom: 49,
+    paddingLeft: 40,
+    paddingTop: 10,
+    flexDirection: "row",
+    alignSelf: "flex-end",
   },
 });
 
