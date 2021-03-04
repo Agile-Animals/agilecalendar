@@ -7,14 +7,14 @@ import CalendarPicker from 'react-native-calendar-picker';
 
 class AddInsatsScreen extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.dbRef = firebase.firestore().collection('insatser');
     this.state = {
       helperName: '',
       insatsType: 'Fritext',
       residentName: '',
       time: '',
-      date: new Date().toJSON().substring(0, 10),
+      date: "",
       freeText: '',
       isLoading: false
     };
@@ -49,7 +49,6 @@ class AddInsatsScreen extends Component {
           insatsType: '',
           residentName: '',
           time: '',
-          date: '',
           freeText: '',
           isLoading: false
 
@@ -67,18 +66,21 @@ class AddInsatsScreen extends Component {
   }
 
 
+
+
+  
+  
   onDateChange(date) {
     this.setState({
-      selectedStartDate: date.toJSON().substring(0, 10),
+      date: date.toJSON().substring(0,10),
     });
-    this.inputValueUpdate(date.toJSON().substring(0, 10), "date");
   }
 
   render() {
 
     var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
-    const { selectedStartDate } = this.state;
-    const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+    const { date } = this.state;
+    const startDate = date ? date.toString() : '';
     if(this.state.isLoading){
       return(
         <View style={styles.preloader}>
@@ -119,6 +121,10 @@ class AddInsatsScreen extends Component {
           <CalendarPicker
             onDateChange={this.onDateChange}
           />
+
+          <View>
+            <Text>SELECTED DATE:{ startDate }</Text>
+          </View>
         </View>
 
 

@@ -81,7 +81,6 @@ class InsatsDetailScreen extends Component {
           key: "",
           residentName: "",
           time: "",
-          date: "",
           helperName: "",
           insatsType: "",
           freeText: "",
@@ -129,17 +128,16 @@ class InsatsDetailScreen extends Component {
 
   onDateChange(date) {
     this.setState({
-      selectedStartDate: date.toJSON().substring(0, 10),
+      date: date.toJSON().substring(0,10),
     });
-    this.inputValueUpdate(date.toJSON().substring(0, 10), "date");
   }
 
 
 
   render() {
     var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
-    const { selectedStartDate } = this.state;
-    const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+    const { date } = this.state;
+    const startDate = date ? date.toString() : '';
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
@@ -179,6 +177,10 @@ class InsatsDetailScreen extends Component {
           <CalendarPicker
             onDateChange={this.onDateChange}
           />
+
+          <View>
+            <Text>SELECTED DATE:{ startDate }</Text>
+          </View>
         </View>
 
         <View style={styles.Dropdown}>
