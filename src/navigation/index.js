@@ -51,12 +51,12 @@ const LoginStack = () => (
     <Stack.Screen
       name="AddInsatsScreen"
       component={AddInsatsScreen}
-      options={{ title: "Add Insats" }}
+      options={{ title: "Lägg till Insats" }}
     />
     <Stack.Screen
       name="InsatsDetailScreen"
       component={InsatsDetailScreen}
-      options={{ title: "Insats Detail" }}
+      options={{ title: "Ändra Insats" }}
     />
   </Stack.Navigator>
 );

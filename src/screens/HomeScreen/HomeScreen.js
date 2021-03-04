@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
   const renderItem = ({ item, index }) => (
     <ListItem
       title={`${item.residentName}`}
-      description={`${item.insatsType}`}
+      description={`${item.insatsType + " " + item.date}`}
       onPress={() => {
         navigation.navigate("InsatsDetailScreen", {
           insatskey: item.key,
@@ -68,7 +68,7 @@ const HomeScreen = ({ navigation }) => {
     <Layout style={styles.container} level="1">
       <Layout style={styles.header} level="1">
         <Text category="h2">Översikt</Text>
-        <Text category="h6">Valt Datum: {date.toLocaleDateString()}</Text>
+        {/* <Text category="h6">Valt Datum: {date.toLocaleDateString()}</Text> */}
       </Layout>
       <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Button
@@ -79,7 +79,7 @@ const HomeScreen = ({ navigation }) => {
         >
           Lägg till insats
         </Button>
-        <Button
+        {/* <Button
           style={{
             height: 40,
             width: 84,
@@ -89,10 +89,11 @@ const HomeScreen = ({ navigation }) => {
           }}
         >
           Datum
-        </Button>
+        </Button> */}
       </Layout>
       <List style={styles.container} data={insatser} renderItem={renderItem} />
-      <Layout style={{ flex: 1 }}>
+      {/* behöver byta namn på variablen ifall detta ska användas */}
+      {/* <Layout style={{ flex: 1 }}>
         <Modal visible={modalState} animationType="slide">
           <Calendar
             date={date}
@@ -102,7 +103,7 @@ const HomeScreen = ({ navigation }) => {
             }}
           />
         </Modal>
-      </Layout>
+      </Layout> */}
     </Layout>
   );
 };
