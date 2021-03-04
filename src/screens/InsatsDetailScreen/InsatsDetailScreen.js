@@ -7,11 +7,11 @@ import {
   ScrollView,
   ActivityIndicator,
   View,
-  Text 
+  Text,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
-import DropdownMenu from 'react-native-dropdown-menu';
-import CalendarPicker from 'react-native-calendar-picker';
+import DropdownMenu from "react-native-dropdown-menu";
+import CalendarPicker from "react-native-calendar-picker";
 
 class InsatsDetailScreen extends Component {
   constructor(props) {
@@ -27,7 +27,6 @@ class InsatsDetailScreen extends Component {
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
-
 
   componentDidMount() {
     const dbRef = firebase
@@ -125,19 +124,32 @@ class InsatsDetailScreen extends Component {
     );
   };
 
-
   onDateChange(date) {
     this.setState({
-      date: date.toJSON().substring(0,10),
+      date: date.toJSON().substring(0, 10),
     });
   }
 
-
-
   render() {
-    var data = [['Fritext', 'Städa','Tvätta', 'Handla', 'Duscha']];
+    var data = [["Fritext", "Städa", "Tvätta", "Handla", "Duscha"]];
+    var timeData = [
+      [
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+        "18:00",
+        "19:00",
+      ],
+    ];
     const { date } = this.state;
-    const startDate = date ? date.toString() : '';
+    const startDate = date ? date.toString() : "";
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
@@ -154,7 +166,7 @@ class InsatsDetailScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        
+
         <View style={styles.inputGroup}>
           <TextInput
             placeholder={"residentName"}
@@ -162,7 +174,6 @@ class InsatsDetailScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
         </View>
-
 
         <View style={styles.inputGroup}>
           <TextInput
@@ -172,40 +183,59 @@ class InsatsDetailScreen extends Component {
           />
         </View>
 
+        <View style={styles.timeDropdown}>
+          <View style={styles.timeFrom}>
+            <Text>Från:</Text>
+            <DropdownMenu
+              style={{ flex: 1 }}
+              bgColor={"white"}
+              tintColor={"#666666"}
+              activityTintColor={"green"}
+              handler={(selection, row) =>
+                this.setState({ insatsType: data[selection][row] })
+              }
+              data={timeData}
+            ></DropdownMenu>
+          </View>
 
-        <View style={styles.inputGroup}>
-          <CalendarPicker
-            onDateChange={this.onDateChange}
-          />
-
-          <View>
-            <Text>SELECTED DATE:{ startDate }</Text>
+          <View style={styles.timeTo}>
+            <Text>Till:</Text>
+            <DropdownMenu
+              style={{ flex: 1 }}
+              bgColor={"white"}
+              tintColor={"#666666"}
+              activityTintColor={"green"}
+              handler={(selection, row) =>
+                this.setState({ insatsType: data[selection][row] })
+              }
+              data={timeData}
+            ></DropdownMenu>
           </View>
         </View>
 
+        <View style={styles.inputGroup}>
+          <CalendarPicker onDateChange={this.onDateChange} />
+        </View>
+
         <View style={styles.Dropdown}>
-          <View style={{height: 64}} />
+          <View style={{ height: 64 }} />
           <DropdownMenu
-            style={{flex: 1, marginBottom: 95,}}
-            bgColor={'white'}
-            tintColor={'#666666'}
-            activityTintColor={'green'}
-            // arrowImg={}      
-            // checkImage={}   
-            // optionTextStyle={{color: '#333333'}}
-            // titleStyle={{color: '#333333'}} 
-            // maxHeight={300} 
-            handler={(selection, row) => this.setState({insatsType: data[selection][row]})}
+            style={{ flex: 1, marginBottom: 95 }}
+            bgColor={"white"}
+            tintColor={"#666666"}
+            activityTintColor={"green"}
+            handler={(selection, row) =>
+              this.setState({ insatsType: data[selection][row] })
+            }
             data={data}
-          >
-          </DropdownMenu>
+          ></DropdownMenu>
         </View>
 
         <View style={styles.inputGroup}>
           <TextInput
-              placeholder={this.state.freeText}
-              value={this.state.freeText}
-              onChangeText={(val) => this.inputValueUpdate(val, 'freeText')}
+            placeholder={this.state.freeText}
+            value={this.state.freeText}
+            onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
           />
         </View>
 
@@ -256,12 +286,23 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 250,
   },
+  timeDropdown: {
+    flex: 1,
+    marginBottom: 250,
+    flexDirection: 'row',
+  },
+  timeFrom: {
+    width: 120,
+    paddingRight: 20,
+  },
+  timeTo: {
+    width: 100,
+  },
   button: {
     flex: 1,
     padding: 0,
     marginBottom: 49,
     borderBottomWidth: 1,
-
   },
 });
 
