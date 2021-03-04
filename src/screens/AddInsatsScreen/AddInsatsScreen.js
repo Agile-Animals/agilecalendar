@@ -14,7 +14,7 @@ class AddInsatsScreen extends Component {
       insatsType: 'Fritext',
       residentName: '',
       time: '',
-      date: "",
+      date: new Date().toJSON().substring(0, 10),
       freeText: '',
       isLoading: false
     };
@@ -65,11 +65,6 @@ class AddInsatsScreen extends Component {
     }
   }
 
-
-
-
-  
-  
   onDateChange(date) {
     this.setState({
       date: date.toJSON().substring(0,10),
@@ -121,10 +116,6 @@ class AddInsatsScreen extends Component {
           <CalendarPicker
             onDateChange={this.onDateChange}
           />
-
-          <View>
-            <Text>SELECTED DATE:{ startDate }</Text>
-          </View>
         </View>
 
 
