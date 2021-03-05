@@ -6,7 +6,7 @@ import {
   Text,
   Button,
   List,
-  ListItem,
+  Card,
   Calendar,
 } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
@@ -48,15 +48,23 @@ const HomeScreen = ({ navigation }) => {
   }
 
   const renderItem = ({ item, index }) => (
-    <ListItem
-      title={`${item.residentName}` + "\t\t\t\t" + `${item.fromTime}` + "-" + `${item.toTime}`}
-      description={`${item.insatsType + " " + item.date}`}
+    <Card
+      style={styles.instatsList}
       onPress={() => {
         navigation.navigate("InsatsDetailScreen", {
           insatskey: item.key,
         });
       }}
-    />
+    >
+      {/* title={`${item.residentName}` + "\t\t\t\t" + `${item.fromTime}` + "-" + `${item.toTime}`}
+      description={`${item.insatsType + " " + item.date}`} */}
+
+      <Text style={{
+    fontSize: 14}}>
+        {item.residentName} {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card>
   );
 
   return (
@@ -74,7 +82,6 @@ const HomeScreen = ({ navigation }) => {
         >
           Lägg till insats
         </Button>
-        
       </Layout>
       <List style={styles.container} data={insatser} renderItem={renderItem} />
       {/* behöver byta namn på variablen ifall detta ska användas */}
@@ -113,6 +120,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  instatsList: {
+    marginTop: 10,
+    margin: 10,
+    height: 150,
+    flex: 10,
+    marginBottom: 10,
+    borderRadius: 4,
+    shadowColor: "black",
+    shadowColor: "red",
+    // shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
 });
 
