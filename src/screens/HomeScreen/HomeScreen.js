@@ -56,11 +56,12 @@ const HomeScreen = ({ navigation }) => {
         });
       }}
     >
-      {/* title={`${item.residentName}` + "\t\t\t\t" + `${item.fromTime}` + "-" + `${item.toTime}`}
-      description={`${item.insatsType + " " + item.date}`} */}
-
-      <Text style={{
-    fontSize: 14}}>
+      <Text
+        style={{
+          fontSize: 14,
+        }}
+      >
+        if (item.date === new Date().toJSON().substring(0, 10))
         {item.residentName} {item.fromTime}-{item.toTime} {"\n\n"}
         {item.insatsType} {item.date}
       </Text>
@@ -83,7 +84,10 @@ const HomeScreen = ({ navigation }) => {
           Lägg till insats
         </Button>
       </Layout>
+      <Layout>
       <List style={styles.container} data={insatser} renderItem={renderItem} />
+      <List style={styles.container} data={insatser} renderItem={renderItem} />
+      </Layout>
       {/* behöver byta namn på variablen ifall detta ska användas */}
       {/* <Layout style={{ flex: 1 }}>
         <Modal visible={modalState} animationType="slide">
