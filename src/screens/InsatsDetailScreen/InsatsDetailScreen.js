@@ -19,7 +19,7 @@ class InsatsDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      residentName: "",
+      boende: firebase.auth().currentUser.uid,
       fromTime: "",
       toTime: "",
       date: "",
@@ -41,7 +41,7 @@ class InsatsDetailScreen extends Component {
         const insats = res.data();
         this.setState({
           key: res.id,
-          residentName: insats.residentName,
+          boende: insats.boende,
           fromTime: insats.fromTime,
           toTime: insats.toTime,
           date: insats.date,
@@ -77,7 +77,7 @@ class InsatsDetailScreen extends Component {
       .doc(this.state.key);
     updateDBRef
       .set({
-        residentName: this.state.residentName,
+        boende: this.state.boende,
         fromTime: this.state.fromTime,
         toTime: this.state.toTime,
         date: this.state.date,
@@ -88,7 +88,7 @@ class InsatsDetailScreen extends Component {
       .then((docRef) => {
         this.setState({
           key: "",
-          residentName: "",
+          boende: "",
           fromTime: "",
           toTime: "",
           helperName: "",
@@ -177,13 +177,6 @@ class InsatsDetailScreen extends Component {
           />
         </View>
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            placeholder={"Boende"}
-            value={this.state.residentName}
-            onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
-          />
-        </View>
         <Button
           style={{
             height: 40,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, ActivityIndicator } from "react-native";
+import { StyleSheet, Dimensions, ActivityIndicator, Alert } from "react-native";
 import {
   Icon,
   Layout,
@@ -11,6 +11,7 @@ import {
 } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
+import { loggingOut } from "../../API/firebaseMethods";
 
 // these need to be updated upon fliping or they serve no real purpose
 // const window = Dimensions.get("window");
@@ -21,21 +22,23 @@ const HomeScreen = ({ navigation }) => {
   const [insatser, setInsatser] = useState([]); // Initial empty array of users
   const [date, setDate] = useState(new Date());
 
+  const insatsRef = firebase.firestore().collection("insatser");
+  const userID = firebase.auth().currentUser.uid;
+
   useEffect(() => {
-    const subscriber = firebase
-      .firestore()
-      .collection("insatser")
+    const subscriber = insatsRef
+      .where("boende", "==", userID)
       .onSnapshot((querySnapshot) => {
-        const insatser = [];
+        const tempInsatser = [];
 
         querySnapshot.forEach((documentSnapshot) => {
-          insatser.push({
+          tempInsatser.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
         });
 
-        setInsatser(insatser);
+        setInsatser(tempInsatser);
         setLoading(false);
       });
 
@@ -47,6 +50,11 @@ const HomeScreen = ({ navigation }) => {
     return <ActivityIndicator />;
   }
 
+  const handlePress = () => {
+    loggingOut();
+    navigation.replace("Login");
+  };
+
   const renderItem = ({ item, index }) => (
     <Card
       style={styles.instatsList}
@@ -56,37 +64,37 @@ const HomeScreen = ({ navigation }) => {
         });
       }}
     >
-      <Text
-        style={{
-          fontSize: 14,
-        }}
-      >
-        if (item.date === new Date().toJSON().substring(0, 10))
-        {item.residentName} {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
-      </Text>
+      <Text>{insatser[0].boende}</Text>
     </Card>
   );
 
   return (
     <Layout style={styles.container} level="1">
       <Layout style={styles.header} level="1">
-        <Text category="h2">Översikt</Text>
+        <Text category="h2">Översikt {insatser[0].insatsType} </Text>
         {/* <Text category="h6">Valt Datum: {date.toLocaleDateString()}</Text> */}
       </Layout>
       <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Button
           style={{ height: 40, width: 140 }}
-          onPress={() => {
-            navigation.navigate("AddInsatsScreen");
-          }}
+          // onPress={() => {
+          //   navigation.navigate("AddInsatsScreen");
+          // }}
         >
           Lägg till insats
         </Button>
       </Layout>
       <Layout>
-      <List style={styles.container} data={insatser} renderItem={renderItem} />
-      <List style={styles.container} data={insatser} renderItem={renderItem} />
+        <List
+          style={styles.container}
+          data={insatser}
+          renderItem={renderItem}
+        />
+        <List
+          style={styles.container}
+          data={insatser}
+          renderItem={renderItem}
+        />
       </Layout>
       {/* behöver byta namn på variablen ifall detta ska användas */}
       {/* <Layout style={{ flex: 1 }}>
@@ -100,6 +108,12 @@ const HomeScreen = ({ navigation }) => {
           />
         </Modal>
       </Layout> */}
+
+      <Button
+        style={{ height: 40, width: 140 }}
+        onPress={ handlePress }>
+        Logga Ut
+      </Button>
     </Layout>
   );
 };

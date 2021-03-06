@@ -1,20 +1,29 @@
-import React from "react";
-import { View, StyleSheet, KeyboardAvoidingView } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Alert } from "react-native";
 import { Text, Layout, Button, Input, Icon } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
 import { ThemeContext } from "../../../config/ThemeContext";
+import { signIn } from "../../API/firebaseMethods";
 
 const LoginScreen = ({ navigation }) => {
-  const { control, handleSubmit, errors } = useForm();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
   const themeContext = React.useContext(ThemeContext);
-  const onSubmit = (data) => {
-    if (data.email === "test" && data.password === "test") {
-      console.log("Succé!");
-      navigation.navigate("HomeScreen");
-    } else {
-      alert("E-mail/Lösenord är felaktigt.");
+
+  const onSubmit = () => {
+    if (!email) {
+      Alert.alert("Email field is required.");
     }
+
+    if (!password) {
+      Alert.alert("Password field is required.");
+    }
+
+    signIn(email, password);
+    setEmail("");
+    setPassword("");
+    navigation.navigate("Loading");
   };
 
   return (
@@ -27,43 +36,30 @@ const LoginScreen = ({ navigation }) => {
         <Layout style={styles.header} level="1">
           <Text category="h2">Logga in</Text>
         </Layout>
-        <Controller
-          control={control}
-          render={({ onChange, onBlur, value }) => (
-            <Input
-              style={styles.formInput}
-              autoCapitalize="none"
-              onBlur={onBlur}
-              onChangeText={(value) => onChange(value)}
-              value={value}
-              placeholder="E-postadress"
-            />
-          )}
-          name="email"
-          rules={{ required: true }}
-          defaultValue=""
+        <Input
+          style={styles.formInput}
+          autoCapitalize="none"
+          value={email}
+          onChangeText={(email) => setEmail(email)}
+          keyboardType="email-address"
+          placeholder="E-postadress"
         />
-        {errors.email && <Text>E-postadress får inte vara tomt.</Text>}
-        <Controller
-          control={control}
-          render={({ onChange, onBlur, value }) => (
-            <Input
-              style={styles.formInput}
-              autoCapitalize="none"
-              onBlur={onBlur}
-              onChangeText={(value) => onChange(value)}
-              value={value}
-              placeholder="Lösenord"
-            />
-          )}
-          name="password"
-          rules={{ required: true }}
-          defaultValue=""
+        <Input
+          style={styles.formInput}
+          autoCapitalize="none"
+          value={password}
+          onChangeText={(password) => setPassword(password)}
+          placeholder="Lösenord"
         />
-        {errors.password && <Text>Lösenord får inte vara tomt.</Text>}
       </Layout>
-      <Button style={styles.loginBtn} onPress={handleSubmit(onSubmit)}>
+      <Button style={styles.loginBtn} onPress={onSubmit}>
         Logga in
+      </Button>
+      <Button
+        style={styles.button}
+        onPress={() => navigation.navigate("Sign Up")}
+      >
+        <Text style={styles.buttonText}>Sign Up</Text>
       </Button>
       <Layout
         style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }}

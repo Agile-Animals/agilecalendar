@@ -6,6 +6,9 @@ import LoginScreen from "../screens/LoginScreen";
 import HomeScreen from "../screens/HomeScreen";
 import AddInsatsScreen from "../screens/AddInsatsScreen";
 import InsatsDetailScreen from "../screens/InsatsDetailScreen";
+import LoadingScreen from "../screens/LoadingScreen";
+import Dashboard from "../screens/Dashboard";
+import SignUp from "../screens/SignUp";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -16,7 +19,7 @@ const LoggedInTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === "HomeScreen") {
+          if (route.name === "Home") {
             iconName = focused ? "ios-home" : "ios-home-outline";
           } else if (route.name === "Settings") {
             iconName = focused ? "ios-list-box" : "ios-list";
@@ -27,7 +30,7 @@ const LoggedInTabs = () => {
         },
       })}
     >
-      <Tab.Screen name="HomeScreen" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
     </Tab.Navigator>
   );
 };
@@ -57,6 +60,21 @@ const LoginStack = () => (
       name="InsatsDetailScreen"
       component={InsatsDetailScreen}
       options={{ title: "Ändra Insats" }}
+    />
+    <Stack.Screen
+      name={"Loading"}
+      component={LoadingScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Sign Up"
+      component={SignUp}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name={"Dashboard"}
+      component={Dashboard}
+      options={{ headerShown: false }}
     />
   </Stack.Navigator>
 );

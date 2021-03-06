@@ -9,8 +9,14 @@ import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { default as theme } from "./config/custom-theme.json";
 import { ThemeContext } from "./config/ThemeContext";
+import firebase from "./src/database/firebaseDb";
 
 const App = () => {
+  if (!firebase.apps.length) {
+    console.log('Connected with Firebase')
+    firebase.initializeApp(apiKeys.firebaseConfig);
+  }
+  
   const [theme, setTheme] = React.useState("light");
 
   const toggleTheme = () => {
@@ -41,6 +47,11 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     // justifyContent: "center",
   },
+  text: {},
+  textInput: {},
+  button: {},
+  buttonText: {},
+  inlineText: {},
 });
 
 export default App;

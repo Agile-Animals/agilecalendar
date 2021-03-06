@@ -13,6 +13,8 @@ import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
 import { ThemeContext } from "../../../config/ThemeContext";
 import { Button } from "@ui-kitten/components";
+import { loggingOut } from "../../API/firebaseMethods";
+
 
 class AddInsatsScreen extends Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class AddInsatsScreen extends Component {
     this.state = {
       helperName: "",
       insatsType: "Fritext",
-      residentName: "",
+      boende: firebase.auth().currentUser.uid,
       fromTime: "08:00",
       toTime: "09:00",
       date: new Date().toJSON().substring(0, 10),
@@ -54,7 +56,7 @@ class AddInsatsScreen extends Component {
         .add({
           helperName: this.state.helperName,
           insatsType: this.state.insatsType,
-          residentName: this.state.residentName,
+          boende: this.state.boende,
           fromTime: this.state.fromTime,
           toTime: this.state.toTime,
           date: this.state.date,
@@ -64,7 +66,7 @@ class AddInsatsScreen extends Component {
           this.setState({
             helperName: "",
             insatsType: "",
-            residentName: "",
+            boende: "",
             fromTime: "",
             toTime: "",
             freeText: "",
@@ -125,13 +127,13 @@ class AddInsatsScreen extends Component {
           />
         </View>
 
-        <View style={styles.inputGroup}>
+        {/* <View style={styles.inputGroup}>
           <TextInput
             placeholder={"Boende"}
             value={this.state.residentName}
             onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
           />
-        </View>
+        </View> */}
         <Button
           style={{
             height: 40,
