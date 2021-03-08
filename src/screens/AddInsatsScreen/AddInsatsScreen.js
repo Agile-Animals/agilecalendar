@@ -85,7 +85,7 @@ class AddInsatsScreen extends Component {
 
   onDateChange(date) {
     this.setState({
-      date: date.toJSON().substring(5, 10),
+      date: date.toJSON().substring(0, 10),
     });
     this.setModalVisible(false);
   }
