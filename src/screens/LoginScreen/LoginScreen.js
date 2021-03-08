@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
         Logga in
       </Button>
       <Button
-        style={styles.button}
+        style={styles.loginBtn}
         onPress={() => navigation.navigate("Sign Up")}
       >
         <Text style={styles.buttonText}>Sign Up</Text>
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   loginBtn: {
+    // FontColor: '#0000',
     marginTop: 12,
     width: 300,
   },

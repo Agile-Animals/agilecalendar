@@ -57,14 +57,14 @@ const HomeScreen = ({ navigation }) => {
   };
 
   let today = new Date();
-  today = moment(today).format("YYYY-MM-DD");
+  today = moment(today).format("MM-DD");
   let tomorrow = new Date();
-  let aday2 = moment(tomorrow).add(1, "day").format("YYYY-MM-DD");
-  let aday3 = moment(tomorrow).add(2, "day").format("YYYY-MM-DD");
-  let aday4 = moment(tomorrow).add(3, "day").format("YYYY-MM-DD");
-  let aday5 = moment(tomorrow).add(4, "day").format("YYYY-MM-DD");
-  let aday6 = moment(tomorrow).add(5, "day").format("YYYY-MM-DD");
-  let aday7 = moment(tomorrow).add(6, "day").format("YYYY-MM-DD");
+  let aday2 = moment(tomorrow).add(1, "day").format("MM-DD");
+  let aday3 = moment(tomorrow).add(2, "day").format("MM-DD");
+  let aday4 = moment(tomorrow).add(3, "day").format("MM-DD");
+  let aday5 = moment(tomorrow).add(4, "day").format("MM-DD");
+  let aday6 = moment(tomorrow).add(5, "day").format("MM-DD");
+  let aday7 = moment(tomorrow).add(6, "day").format("MM-DD");
 
   const day1 = ({ item, index }) => (
     item.date === today ? <Card
@@ -77,7 +77,7 @@ const HomeScreen = ({ navigation }) => {
     >
       <Text>
         {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
+        {item.insatsType}
       </Text>
     </Card> : null
   );
@@ -93,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
     >
       <Text>
         {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
+        {item.insatsType} 
       </Text>
     </Card> : null
   );
@@ -109,7 +109,7 @@ const HomeScreen = ({ navigation }) => {
     >
       <Text>
         {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
+        {item.insatsType} 
       </Text>
     </Card> : null
   );
@@ -125,7 +125,7 @@ const HomeScreen = ({ navigation }) => {
     >
       <Text>
         {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
+        {item.insatsType} 
       </Text>
     </Card> : null
   );
@@ -141,7 +141,7 @@ const HomeScreen = ({ navigation }) => {
     >
       <Text>
         {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
+        {item.insatsType} 
       </Text>
     </Card> : null
   );
@@ -157,7 +157,7 @@ const HomeScreen = ({ navigation }) => {
     >
       <Text>
         {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
+        {item.insatsType} 
       </Text>
     </Card> : null
   );
@@ -173,7 +173,7 @@ const HomeScreen = ({ navigation }) => {
     >
       <Text>
         {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} {item.date}
+        {item.insatsType} 
       </Text>
     </Card> : null
   );
@@ -195,32 +195,32 @@ const HomeScreen = ({ navigation }) => {
         </Button>
       </Layout>
       <Layout style={styles.listContainer}>
-        <Layout>
-          <Text> {today}</Text>
+        <Layout style={{  width: 180 }}>
+          <Text> Måndag: {today}</Text>
           <List data={insatser} renderItem={day1} />
         </Layout>
-        <Layout>
-          <Text> {moment(tomorrow).add(1, "day").format("YYYY-MM-DD")}</Text>
+        <Layout  style={{  width: 180 }}>
+          <Text> Tisdag:  {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day2} />
         </Layout>
-        <Layout>
-          <Text> {moment(tomorrow).add(2, "day").format("YYYY-MM-DD")}</Text>
+        <Layout  style={{  width: 180 }}>
+          <Text> Onsdag: {moment(tomorrow).add(2, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day3} />
         </Layout>
-        <Layout>
-          <Text> {moment(tomorrow).add(3, "day").format("YYYY-MM-DD")}</Text>
+        <Layout  style={{  width: 180 }}>
+          <Text> Torsdag: {moment(tomorrow).add(3, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day4} />
         </Layout>
-        <Layout>
-          <Text> {moment(tomorrow).add(4, "day").format("YYYY-MM-DD")}</Text>
+        <Layout  style={{  width: 180 }}>
+          <Text> Fredag: {moment(tomorrow).add(4, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day5} />
         </Layout>
-        <Layout>
-          <Text> {moment(tomorrow).add(5, "day").format("YYYY-MM-DD")}</Text>
+        <Layout  style={{  width: 180 }}>
+          <Text> Lördag:  {moment(tomorrow).add(5, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day6} />
         </Layout>
-        <Layout>
-          <Text> {moment(tomorrow).add(6, "day").format("YYYY-MM-DD")}</Text>
+        <Layout  style={{  width: 180 }}>
+          <Text> Söndag: {moment(tomorrow).add(6, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day7} />
         </Layout>
       </Layout>
@@ -253,9 +253,10 @@ const styles = StyleSheet.create({
     borderColor: "black",
     shadowColor: "black",
     shadowColor: "red",
+    // width: 500,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: "red",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -266,6 +267,7 @@ const styles = StyleSheet.create({
   instatsList: {
     height: 100,
     flex: 10,
+    color:'red',
     // shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
