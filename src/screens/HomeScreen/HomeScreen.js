@@ -66,117 +66,124 @@ const HomeScreen = ({ navigation }) => {
   let aday6 = moment(tomorrow).add(5, "day").format("YYYY-MM-DD");
   let aday7 = moment(tomorrow).add(6, "day").format("YYYY-MM-DD");
 
-  const day1 = ({ item, index }) => (
-    item.date === today ? <Card
-      style={styles.instatsList}
-      onPress={() => {
-        navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
-        });
-      }}
-    >
-      <Text>
-        {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType}
-      </Text>
-    </Card> : null
-  );
+  const day1 = ({ item, index }) =>
+    item.date === today ? (
+      <Card
+        style={styles.instatsList}
+        onPress={() => {
+          navigation.navigate("InsatsDetailScreen", {
+            insatskey: item.key,
+          });
+        }}
+      >
+        <Text>
+          {item.fromTime}-{item.toTime} {"\n\n"}
+          {item.insatsType}
+        </Text>
+      </Card>
+    ) : null;
 
-  const day2 = ({ item, index }) => (
-    item.date === aday2 ? <Card
-      style={styles.instatsList}
-      onPress={() => {
-        navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
-        });
-      }}
-    >
-      <Text>
-        {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} 
-      </Text>
-    </Card> : null
-  );
+  const day2 = ({ item, index }) =>
+    item.date === aday2 ? (
+      <Card
+        style={styles.instatsList}
+        onPress={() => {
+          navigation.navigate("InsatsDetailScreen", {
+            insatskey: item.key,
+          });
+        }}
+      >
+        <Text>
+          {item.fromTime}-{item.toTime} {"\n\n"}
+          {item.insatsType}
+        </Text>
+      </Card>
+    ) : null;
 
-  const day3 = ({ item, index }) => (
-    item.date === aday3 ? <Card
-      style={styles.instatsList}
-      onPress={() => {
-        navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
-        });
-      }}
-    >
-      <Text>
-        {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} 
-      </Text>
-    </Card> : null
-  );
+  const day3 = ({ item, index }) =>
+    item.date === aday3 ? (
+      <Card
+        style={styles.instatsList}
+        onPress={() => {
+          navigation.navigate("InsatsDetailScreen", {
+            insatskey: item.key,
+          });
+        }}
+      >
+        <Text>
+          {item.fromTime}-{item.toTime} {"\n\n"}
+          {item.insatsType}
+        </Text>
+      </Card>
+    ) : null;
 
-  const day4 = ({ item, index }) => (
-    item.date === aday4 ? <Card
-      style={styles.instatsList}
-      onPress={() => {
-        navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
-        });
-      }}
-    >
-      <Text>
-        {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} 
-      </Text>
-    </Card> : null
-  );
+  const day4 = ({ item, index }) =>
+    item.date === aday4 ? (
+      <Card
+        style={styles.instatsList}
+        onPress={() => {
+          navigation.navigate("InsatsDetailScreen", {
+            insatskey: item.key,
+          });
+        }}
+      >
+        <Text>
+          {item.fromTime}-{item.toTime} {"\n\n"}
+          {item.insatsType}
+        </Text>
+      </Card>
+    ) : null;
 
-  const day5 = ({ item, index }) => (
-    item.date === aday5 ? <Card
-      style={styles.instatsList}
-      onPress={() => {
-        navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
-        });
-      }}
-    >
-      <Text>
-        {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} 
-      </Text>
-    </Card> : null
-  );
+  const day5 = ({ item, index }) =>
+    item.date === aday5 ? (
+      <Card
+        style={styles.instatsList}
+        onPress={() => {
+          navigation.navigate("InsatsDetailScreen", {
+            insatskey: item.key,
+          });
+        }}
+      >
+        <Text>
+          {item.fromTime}-{item.toTime} {"\n\n"}
+          {item.insatsType}
+        </Text>
+      </Card>
+    ) : null;
 
-  const day6 = ({ item, index }) => (
-    item.date === aday6 ? <Card
-      style={styles.instatsList}
-      onPress={() => {
-        navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
-        });
-      }}
-    >
-      <Text>
-        {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} 
-      </Text>
-    </Card> : null
-  );
+  const day6 = ({ item, index }) =>
+    item.date === aday6 ? (
+      <Card
+        style={styles.instatsList}
+        onPress={() => {
+          navigation.navigate("InsatsDetailScreen", {
+            insatskey: item.key,
+          });
+        }}
+      >
+        <Text>
+          {item.fromTime}-{item.toTime} {"\n\n"}
+          {item.insatsType}
+        </Text>
+      </Card>
+    ) : null;
 
-  const day7 = ({ item, index }) => (
-    item.date === aday7 ? <Card
-      style={styles.instatsList}
-      onPress={() => {
-        navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
-        });
-      }}
-    >
-      <Text>
-        {item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} 
-      </Text>
-    </Card> : null
-  );
+  const day7 = ({ item, index }) =>
+    item.date === aday7 ? (
+      <Card
+        style={styles.instatsList}
+        onPress={() => {
+          navigation.navigate("InsatsDetailScreen", {
+            insatskey: item.key,
+          });
+        }}
+      >
+        <Text>
+          {item.fromTime}-{item.toTime} {"\n\n"}
+          {item.insatsType}
+        </Text>
+      </Card>
+    ) : null;
 
   return (
     <Layout style={styles.container} level="1">
@@ -195,31 +202,34 @@ const HomeScreen = ({ navigation }) => {
         </Button>
       </Layout>
       <Layout style={styles.listContainer}>
-        <Layout style={{  width: 180 }}>
+        <Layout style={{ width: 180 }}>
           <Text> Måndag: {today}</Text>
           <List data={insatser} renderItem={day1} />
         </Layout>
-        <Layout  style={{  width: 180 }}>
+        <Layout style={{ width: 180 }}>
           <Text> Tisdag: {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day2} />
         </Layout>
-        <Layout  style={{  width: 180 }}>
+        <Layout style={{ width: 180 }}>
           <Text> Onsdag: {moment(tomorrow).add(2, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day3} />
         </Layout>
-        <Layout  style={{  width: 180 }}>
-          <Text> Torsdag: {moment(tomorrow).add(3, "day").format("MM-DD")}</Text>
+        <Layout style={{ width: 180 }}>
+          <Text>
+            {" "}
+            Torsdag: {moment(tomorrow).add(3, "day").format("MM-DD")}
+          </Text>
           <List data={insatser} renderItem={day4} />
         </Layout>
-        <Layout  style={{  width: 180 }}>
+        <Layout style={{ width: 180 }}>
           <Text> Fredag: {moment(tomorrow).add(4, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day5} />
         </Layout>
-        <Layout  style={{  width: 180 }}>
-          <Text> Lördag:  {moment(tomorrow).add(5, "day").format("MM-DD")}</Text>
+        <Layout style={{ width: 180 }}>
+          <Text> Lördag: {moment(tomorrow).add(5, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day6} />
         </Layout>
-        <Layout  style={{  width: 180 }}>
+        <Layout style={{ width: 180 }}>
           <Text> Söndag: {moment(tomorrow).add(6, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day7} />
         </Layout>
@@ -267,7 +277,7 @@ const styles = StyleSheet.create({
   instatsList: {
     height: 100,
     flex: 10,
-    color:'red',
+    color: "red",
     // shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,

@@ -15,7 +15,6 @@ import { ThemeContext } from "../../../config/ThemeContext";
 import { Button } from "@ui-kitten/components";
 import { loggingOut } from "../../API/firebaseMethods";
 
-
 class AddInsatsScreen extends Component {
   constructor(props) {
     super(props);
@@ -207,7 +206,6 @@ class AddInsatsScreen extends Component {
             <CalendarPicker onDateChange={this.onDateChange} />
           </View>
         </Modal>
-
 
         <View style={styles.button}>
           <Button
