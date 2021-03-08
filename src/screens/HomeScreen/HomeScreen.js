@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Dimensions, ActivityIndicator, Alert } from "react-native";
+import moment from "moment";
 import {
   Icon,
   Layout,
@@ -55,18 +56,126 @@ const HomeScreen = ({ navigation }) => {
     navigation.replace("Login");
   };
 
-  const renderItem = ({ item, index }) => (
-    <Card
+  let today = new Date();
+  today = moment(today).format("YYYY-MM-DD");
+  let tomorrow = new Date();
+  let aday2 = moment(tomorrow).add(1, "day").format("YYYY-MM-DD");
+  let aday3 = moment(tomorrow).add(2, "day").format("YYYY-MM-DD");
+  let aday4 = moment(tomorrow).add(3, "day").format("YYYY-MM-DD");
+  let aday5 = moment(tomorrow).add(4, "day").format("YYYY-MM-DD");
+  let aday6 = moment(tomorrow).add(5, "day").format("YYYY-MM-DD");
+  let aday7 = moment(tomorrow).add(6, "day").format("YYYY-MM-DD");
+
+  const day1 = ({ item, index }) => (
+    item.date === today ? <Card
       style={styles.instatsList}
       onPress={() => {
         navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key
+          insatskey: item.key,
         });
       }}
     >
-      <Text>{item.fromTime}-{item.toTime} {"\n\n"}
-        {item.insatsType} </Text>
-    </Card>
+      <Text>
+        {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card> : null
+  );
+
+  const day2 = ({ item, index }) => (
+    item.date === aday2 ? <Card
+      style={styles.instatsList}
+      onPress={() => {
+        navigation.navigate("InsatsDetailScreen", {
+          insatskey: item.key,
+        });
+      }}
+    >
+      <Text>
+        {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card> : null
+  );
+
+  const day3 = ({ item, index }) => (
+    item.date === aday3 ? <Card
+      style={styles.instatsList}
+      onPress={() => {
+        navigation.navigate("InsatsDetailScreen", {
+          insatskey: item.key,
+        });
+      }}
+    >
+      <Text>
+        {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card> : null
+  );
+
+  const day4 = ({ item, index }) => (
+    item.date === aday4 ? <Card
+      style={styles.instatsList}
+      onPress={() => {
+        navigation.navigate("InsatsDetailScreen", {
+          insatskey: item.key,
+        });
+      }}
+    >
+      <Text>
+        {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card> : null
+  );
+
+  const day5 = ({ item, index }) => (
+    item.date === aday5 ? <Card
+      style={styles.instatsList}
+      onPress={() => {
+        navigation.navigate("InsatsDetailScreen", {
+          insatskey: item.key,
+        });
+      }}
+    >
+      <Text>
+        {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card> : null
+  );
+
+  const day6 = ({ item, index }) => (
+    item.date === aday6 ? <Card
+      style={styles.instatsList}
+      onPress={() => {
+        navigation.navigate("InsatsDetailScreen", {
+          insatskey: item.key,
+        });
+      }}
+    >
+      <Text>
+        {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card> : null
+  );
+
+  const day7 = ({ item, index }) => (
+    item.date === aday7 ? <Card
+      style={styles.instatsList}
+      onPress={() => {
+        navigation.navigate("InsatsDetailScreen", {
+          insatskey: item.key,
+        });
+      }}
+    >
+      <Text>
+        {item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} {item.date}
+      </Text>
+    </Card> : null
   );
 
   return (
@@ -86,51 +195,37 @@ const HomeScreen = ({ navigation }) => {
         </Button>
       </Layout>
       <Layout style={styles.listContainer}>
-        <List
-          data={insatser}
-          renderItem={renderItem}
-        />
-        <List
-          data={insatser}
-          renderItem={renderItem}
-        />
-        <List
-          data={insatser}
-          renderItem={renderItem}
-        />
-        <List
-          data={insatser}
-          renderItem={renderItem}
-        />
-        <List
-          data={insatser}
-          renderItem={renderItem}
-        />
-        <List
-          data={insatser}
-          renderItem={renderItem}
-        />
-        <List
-          data={insatser}
-          renderItem={renderItem}
-        />
+        <Layout>
+          <Text> {today}</Text>
+          <List data={insatser} renderItem={day1} />
+        </Layout>
+        <Layout>
+          <Text> {moment(tomorrow).add(1, "day").format("YYYY-MM-DD")}</Text>
+          <List data={insatser} renderItem={day2} />
+        </Layout>
+        <Layout>
+          <Text> {moment(tomorrow).add(2, "day").format("YYYY-MM-DD")}</Text>
+          <List data={insatser} renderItem={day3} />
+        </Layout>
+        <Layout>
+          <Text> {moment(tomorrow).add(3, "day").format("YYYY-MM-DD")}</Text>
+          <List data={insatser} renderItem={day4} />
+        </Layout>
+        <Layout>
+          <Text> {moment(tomorrow).add(4, "day").format("YYYY-MM-DD")}</Text>
+          <List data={insatser} renderItem={day5} />
+        </Layout>
+        <Layout>
+          <Text> {moment(tomorrow).add(5, "day").format("YYYY-MM-DD")}</Text>
+          <List data={insatser} renderItem={day6} />
+        </Layout>
+        <Layout>
+          <Text> {moment(tomorrow).add(6, "day").format("YYYY-MM-DD")}</Text>
+          <List data={insatser} renderItem={day7} />
+        </Layout>
       </Layout>
-      {/* behöver byta namn på variablen ifall detta ska användas */}
-      {/* <Layout style={{ flex: 1 }}>
-        <Modal visible={modalState} animationType="slide">
-          <Calendar
-            date={date}
-            onSelect={(nextDate) => {
-              setDate(nextDate);
-              setModalState(false);
-            }}
-          />
-        </Modal>
-      </Layout> */}
 
-      <Button
-        style={{ height: 40, width: 140 }}
-        onPress={ handlePress }>
+      <Button style={{ height: 40, width: 140 }} onPress={handlePress}>
         Logga Ut
       </Button>
     </Layout>
