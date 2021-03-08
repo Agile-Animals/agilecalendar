@@ -60,38 +60,57 @@ const HomeScreen = ({ navigation }) => {
       style={styles.instatsList}
       onPress={() => {
         navigation.navigate("InsatsDetailScreen", {
-          insatskey: item.key,
+          insatskey: item.key
         });
       }}
     >
-      <Text>{insatser[0].boende}</Text>
+      <Text>{item.fromTime}-{item.toTime} {"\n\n"}
+        {item.insatsType} </Text>
     </Card>
   );
 
   return (
     <Layout style={styles.container} level="1">
       <Layout style={styles.header} level="1">
-        <Text category="h2">Översikt {insatser[0].insatsType} </Text>
+        <Text category="h2">Översikt user: {userID}</Text>
         {/* <Text category="h6">Valt Datum: {date.toLocaleDateString()}</Text> */}
       </Layout>
       <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Button
           style={{ height: 40, width: 140 }}
-          // onPress={() => {
-          //   navigation.navigate("AddInsatsScreen");
-          // }}
+          onPress={() => {
+            navigation.navigate("AddInsatsScreen");
+          }}
         >
           Lägg till insats
         </Button>
       </Layout>
-      <Layout>
+      <Layout style={styles.listContainer}>
         <List
-          style={styles.container}
           data={insatser}
           renderItem={renderItem}
         />
         <List
-          style={styles.container}
+          data={insatser}
+          renderItem={renderItem}
+        />
+        <List
+          data={insatser}
+          renderItem={renderItem}
+        />
+        <List
+          data={insatser}
+          renderItem={renderItem}
+        />
+        <List
+          data={insatser}
+          renderItem={renderItem}
+        />
+        <List
+          data={insatser}
+          renderItem={renderItem}
+        />
+        <List
           data={insatser}
           renderItem={renderItem}
         />
@@ -130,6 +149,16 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 30,
   },
+  listContainer: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 10,
+    margin: 10,
+    borderRadius: 10,
+    borderColor: "black",
+    shadowColor: "black",
+    shadowColor: "red",
+  },
   item: {
     backgroundColor: "#f9c2ff",
     padding: 20,
@@ -140,14 +169,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
   instatsList: {
-    marginTop: 10,
-    margin: 10,
-    height: 150,
+    height: 100,
     flex: 10,
-    marginBottom: 10,
-    borderRadius: 4,
-    shadowColor: "black",
-    shadowColor: "red",
     // shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
