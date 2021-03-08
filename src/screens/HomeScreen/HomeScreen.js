@@ -57,14 +57,14 @@ const HomeScreen = ({ navigation }) => {
   };
 
   let today = new Date();
-  today = moment(today).format("MM-DD");
+  today = moment(today).format("YYYY-MM-DD");
   let tomorrow = new Date();
-  let aday2 = moment(tomorrow).add(1, "day").format("MM-DD");
-  let aday3 = moment(tomorrow).add(2, "day").format("MM-DD");
-  let aday4 = moment(tomorrow).add(3, "day").format("MM-DD");
-  let aday5 = moment(tomorrow).add(4, "day").format("MM-DD");
-  let aday6 = moment(tomorrow).add(5, "day").format("MM-DD");
-  let aday7 = moment(tomorrow).add(6, "day").format("MM-DD");
+  let aday2 = moment(tomorrow).add(1, "day").format("YYYY-MM-DD");
+  let aday3 = moment(tomorrow).add(2, "day").format("YYYY-MM-DD");
+  let aday4 = moment(tomorrow).add(3, "day").format("YYYY-MM-DD");
+  let aday5 = moment(tomorrow).add(4, "day").format("YYYY-MM-DD");
+  let aday6 = moment(tomorrow).add(5, "day").format("YYYY-MM-DD");
+  let aday7 = moment(tomorrow).add(6, "day").format("YYYY-MM-DD");
 
   const day1 = ({ item, index }) => (
     item.date === today ? <Card
@@ -200,7 +200,7 @@ const HomeScreen = ({ navigation }) => {
           <List data={insatser} renderItem={day1} />
         </Layout>
         <Layout  style={{  width: 180 }}>
-          <Text> Tisdag:  {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
+          <Text> Tisdag: {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day2} />
         </Layout>
         <Layout  style={{  width: 180 }}>
