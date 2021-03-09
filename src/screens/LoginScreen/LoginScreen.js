@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Alert } from "react-native";
-import { Text, Layout, Button, Input, Icon } from "@ui-kitten/components";
+import React, { useState, useRef } from "react";
+import { View, StyleSheet, Alert, PanResponder, Animated } from "react-native";
+import { Text, Button, Input, Icon } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
 import { ThemeContext } from "../../../config/ThemeContext";
 import { signIn } from "../../API/firebaseMethods";
@@ -26,16 +26,34 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate("Loading");
   };
 
-  return (
-    <Layout style={styles.container}>
-      <Layout style={styles.header} level="1">
-        <Text category="h1">Agile Calendar</Text>
-      </Layout>
+  const pan = useRef(new Animated.ValueXY()).current;
 
-      <Layout style={styles.loginForm} level="1">
-        <Layout style={styles.header} level="1">
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        pan.setOffset({
+          x: pan.x._value,
+          y: pan.y._value,
+        });
+      },
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
+      onPanResponderRelease: () => {
+        pan.flattenOffset();
+      },
+    })
+  ).current;
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header} level="1">
+        <Text category="h1">Agile Calendar</Text>
+      </View>
+
+      <View style={styles.loginForm} level="1">
+        <View style={styles.header} level="1">
           <Text category="h2">Logga in</Text>
-        </Layout>
+        </View>
         <Input
           style={styles.formInput}
           autoCapitalize="none"
@@ -51,7 +69,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={(password) => setPassword(password)}
           placeholder="Lösenord"
         />
-      </Layout>
+      </View>
       <Button style={styles.loginBtn} onPress={onSubmit}>
         Logga in
       </Button>
@@ -61,16 +79,26 @@ const LoginScreen = ({ navigation }) => {
       >
         <Text style={styles.buttonText}>Sign Up</Text>
       </Button>
-      <Layout
-        style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }}
-      >
+      <View style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }}>
         <Button
           style={{ height: 1, width: 1 }}
           accessoryLeft={SunIcon}
           onPress={themeContext.toggleTheme}
         ></Button>
-      </Layout>
-    </Layout>
+      </View>
+      <View style={styles.container}>
+        <Text style={styles.titleText}>Drag this box!</Text>
+        <Animated.View
+          style={{
+            transform: [{ translateX: pan.x }, { translateY: pan.y }],
+          }}
+          {...panResponder.panHandlers}
+        >
+          <View style={styles.box}>
+          <Text style={styles.titleText}>Drag this box!</Text></View>
+        </Animated.View>
+      </View>
+    </View>
   );
 };
 
@@ -103,6 +131,17 @@ const styles = StyleSheet.create({
   },
   formInput: {
     margin: 4,
+  },
+  titleText: {
+    fontSize: 14,
+    lineHeight: 24,
+    fontWeight: "bold",
+  },
+  box: {
+    height: 150,
+    width: 150,
+    backgroundColor: "white",
+    borderRadius: 5,
   },
 });
 

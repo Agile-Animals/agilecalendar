@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, ActivityIndicator, Alert } from "react-native";
+import { StyleSheet, Dimensions, ActivityIndicator, Alert, } from "react-native";
 import moment from "moment";
 import {
   Icon,
@@ -57,17 +57,15 @@ const HomeScreen = ({ navigation }) => {
   };
 
   let today = new Date();
-  today = moment(today).format("YYYY-MM-DD");
-  let tomorrow = new Date();
-  let aday2 = moment(tomorrow).add(1, "day").format("YYYY-MM-DD");
-  let aday3 = moment(tomorrow).add(2, "day").format("YYYY-MM-DD");
-  let aday4 = moment(tomorrow).add(3, "day").format("YYYY-MM-DD");
-  let aday5 = moment(tomorrow).add(4, "day").format("YYYY-MM-DD");
-  let aday6 = moment(tomorrow).add(5, "day").format("YYYY-MM-DD");
-  let aday7 = moment(tomorrow).add(6, "day").format("YYYY-MM-DD");
+  let aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
+  let aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
+  let aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
+  let aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
+  let aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
+  let aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
 
   const day1 = ({ item, index }) =>
-    item.date === today ? (
+    item.date === moment(today).format("YYYY-MM-DD") ? (
       <Card
         style={styles.instatsList}
         onPress={() => {
@@ -200,44 +198,40 @@ const HomeScreen = ({ navigation }) => {
         >
           Lägg till insats
         </Button>
+        <Button style={{ height: 40, width: 140 }} onPress={handlePress}>
+          Logga Ut
+        </Button>
       </Layout>
       <Layout style={styles.listContainer}>
         <Layout style={{ width: 180 }}>
-          <Text> Måndag: {today}</Text>
+          <Text> Måndag: {moment(today).format("MM-DD")}</Text>
           <List data={insatser} renderItem={day1} />
         </Layout>
         <Layout style={{ width: 180 }}>
-          <Text> Tisdag: {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
+          <Text> Tisdag: {moment(today).add(1, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day2} />
         </Layout>
         <Layout style={{ width: 180 }}>
-          <Text> Onsdag: {moment(tomorrow).add(2, "day").format("MM-DD")}</Text>
+          <Text> Onsdag: {moment(today).add(2, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day3} />
         </Layout>
         <Layout style={{ width: 180 }}>
-          <Text>
-            {" "}
-            Torsdag: {moment(tomorrow).add(3, "day").format("MM-DD")}
-          </Text>
+          <Text> Torsdag: {moment(today).add(3, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day4} />
         </Layout>
         <Layout style={{ width: 180 }}>
-          <Text> Fredag: {moment(tomorrow).add(4, "day").format("MM-DD")}</Text>
+          <Text> Fredag: {moment(today).add(4, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day5} />
         </Layout>
         <Layout style={{ width: 180 }}>
-          <Text> Lördag: {moment(tomorrow).add(5, "day").format("MM-DD")}</Text>
+          <Text> Lördag: {moment(today).add(5, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day6} />
         </Layout>
         <Layout style={{ width: 180 }}>
-          <Text> Söndag: {moment(tomorrow).add(6, "day").format("MM-DD")}</Text>
+          <Text> Söndag: {moment(today).add(6, "day").format("MM-DD")}</Text>
           <List data={insatser} renderItem={day7} />
         </Layout>
       </Layout>
-
-      <Button style={{ height: 40, width: 140 }} onPress={handlePress}>
-        Logga Ut
-      </Button>
     </Layout>
   );
 };

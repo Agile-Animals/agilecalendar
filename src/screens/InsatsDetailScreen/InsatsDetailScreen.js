@@ -242,7 +242,7 @@ class InsatsDetailScreen extends Component {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            Alert.alert("Nuvarande datum för insatsen: " + date);
             this.setModalVisible(!modalVisible);
           }}
         >

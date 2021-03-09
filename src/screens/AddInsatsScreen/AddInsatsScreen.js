@@ -7,6 +7,7 @@ import {
   View,
   Text,
   Modal,
+  Alert
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
@@ -198,7 +199,7 @@ class AddInsatsScreen extends Component {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            Alert.alert("Nuvarande datum för insatsen: " + date);
             this.setModalVisible(!modalVisible);
           }}
         >
