@@ -126,14 +126,6 @@ class AddInsatsScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-
-        {/* <View style={styles.inputGroup}>
-          <TextInput
-            placeholder={"Boende"}
-            value={this.state.residentName}
-            onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
-          />
-        </View> */}
         <Button
           style={{
             height: 40,

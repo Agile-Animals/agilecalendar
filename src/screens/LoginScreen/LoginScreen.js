@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { View, StyleSheet, Alert, PanResponder, Animated } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Alert } from "react-native";
 import { Text, Button, Input, Icon } from "@ui-kitten/components";
 import { useForm, Controller } from "react-hook-form";
 import { ThemeContext } from "../../../config/ThemeContext";
@@ -25,25 +25,7 @@ const LoginScreen = ({ navigation }) => {
     setPassword("");
     navigation.navigate("Loading");
   };
-
-  const pan = useRef(new Animated.ValueXY()).current;
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value,
-        });
-      },
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
-      onPanResponderRelease: () => {
-        pan.flattenOffset();
-      },
-    })
-  ).current;
-
+  
   return (
     <View style={styles.container}>
       <View style={styles.header} level="1">
@@ -79,25 +61,7 @@ const LoginScreen = ({ navigation }) => {
       >
         <Text style={styles.buttonText}>Sign Up</Text>
       </Button>
-      <View style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }}>
-        <Button
-          style={{ height: 1, width: 1 }}
-          accessoryLeft={SunIcon}
-          onPress={themeContext.toggleTheme}
-        ></Button>
-      </View>
-      <View style={styles.container}>
-        <Text style={styles.titleText}>Drag this box!</Text>
-        <Animated.View
-          style={{
-            transform: [{ translateX: pan.x }, { translateY: pan.y }],
-          }}
-          {...panResponder.panHandlers}
-        >
-          <View style={styles.box}>
-          <Text style={styles.titleText}>Drag this box!</Text></View>
-        </Animated.View>
-      </View>
+      
     </View>
   );
 };
