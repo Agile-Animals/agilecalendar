@@ -43,6 +43,27 @@ const HomeScreen = ({ navigation }) => {
     })
   ).current;
 
+  const pan2 = useRef(new Animated.ValueXY()).current;
+
+  const panResponder2 = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        pan2.setOffset({
+          x: pan2.x._value,
+          y: pan2.y._value,
+        });
+      },
+      onPanResponderMove: Animated.event([null, { dx: pan2.x, dy: pan2.y }]),
+      onPanResponderRelease: () => {
+        Animated.spring(pan2, {
+          toValue: { x: 0, y: 0 },
+          friction: 5,
+        }).start();
+      },
+    })
+  ).current;
+
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
   const [insatser, setInsatser] = useState([]); // Initial empty array of users
   const [date, setDate] = useState(new Date());
@@ -116,9 +137,9 @@ const HomeScreen = ({ navigation }) => {
     item.date === aday2 ? (
       <Animated.View
         style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
+          transform: [{ translateX: pan2.x }, { translateY: pan2.y }],
         }}
-        {...panResponder.panHandlers}
+        {...panResponder2.panHandlers}
       >
         <Pressable
           style={styles.instatsList}
@@ -262,33 +283,32 @@ const HomeScreen = ({ navigation }) => {
         <Text category="h2">Översikt user: {userID}</Text>
       </View>
       <ImageBackground
-            source={require("../../../assets/moln.png")}
-            style={styles.moln}
+        source={require("../../../assets/moln.png")}
+        style={styles.moln}
+      >
+        <View>
+          <Animated.View
+            style={{
+              transform: [{ translateX: pan.x }, { translateY: pan.y }],
+            }}
+            {...panResponder.panHandlers}
           >
-            <View>
-              <Animated.View
-                style={{
-                  transform: [{ translateX: pan.x }, { translateY: pan.y }],
-                }}
-                {...panResponder.panHandlers}
-              >
-                <View style={styles.box}>
-                  <Text style={styles.titleText}>Städa</Text>
-                </View>
-              </Animated.View>
+            <View style={styles.box}>
+              <Text style={styles.titleText}>Städa</Text>
             </View>
-          </ImageBackground>
+          </Animated.View>
+        </View>
+      </ImageBackground>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-
-        {/* <Button
+        {/* 
+        <Pressable
           style={{ height: 40, width: 140 }}
           onPress={() => {
             navigation.navigate("AddInsatsScreen");
           }}
         >
-          Lägg till insats
-        </Button> */}
-        
+          <Text>Lägg till insats</Text>
+        </Pressable> */}
       </View>
       <View style={styles.listContainer}>
         <View style={{ width: 140 }}>
@@ -321,8 +341,8 @@ const HomeScreen = ({ navigation }) => {
         </View>
       </View>
       <Button style={{ height: 40, width: 140 }} onPress={handlePress}>
-          Logga Ut
-        </Button>
+        Logga Ut
+      </Button>
     </View>
   );
 };
