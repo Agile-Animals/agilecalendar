@@ -28,6 +28,16 @@ const HomeScreen = ({ navigation }) => {
 
   const [received, setReceived] = React.useState([]);
   const [staged, setStaged] = React.useState([]);
+  const [day_3, setDay_3] = React.useState([]);
+  const [day_4, setDay_4] = React.useState([]);
+  const [day_5, setDay_5] = React.useState([]);
+  const [day_6, setDay_6] = React.useState([]);
+  const [day_7, setDay_7] = React.useState([]);
+
+//   const [staged, setStaged] = React.useState([]);
+//   const [staged, setStaged] = React.useState([]);
+//   const [staged, setStaged] = React.useState([]);
+// v
 
 
   useEffect(() => {
@@ -205,204 +215,13 @@ const HomeScreen = ({ navigation }) => {
           Lägg till insats
         </Button>
       </Layout>
-      {/* <Layout style={styles.listContainer}>
-
-
-      </Layout>
- */}
 
 
       <DraxProvider>
         <View style={styles.container}>
-          <View style={styles.listContainer}>
-            <DraxView 
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Måndag: {today}</Text>
-                    <List data={insatser} renderItem={day1} />
-
-                    <Text style={styles.incomingPayload}>{payload || '-'}</Text>
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Tisdag: {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day2} />
-
-                    <Text style={styles.incomingPayload}>{payload || '-'}</Text>
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
 
 
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Onsdag: {moment(tomorrow).add(2, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day3} />
-
-                    <Text style={styles.incomingPayload}>{payload || '-'}</Text>
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text>
-                      {" "}
-            Torsdag: {moment(tomorrow).add(3, "day").format("MM-DD")}
-                    </Text>
-                    <List data={insatser} renderItem={day4} />
-                    <Text style={styles.incomingPayload}>{payload || '-'}</Text>
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Fredag: {moment(tomorrow).add(4, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day5} />
-
-                    <Text style={styles.incomingPayload}>{payload || '-'}</Text>
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Lördag: {moment(tomorrow).add(5, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day6} />
-
-                    <Text style={styles.incomingPayload}>{payload || '-'}</Text>
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Söndag: {moment(tomorrow).add(6, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day7} />
-
-                    <Text style={styles.incomingPayload}>{payload || '-'}</Text>
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-          </View>
-
-          <View style={styles.palette}>
+        <View style={styles.palette}>
             <DraxView
               style={[styles.centeredContent, styles.draggableBox, styles.red]}
               draggingStyle={styles.dragging}
@@ -445,6 +264,209 @@ const HomeScreen = ({ navigation }) => {
             </DraxView>
           </View>
 
+
+
+
+
+
+          <View style={styles.listContainer}>
+            <DraxView
+
+              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
+              style={{ height: 40, width: 140 }}
+              // receivingStyle={styles.receiving}
+              renderContent={({ viewState }) => {
+                const receivingDrag = viewState && viewState.receivingDrag;
+                const payload = receivingDrag && receivingDrag.payload;
+                return (
+                  <>
+                    <Text> Måndag: {today}</Text>
+                    <List data={insatser} renderItem={day1} />
+
+                    <Text style={styles.received}>{received.join(' ')}</Text>
+                  </>
+                );
+              }}
+              onReceiveDragDrop={(event) => {
+                setReceived([
+                  ...received,
+                  
+                  event.dragged.payload || '?',
+                ]);
+              }}
+            />
+
+
+            <DraxView style={{ width: 180 }}
+
+              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
+              style={{ height: 40, width: 140 }}
+              receivingStyle={styles.receiving}
+              renderContent={({ viewState }) => {
+                const receivingDrag = viewState && viewState.receivingDrag;
+                const payload = receivingDrag && receivingDrag.payload;
+                return (
+                  <>
+                    <Text> Tisdag: {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
+                    <List data={insatser} renderItem={day2} />
+                    <Text style={styles.received}>{staged.join(' ')}</Text>
+                  </>
+                );
+              }}
+
+
+              onReceiveDragDrop={(event) => {
+                setStaged([
+                  ...staged,
+                  event.dragged.payload || '?',
+                ]);
+              }}
+            />
+
+
+
+            <DraxView style={{ width: 180 }}
+
+              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
+              style={{ height: 40, width: 140 }}
+              // receivingStyle={styles.receiving}
+              renderContent={({ viewState }) => {
+                const receivingDrag = viewState && viewState.receivingDrag;
+                const payload = receivingDrag && receivingDrag.payload;
+                return (
+                  <>
+                    <Text> Onsdag: {moment(tomorrow).add(2, "day").format("MM-DD")}</Text>
+                    <List data={insatser} renderItem={day3} />
+
+
+                    <Text style={styles.received}>{day_3.join(' ')}</Text>
+                  </>
+                );
+              }}
+              onReceiveDragDrop={(event) => {
+                setDay_3([
+                  ...day_3,
+                  event.dragged.payload || '?',
+                ]);
+              }}
+            />
+
+
+
+
+            <DraxView style={{ width: 180 }}
+
+              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
+              style={{ height: 40, width: 140 }}
+              // receivingStyle={styles.receiving}
+              renderContent={({ viewState }) => {
+                const receivingDrag = viewState && viewState.receivingDrag;
+                const payload = receivingDrag && receivingDrag.payload;
+                return (
+                  <>
+                    <Text>
+                      {" "}
+            Torsdag: {moment(tomorrow).add(3, "day").format("MM-DD")}
+                    </Text>
+                    <List data={insatser} renderItem={day4} />
+                    <Text style={styles.received}>{day_4.join(' ')}</Text>
+                  </>
+                );
+              }}
+              onReceiveDragDrop={(event) => {
+                setDay_4([
+                  ...day_4,
+                  event.dragged.payload || '?',
+                ]);
+              }}
+            />
+
+
+            <DraxView style={{ width: 180 }}
+
+              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
+              style={{ height: 40, width: 140 }}
+              // receivingStyle={styles.receiving}
+              renderContent={({ viewState }) => {
+                const receivingDrag = viewState && viewState.receivingDrag;
+                const payload = receivingDrag && receivingDrag.payload;
+                return (
+                  <>
+                    <Text> Fredag: {moment(tomorrow).add(4, "day").format("MM-DD")}</Text>
+                    <List data={insatser} renderItem={day5} />
+
+
+                    <Text style={styles.received}>{day_5.join(' ')}</Text>
+                  </>
+                );
+              }}
+              onReceiveDragDrop={(event) => {
+                setDay_5([
+                  ...day_5,
+                  event.dragged.payload || '?',
+                ]);
+              }}
+            />
+
+
+
+            <DraxView style={{ width: 180 }}
+
+              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
+              style={{ height: 40, width: 140 }}
+              // receivingStyle={styles.receiving}
+              renderContent={({ viewState }) => {
+                const receivingDrag = viewState && viewState.receivingDrag;
+                const payload = receivingDrag && receivingDrag.payload;
+                return (
+                  <>
+                    <Text> Lördag: {moment(tomorrow).add(5, "day").format("MM-DD")}</Text>
+                    <List data={insatser} renderItem={day6} />
+
+
+                    <Text style={styles.received}>{day_6.join(' ')}</Text>
+                  </>
+                );
+              }}
+              onReceiveDragDrop={(event) => {
+                setDay_6([
+                  ...day_6,
+                  event.dragged.payload || '?',
+                ]);
+              }}
+            />
+
+
+
+            <DraxView style={{ width: 180 }}
+
+              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
+              style={{ height: 40, width: 140 }}
+              // receivingStyle={styles.receiving}
+              renderContent={({ viewState }) => {
+                const receivingDrag = viewState && viewState.receivingDrag;
+                const payload = receivingDrag && receivingDrag.payload;
+                return (
+                  <>
+                    <Text> Söndag: {moment(tomorrow).add(6, "day").format("MM-DD")}</Text>
+                    <List data={insatser} renderItem={day7} />
+
+
+                    <Text style={styles.received}>{day_7.join(' ')}</Text>
+                  </>
+                );
+              }}
+              onReceiveDragDrop={(event) => {
+                setDay_7([
+                  ...day_7,
+                  event.dragged.payload || '?',
+                ]);
+              }}
+            />
+          </View> 
+
+
+
         </View>
       </DraxProvider>
 
@@ -477,13 +499,14 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    flexDirection: "row",
     marginTop: 10,
     margin: 10,
     borderRadius: 10,
-    borderColor: "black",
-    shadowColor: "black",
-    shadowColor: "red",
+    flexDirection: "row",
+    justifyContent: 'space-evenly',
+    // borderColor: "black",
+    // shadowColor: "black",
+    // shadowColor: "red",
     // width: 500,
   },
   item: {
@@ -531,7 +554,7 @@ const styles = StyleSheet.create({
   },
   palette: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    // justifyContent: 'space-evenly',
   },
   draggableBox: {
     width: 60,
@@ -550,15 +573,16 @@ const styles = StyleSheet.create({
   yellow: {
     backgroundColor: '#ffffaa',
   },
-  cyan: {
-    backgroundColor: '#aaffff',
-  },
+  // cyan: {
+  //   backgroundColor: '#aaffff',
+  // },
   magenta: {
     height: 40,
     width: 140
   },
   dragging: {
-    opacity: 0.2,
+    height: 40,
+    width: 140
   },
   hoverDragging: {
     borderColor: 'magenta',
