@@ -135,24 +135,25 @@ export default class HomeScreen extends Component {
           </View>
         </ImageBackground>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Pressable
+          <Button
+
             style={{ height: 40, width: 140 }}
             onPress={() => {
               this.props.navigation.navigate("AddInsatsScreen");
             }}
-          >
-            <Button
-              icon={
-                <Icon
-                  name="arrow-right"
-                  size={15}
-                  color="white"
-                />
-              }
-              iconRight
-              title="Lägg till insats  "
-            />
-          </Pressable>
+
+
+            icon={
+              <Icon
+                name="arrow-right"
+                size={15}
+                color="white"
+              />
+            }
+            iconRight
+            title="Lägg till insats  "
+          />
+
         </View>
         <View style={styles.listContainer}>
           <View style={{ width: 140 }}>
@@ -324,15 +325,15 @@ export default class HomeScreen extends Component {
             />
           </View>
         </View>
-        <Pressable
+        {/* <Pressable */}
+        <Button
           style={{ height: 40, width: 140 }}
           onPress={() => this.logOut()}
-        >
-          <Button
-            title="Logga Ut "
-            type="outline"
-          />
-        </Pressable>
+
+          title="Logga Ut "
+          type="outline"
+        />
+        {/* </Pressable> */}
       </View>
     );
   }
