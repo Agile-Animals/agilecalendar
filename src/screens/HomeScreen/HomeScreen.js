@@ -17,9 +17,8 @@ import moment from "moment";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { Button } from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -135,24 +134,15 @@ export default class HomeScreen extends Component {
           </View>
         </ImageBackground>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Pressable
+          <Button
+            title="Lägg till insats  "
+            icon={<Icon name="plus" size={15} color="white" />}
+            iconRight
             style={{ height: 40, width: 140 }}
             onPress={() => {
               this.props.navigation.navigate("AddInsatsScreen");
             }}
-          >
-            <Button
-              icon={
-                <Icon
-                  name="arrow-right"
-                  size={15}
-                  color="white"
-                />
-              }
-              iconRight
-              title="Lägg till insats  "
-            />
-          </Pressable>
+          ></Button>
         </View>
         <View style={styles.listContainer}>
           <View style={{ width: 140 }}>
@@ -328,10 +318,7 @@ export default class HomeScreen extends Component {
           style={{ height: 40, width: 140 }}
           onPress={() => this.logOut()}
         >
-          <Button
-            title="Logga Ut "
-            type="outline"
-          />
+          <Button title="Logga Ut " type="outline" />
         </Pressable>
       </View>
     );
@@ -403,6 +390,3 @@ const styles = StyleSheet.create({
     width: 220,
   },
 });
-
-
-
