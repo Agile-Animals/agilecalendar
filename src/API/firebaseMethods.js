@@ -1,3 +1,4 @@
+  
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { Alert } from "react-native";
@@ -14,7 +15,7 @@ export async function registration(email, password, lastName, firstName) {
       firstName: firstName,
     });
   } catch (err) {
-    Alert.alert("There is something wrong!!!!", err.message);
+    Alert.alert("Fel e-post eller så finns inte denna användare ännu.", err.message);
   }
 }
 
@@ -22,7 +23,7 @@ export async function signIn(email, password) {
   try {
     await firebase.auth().signInWithEmailAndPassword(email, password);
   } catch (err) {
-    Alert.alert("There is something wrong!", err.message);
+    Alert.alert("Fel lösenord eller e-postadress.", err.message);
   }
 }
 

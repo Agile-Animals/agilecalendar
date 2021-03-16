@@ -1,351 +1,342 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
-  Dimensions,
+  Text,
   ActivityIndicator,
   Alert,
   View,
-  PanResponder,
   Animated,
   Pressable,
   ImageBackground,
   FlatList,
+  ListItem,
+  useWindowDimensions,
 } from "react-native";
 import moment from "moment";
-import { Icon, Text, Button, Calendar } from "@ui-kitten/components";
-import { useForm, Controller } from "react-hook-form";
+// import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
+import Draggable from "../../components/Draggable";
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-// these need to be updated upon fliping or they serve no real purpose
-// const window = Dimensions.get("window");
-// const screen = Dimensions.get("screen");
 
-const HomeScreen = ({ navigation }) => {
-  const pan = useRef(new Animated.ValueXY()).current;
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value,
-        });
-      },
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
-      onPanResponderRelease: () => {
-        Animated.spring(pan, {
-          toValue: { x: 0, y: 0 },
-          friction: 5,
-        }).start();
-      },
-    })
-  ).current;
-
-  const pan2 = useRef(new Animated.ValueXY()).current;
-
-  const panResponder2 = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        pan2.setOffset({
-          x: pan2.x._value,
-          y: pan2.y._value,
-        });
-      },
-      onPanResponderMove: Animated.event([null, { dx: pan2.x, dy: pan2.y }]),
-      onPanResponderRelease: () => {
-        Animated.spring(pan2, {
-          toValue: { x: 0, y: 0 },
-          friction: 5,
-        }).start();
-      },
-    })
-  ).current;
-
-  const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  const [insatser, setInsatser] = useState([]); // Initial empty array of users
-  const [date, setDate] = useState(new Date());
-
-  const insatsRef = firebase.firestore().collection("insatser");
-  const userID = firebase.auth().currentUser.uid;
-
-  useEffect(() => {
-    const subscriber = insatsRef
-      .where("boende", "==", userID)
-      .onSnapshot((querySnapshot) => {
-        const tempInsatser = [];
-
-        querySnapshot.forEach((documentSnapshot) => {
-          tempInsatser.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
-        });
-
-        setInsatser(tempInsatser);
-        setLoading(false);
-      });
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
-
-  if (loading) {
-    return <ActivityIndicator />;
+export default class HomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.firestoreRef = firebase
+      .firestore()
+      .collection("insatser")
+      .where("boende", "==", firebase.auth().currentUser.uid);
+    this.state = {
+      isLoading: true,
+      insatser: [],
+      dragging: false,
+      dropzones: [],
+      dropzoneLayouts: [],
+    };
   }
 
-  const handlePress = () => {
-    loggingOut();
-    navigation.replace("Login");
+  componentDidMount() {
+    this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  getCollection = (querySnapshot) => {
+    const insatser = [];
+    querySnapshot.forEach((res) => {
+      const {
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        freeText,
+      } = res.data();
+      insatser.push({
+        key: res.id,
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        freeText,
+      });
+    });
+    this.setState({
+      insatser,
+      isLoading: false,
+    });
   };
 
-  let today = new Date();
-  let aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
-  let aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
-  let aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
-  let aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
-  let aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
-  let aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+  logOut() {
+    loggingOut();
+    this.props.navigation.replace("Login");
+  }
 
-  const day1 = ({ item, index }) =>
-    item.date === moment(today).format("YYYY-MM-DD") ? (
-      <Animated.View
-        style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
-        }}
-        {...panResponder.panHandlers}
-      >
-        <Pressable
-          style={styles.instatsList}
-          onPress={() => {
-            navigation.navigate("InsatsDetailScreen", {
-              insatskey: item.key,
-            });
-          }}
-        >
-          <Text>
-            {item.fromTime}-{item.toTime} {"\n\n"}
-            {item.insatsType}
-          </Text>
-        </Pressable>
-      </Animated.View>
-    ) : null;
+  render() {
+    const { insatser, dragging } = this.state;
+    // const window = useWindowDimensions();
 
-  const day2 = ({ item, index }) =>
-    item.date === aday2 ? (
-      <Animated.View
-        style={{
-          transform: [{ translateX: pan2.x }, { translateY: pan2.y }],
-        }}
-        {...panResponder2.panHandlers}
-      >
-        <Pressable
-          style={styles.instatsList}
-          onPress={() => {
-            navigation.navigate("InsatsDetailScreen", {
-              insatskey: item.key,
-            });
-          }}
-        >
-          <Text>
-            {item.fromTime}-{item.toTime} {"\n\n"}
-            {item.insatsType}
-          </Text>
-        </Pressable>
-      </Animated.View>
-    ) : null;
-
-  const day3 = ({ item, index }) =>
-    item.date === aday3 ? (
-      <Animated.View
-        style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
-        }}
-        {...panResponder.panHandlers}
-      >
-        <Pressable
-          style={styles.instatsList}
-          onPress={() => {
-            navigation.navigate("InsatsDetailScreen", {
-              insatskey: item.key,
-            });
-          }}
-        >
-          <Text>
-            {item.fromTime}-{item.toTime} {"\n\n"}
-            {item.insatsType}
-          </Text>
-        </Pressable>
-      </Animated.View>
-    ) : null;
-
-  const day4 = ({ item, index }) =>
-    item.date === aday4 ? (
-      <Animated.View
-        style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
-        }}
-        {...panResponder.panHandlers}
-      >
-        <Pressable
-          style={styles.instatsList}
-          onPress={() => {
-            navigation.navigate("InsatsDetailScreen", {
-              insatskey: item.key,
-            });
-          }}
-        >
-          <Text>
-            {item.fromTime}-{item.toTime} {"\n\n"}
-            {item.insatsType}
-          </Text>
-        </Pressable>
-      </Animated.View>
-    ) : null;
-
-  const day5 = ({ item, index }) =>
-    item.date === aday5 ? (
-      <Animated.View
-        style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
-        }}
-        {...panResponder.panHandlers}
-      >
-        <Pressable
-          style={styles.instatsList}
-          onPress={() => {
-            navigation.navigate("InsatsDetailScreen", {
-              insatskey: item.key,
-            });
-          }}
-        >
-          <Text>
-            {item.fromTime}-{item.toTime} {"\n\n"}
-            {item.insatsType}
-          </Text>
-        </Pressable>
-      </Animated.View>
-    ) : null;
-
-  const day6 = ({ item, index }) =>
-    item.date === aday6 ? (
-      <Animated.View
-        style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
-        }}
-        {...panResponder.panHandlers}
-      >
-        <Pressable
-          style={styles.instatsList}
-          onPress={() => {
-            navigation.navigate("InsatsDetailScreen", {
-              insatskey: item.key,
-            });
-          }}
-        >
-          <Text>
-            {item.fromTime}-{item.toTime} {"\n\n"}
-            {item.insatsType}
-          </Text>
-        </Pressable>
-      </Animated.View>
-    ) : null;
-
-  const day7 = ({ item, index }) =>
-    item.date === aday7 ? (
-      <Animated.View
-        style={{
-          transform: [{ translateX: pan.x }, { translateY: pan.y }],
-        }}
-        {...panResponder.panHandlers}
-      >
-        <Pressable
-          style={styles.instatsList}
-          onPress={() => {
-            navigation.navigate("InsatsDetailScreen", {
-              insatskey: item.key,
-            });
-          }}
-        >
-          <Text>
-            {item.fromTime}-{item.toTime} {"\n\n"}
-            {item.insatsType}
-          </Text>
-        </Pressable>
-      </Animated.View>
-    ) : null;
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text category="h2">Översikt user: {userID}</Text>
-      </View>
-      <ImageBackground
-        source={require("../../../assets/moln.png")}
-        style={styles.moln}
-      >
-        <View>
-          <Animated.View
-            style={{
-              transform: [{ translateX: pan.x }, { translateY: pan.y }],
-            }}
-            {...panResponder.panHandlers}
-          >
-            <View style={styles.box}>
-              <Text style={styles.titleText}>Städa</Text>
-            </View>
-          </Animated.View>
+    var today = new Date();
+    today = moment(today).add(0, "day").format("YYYY-MM-DD");
+    var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
+    var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
+    var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
+    var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
+    var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
+    var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+    var timeData = [
+      [
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
+    ];
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.preloader}>
+          <ActivityIndicator size="large" color="#9E9E9E" />
         </View>
-      </ImageBackground>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        {/* 
+      );
+    }
+
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text category="h2">
+            Översikt user: {firebase.auth().currentUser.uid}
+          </Text>
+        </View>
+        <ImageBackground
+          source={require("../../../assets/moln.png")}
+          style={styles.moln}
+        >
+          <Draggable message={"Handla"} />
+          <View style={{ padding: 3 }}>
+            <Draggable message={"Städa"} />
+            <Draggable message={"Duscha"} />
+            <Draggable message={"Fritext"} />
+          </View>
+          <View>
+            <Draggable message={"Tvätta"} />
+          </View>
+        </ImageBackground>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Pressable
+            style={{ height: 40, width: 140 }}
+            onPress={() => {
+              this.props.navigation.navigate("AddInsatsScreen");
+            }}
+          >
+            <Button
+              icon={
+                <Icon
+                  name="arrow-right"
+                  size={15}
+                  color="white"
+                />
+              }
+              iconRight
+              title="Lägg till insats  "
+            />
+          </Pressable>
+        </View>
+        <View style={styles.listContainer}>
+          <View style={{ width: 140 }}>
+            <Text> Idag {moment(today).format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date == moment(today).format("YYYY-MM-DD") ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(1, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday2 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(2, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday3 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(3, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday4 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(4, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday5 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(5, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday6 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(6, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday7 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+        </View>
         <Pressable
           style={{ height: 40, width: 140 }}
-          onPress={() => {
-            navigation.navigate("AddInsatsScreen");
-          }}
+          onPress={() => this.logOut()}
         >
-          <Text>Lägg till insats</Text>
-        </Pressable> */}
+          <Button
+            title="Logga Ut "
+            type="outline"
+          />
+        </Pressable>
       </View>
-      <View style={styles.listContainer}>
-        <View style={{ width: 140 }}>
-          <Text> Idag {moment(today).format("MM-DD")}</Text>
-          <FlatList data={insatser} renderItem={day1} />
-        </View>
-        <View style={{ width: 140 }}>
-          <Text> {moment(today).add(1, "day").format("MM-DD")}</Text>
-          <FlatList data={insatser} renderItem={day2} />
-        </View>
-        <View style={{ width: 140 }}>
-          <Text> {moment(today).add(2, "day").format("MM-DD")}</Text>
-          <FlatList data={insatser} renderItem={day3} />
-        </View>
-        <View style={{ width: 140 }}>
-          <Text> T{moment(today).add(3, "day").format("MM-DD")}</Text>
-          <FlatList data={insatser} renderItem={day4} />
-        </View>
-        <View style={{ width: 140 }}>
-          <Text> {moment(today).add(4, "day").format("MM-DD")}</Text>
-          <FlatList data={insatser} renderItem={day5} />
-        </View>
-        <View style={{ width: 140 }}>
-          <Text> {moment(today).add(5, "day").format("MM-DD")}</Text>
-          <FlatList data={insatser} renderItem={day6} />
-        </View>
-        <View style={{ width: 140 }}>
-          <Text> {moment(today).add(6, "day").format("MM-DD")}</Text>
-          <FlatList data={insatser} renderItem={day7} />
-        </View>
-      </View>
-      <Button style={{ height: 40, width: 140 }} onPress={handlePress}>
-        Logga Ut
-      </Button>
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -381,7 +372,8 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
   instatsList: {
-    height: 100,
+    paddingTop: 10,
+    paddingBottom: 10,
     flex: 10,
     color: "red",
     borderColor: "black",
@@ -403,12 +395,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   moln: {
-    // flex: 1,
+    flexDirection: "row",
     resizeMode: "cover",
     justifyContent: "center",
+    alignItems: "center",
     height: 100,
     width: 220,
   },
 });
 
-export default HomeScreen;
+
+
