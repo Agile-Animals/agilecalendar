@@ -1,489 +1,342 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions, ActivityIndicator, Alert } from "react-native";
-import moment from "moment";
+import React, { Component } from "react";
 import {
-  Icon,
-  Layout,
-  Button,
-  List,
-  Card,
-  Calendar,
-} from "@ui-kitten/components";
-import { useForm, Controller } from "react-hook-form";
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  Alert,
+  View,
+  Animated,
+  Pressable,
+  ImageBackground,
+  FlatList,
+  ListItem,
+  useWindowDimensions,
+} from "react-native";
+import moment from "moment";
+// import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
-import { DraxProvider, DraxView } from 'react-native-drax';
-
-// these need to be updated upon fliping or they serve no real purpose
-// const window = Dimensions.get("window");
-// const screen = Dimensions.get("screen");
-
-const HomeScreen = ({ navigation }) => {
-  const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  const [insatser, setInsatser] = useState([]); // Initial empty array of users
-  const [date, setDate] = useState(new Date());
-
-  const insatsRef = firebase.firestore().collection("insatser");
-  const userID = firebase.auth().currentUser.uid;
-
-  const [received, setReceived] = React.useState([]);
-  const [staged, setStaged] = React.useState([]);
-  const [day_3, setDay_3] = React.useState([]);
-  const [day_4, setDay_4] = React.useState([]);
-  const [day_5, setDay_5] = React.useState([]);
-  const [day_6, setDay_6] = React.useState([]);
-  const [day_7, setDay_7] = React.useState([]);
-
-//   const [staged, setStaged] = React.useState([]);
-//   const [staged, setStaged] = React.useState([]);
-//   const [staged, setStaged] = React.useState([]);
-// v
+import Draggable from "../../components/Draggable";
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-  useEffect(() => {
-    const subscriber = insatsRef
-      .where("boende", "==", userID)
-      .onSnapshot((querySnapshot) => {
-        const tempInsatser = [];
-
-        querySnapshot.forEach((documentSnapshot) => {
-          tempInsatser.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
-        });
-
-        setInsatser(tempInsatser);
-        setLoading(false);
-      });
-
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
-
-  if (loading) {
-    return <ActivityIndicator />;
+export default class HomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.firestoreRef = firebase
+      .firestore()
+      .collection("insatser")
+      .where("boende", "==", firebase.auth().currentUser.uid);
+    this.state = {
+      isLoading: true,
+      insatser: [],
+      dragging: false,
+      dropzones: [],
+      dropzoneLayouts: [],
+    };
   }
 
-  const handlePress = () => {
-    loggingOut();
-    navigation.replace("Login");
+  componentDidMount() {
+    this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  getCollection = (querySnapshot) => {
+    const insatser = [];
+    querySnapshot.forEach((res) => {
+      const {
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        freeText,
+      } = res.data();
+      insatser.push({
+        key: res.id,
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        freeText,
+      });
+    });
+    this.setState({
+      insatser,
+      isLoading: false,
+    });
   };
 
-  let today = new Date();
-  today = moment(today).format("YYYY-MM-DD");
-  let tomorrow = new Date();
-  let aday2 = moment(tomorrow).add(1, "day").format("YYYY-MM-DD");
-  let aday3 = moment(tomorrow).add(2, "day").format("YYYY-MM-DD");
-  let aday4 = moment(tomorrow).add(3, "day").format("YYYY-MM-DD");
-  let aday5 = moment(tomorrow).add(4, "day").format("YYYY-MM-DD");
-  let aday6 = moment(tomorrow).add(5, "day").format("YYYY-MM-DD");
-  let aday7 = moment(tomorrow).add(6, "day").format("YYYY-MM-DD");
+  logOut() {
+    loggingOut();
+    this.props.navigation.replace("Login");
+  }
 
-  const day1 = ({ item, index }) =>
-    item.date === today ? (
-      <Card
-        style={styles.instatsList}
-        onPress={() => {
-          navigation.navigate("InsatsDetailScreen", {
-            insatskey: item.key,
-          });
-        }}
-      >
-        <Text>
-          {item.fromTime}-{item.toTime} {"\n\n"}
-          {item.insatsType}
-        </Text>
-      </Card>
-    ) : null;
+  render() {
+    const { insatser, dragging } = this.state;
+    // const window = useWindowDimensions();
 
-  const day2 = ({ item, index }) =>
-    item.date === aday2 ? (
-      <Card
-        style={styles.instatsList}
-        onPress={() => {
-          navigation.navigate("InsatsDetailScreen", {
-            insatskey: item.key,
-          });
-        }}
-      >
-        <Text>
-          {item.fromTime}-{item.toTime} {"\n\n"}
-          {item.insatsType}
-        </Text>
-      </Card>
-    ) : null;
-
-  const day3 = ({ item, index }) =>
-    item.date === aday3 ? (
-      <Card
-        style={styles.instatsList}
-        onPress={() => {
-          navigation.navigate("InsatsDetailScreen", {
-            insatskey: item.key,
-          });
-        }}
-      >
-        <Text>
-          {item.fromTime}-{item.toTime} {"\n\n"}
-          {item.insatsType}
-        </Text>
-      </Card>
-    ) : null;
-
-  const day4 = ({ item, index }) =>
-    item.date === aday4 ? (
-      <Card
-        style={styles.instatsList}
-        onPress={() => {
-          navigation.navigate("InsatsDetailScreen", {
-            insatskey: item.key,
-          });
-        }}
-      >
-        <Text>
-          {item.fromTime}-{item.toTime} {"\n\n"}
-          {item.insatsType}
-        </Text>
-      </Card>
-    ) : null;
-
-  const day5 = ({ item, index }) =>
-    item.date === aday5 ? (
-      <Card
-        style={styles.instatsList}
-        onPress={() => {
-          navigation.navigate("InsatsDetailScreen", {
-            insatskey: item.key,
-          });
-        }}
-      >
-        <Text>
-          {item.fromTime}-{item.toTime} {"\n\n"}
-          {item.insatsType}
-        </Text>
-      </Card>
-    ) : null;
-
-  const day6 = ({ item, index }) =>
-    item.date === aday6 ? (
-      <Card
-        style={styles.instatsList}
-        onPress={() => {
-          navigation.navigate("InsatsDetailScreen", {
-            insatskey: item.key,
-          });
-        }}
-      >
-        <Text>
-          {item.fromTime}-{item.toTime} {"\n\n"}
-          {item.insatsType}
-        </Text>
-      </Card>
-    ) : null;
-
-  const day7 = ({ item, index }) =>
-    item.date === aday7 ? (
-      <Card
-        style={styles.instatsList}
-        onPress={() => {
-          navigation.navigate("InsatsDetailScreen", {
-            insatskey: item.key,
-          });
-        }}
-      >
-        <Text>
-          {item.fromTime}-{item.toTime} {"\n\n"}
-          {item.insatsType}
-        </Text>
-      </Card>
-    ) : null;
-
-  return (
-    <Layout style={styles.container} level="1">
-      <Layout style={styles.header} level="1">
-        <Text category="h2">Översikt user: {userID}</Text>
-        {/* <Text category="h6">Valt Datum: {date.toLocaleDateString()}</Text> */}
-      </Layout>
-      <Layout style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Button
-          style={{ height: 40, width: 140 }}
-          onPress={() => {
-            navigation.navigate("AddInsatsScreen");
-          }}
-        >
-          Lägg till insats
-        </Button>
-      </Layout>
-
-
-      <DraxProvider>
-        <View style={styles.container}>
-
-
-        <View style={styles.palette}>
-            <DraxView
-              style={[styles.centeredContent, styles.draggableBox, styles.red]}
-              draggingStyle={styles.dragging}
-              dragReleasedStyle={styles.dragging}
-              hoverDraggingStyle={styles.hoverDragging}
-              dragPayload={'Tvätta'}
-              longPressDelay={0}
-            >
-              <Text>Tvätta</Text>
-            </DraxView>
-            <DraxView
-              style={[styles.centeredContent, styles.draggableBox, styles.green]}
-              draggingStyle={styles.dragging}
-              dragReleasedStyle={styles.dragging}
-              hoverDraggingStyle={styles.hoverDragging}
-              dragPayload={'Duscha'}
-              longPressDelay={0}
-            >
-              <Text>Duscha</Text>
-            </DraxView>
-            <DraxView
-              style={[styles.centeredContent, styles.draggableBox, styles.blue]}
-              draggingStyle={styles.dragging}
-              dragReleasedStyle={styles.dragging}
-              hoverDraggingStyle={styles.hoverDragging}
-              dragPayload={'Handla'}
-              longPressDelay={0}
-            >
-              <Text>Handla</Text>
-            </DraxView>
-            <DraxView
-              style={[styles.centeredContent, styles.draggableBox, styles.yellow]}
-              draggingStyle={styles.dragging}
-              dragReleasedStyle={styles.dragging}
-              hoverDraggingStyle={styles.hoverDragging}
-              dragPayload={'Städa'}
-              longPressDelay={0}
-            >
-              <Text>Städa</Text>
-            </DraxView>
-          </View>
-
-
-
-
-
-
-          <View style={styles.listContainer}>
-            <DraxView
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Måndag: {today}</Text>
-                    <List data={insatser} renderItem={day1} />
-
-                    <Text style={styles.received}>{received.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setReceived([
-                  ...received,
-                  
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Tisdag: {moment(tomorrow).add(1, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day2} />
-                    <Text style={styles.received}>{staged.join(' ')}</Text>
-                  </>
-                );
-              }}
-
-
-              onReceiveDragDrop={(event) => {
-                setStaged([
-                  ...staged,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Onsdag: {moment(tomorrow).add(2, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day3} />
-
-
-                    <Text style={styles.received}>{day_3.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setDay_3([
-                  ...day_3,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-
-
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text>
-                      {" "}
-            Torsdag: {moment(tomorrow).add(3, "day").format("MM-DD")}
-                    </Text>
-                    <List data={insatser} renderItem={day4} />
-                    <Text style={styles.received}>{day_4.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setDay_4([
-                  ...day_4,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Fredag: {moment(tomorrow).add(4, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day5} />
-
-
-                    <Text style={styles.received}>{day_5.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setDay_5([
-                  ...day_5,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Lördag: {moment(tomorrow).add(5, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day6} />
-
-
-                    <Text style={styles.received}>{day_6.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setDay_6([
-                  ...day_6,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-
-
-
-            <DraxView style={{ width: 180 }}
-
-              style={[styles.centeredContent, styles.receivingZone, styles.magenta]}
-              style={{ height: 40, width: 140 }}
-              // receivingStyle={styles.receiving}
-              renderContent={({ viewState }) => {
-                const receivingDrag = viewState && viewState.receivingDrag;
-                const payload = receivingDrag && receivingDrag.payload;
-                return (
-                  <>
-                    <Text> Söndag: {moment(tomorrow).add(6, "day").format("MM-DD")}</Text>
-                    <List data={insatser} renderItem={day7} />
-
-
-                    <Text style={styles.received}>{day_7.join(' ')}</Text>
-                  </>
-                );
-              }}
-              onReceiveDragDrop={(event) => {
-                setDay_7([
-                  ...day_7,
-                  event.dragged.payload || '?',
-                ]);
-              }}
-            />
-          </View> 
-
-
-
+    var today = new Date();
+    today = moment(today).add(0, "day").format("YYYY-MM-DD");
+    var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
+    var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
+    var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
+    var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
+    var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
+    var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+    var timeData = [
+      [
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+      ],
+    ];
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.preloader}>
+          <ActivityIndicator size="large" color="#9E9E9E" />
         </View>
-      </DraxProvider>
+      );
+    }
 
-
-
-      <Button style={{ height: 40, width: 140 }} onPress={handlePress}>
-        Logga Ut
-      </Button>
-    </Layout>
-
-
-
-
-
-
-  );
-};
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text category="h2">
+            Översikt user: {firebase.auth().currentUser.uid}
+          </Text>
+        </View>
+        <ImageBackground
+          source={require("../../../assets/moln.png")}
+          style={styles.moln}
+        >
+          <Draggable message={"Handla"} />
+          <View style={{ padding: 3 }}>
+            <Draggable message={"Städa"} />
+            <Draggable message={"Duscha"} />
+            <Draggable message={"Fritext"} />
+          </View>
+          <View>
+            <Draggable message={"Tvätta"} />
+          </View>
+        </ImageBackground>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Pressable
+            style={{ height: 40, width: 140 }}
+            onPress={() => {
+              this.props.navigation.navigate("AddInsatsScreen");
+            }}
+          >
+            <Button
+              icon={
+                <Icon
+                  name="arrow-right"
+                  size={15}
+                  color="white"
+                />
+              }
+              iconRight
+              title="Lägg till insats  "
+            />
+          </Pressable>
+        </View>
+        <View style={styles.listContainer}>
+          <View style={{ width: 140 }}>
+            <Text> Idag {moment(today).format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date == moment(today).format("YYYY-MM-DD") ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(1, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday2 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(2, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday3 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(3, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday4 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(4, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday5 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(5, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday6 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+          <View style={{ width: 140 }}>
+            <Text> {moment(today).add(6, "day").format("MM-DD")}</Text>
+            <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date === aday7 ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>
+                      {item.fromTime}-{item.toTime} {"\n\n"}
+                      {item.insatsType}
+                    </Text>
+                  </Pressable>
+                ) : null
+              }
+            />
+          </View>
+        </View>
+        <Pressable
+          style={{ height: 40, width: 140 }}
+          onPress={() => this.logOut()}
+        >
+          <Button
+            title="Logga Ut "
+            type="outline"
+          />
+        </Pressable>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -499,14 +352,14 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
+    flexDirection: "row",
     marginTop: 10,
     margin: 10,
     borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: 'space-evenly',
-    // borderColor: "black",
-    // shadowColor: "black",
-    // shadowColor: "red",
+    borderColor: "black",
+    shadowColor: "black",
+    shadowColor: "red",
+    paddingLeft: 280,
     // width: 500,
   },
   item: {
@@ -519,78 +372,37 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
   instatsList: {
-    height: 100,
+    paddingTop: 10,
+    paddingBottom: 10,
     flex: 10,
     color: "red",
+    borderColor: "black",
     // shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
   },
-  container: {
-    flex: 1,
-    padding: 12,
-    paddingTop: 40,
-    justifyContent: 'space-evenly',
+  titleText: {
+    fontSize: 14,
+    lineHeight: 24,
+    fontWeight: "bold",
   },
-  centeredContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  receivingZone: {
-    height: 200,
-    borderRadius: 10,
-  },
-  receiving: {
-    borderColor: 'red',
-    borderWidth: 2,
-  },
-  incomingPayload: {
-    marginTop: 10,
-    fontSize: 24,
-  },
-  received: {
-    marginTop: 10,
-    fontSize: 18,
-  },
-  palette: {
-    flexDirection: 'row',
-    // justifyContent: 'space-evenly',
-  },
-  draggableBox: {
-    width: 60,
-    height: 60,
-    borderRadius: 10,
-  },
-  green: {
-    backgroundColor: '#aaffaa',
-  },
-  blue: {
-    backgroundColor: '#aaaaff',
-  },
-  red: {
-    backgroundColor: '#ffaaaa',
-  },
-  yellow: {
-    backgroundColor: '#ffffaa',
-  },
-  // cyan: {
-  //   backgroundColor: '#aaffff',
-  // },
-  magenta: {
+  box: {
     height: 40,
-    width: 140
+    width: 100,
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  dragging: {
-    height: 40,
-    width: 140
-  },
-  hoverDragging: {
-    borderColor: 'magenta',
-    borderWidth: 2,
-  },
-  stagedCount: {
-    fontSize: 18,
+  moln: {
+    flexDirection: "row",
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 100,
+    width: 220,
   },
 });
 
-export default HomeScreen;
+
+

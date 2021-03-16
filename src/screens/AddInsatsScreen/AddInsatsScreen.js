@@ -7,6 +7,7 @@ import {
   View,
   Text,
   Modal,
+  Alert
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
@@ -125,14 +126,6 @@ class AddInsatsScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-
-        {/* <View style={styles.inputGroup}>
-          <TextInput
-            placeholder={"Boende"}
-            value={this.state.residentName}
-            onChangeText={(val) => this.inputValueUpdate(val, "residentName")}
-          />
-        </View> */}
         <Button
           style={{
             height: 40,
@@ -198,7 +191,7 @@ class AddInsatsScreen extends Component {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            Alert.alert("Nuvarande datum för insatsen: " + date);
             this.setModalVisible(!modalVisible);
           }}
         >

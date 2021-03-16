@@ -1,91 +1,133 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert } from "react-native";
-import { Text, Layout, Button, Input, Icon} from "@ui-kitten/components";
+import { View, StyleSheet, Alert, SafeAreaView, TextInput,  } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { ThemeContext } from "../../../config/ThemeContext";
 import { signIn } from "../../API/firebaseMethods";
-import Draggable from 'react-native-draggable';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Button, Input, Text } from 'react-native-elements';
+
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
   const themeContext = React.useContext(ThemeContext);
-
+  const [text, onChangeText] = React.useState("Useless Text");
+  const [number, onChangeNumber] = React.useState(null);
   const onSubmit = () => {
-    if (!email) {
-      Alert.alert("Email field is required.");
+    if (!password && !email) {
+      Alert.alert("E-postadress och Lösenord saknas.");
+    } else if (!email) {
+      Alert.alert("E-postadress saknas.");
+    } else if (!password) {
+      Alert.alert("Lösenord saknas.");
+    } else {
+      if (signIn(email, password)) {
+        setEmail("");
+        setPassword("");
+        navigation.navigate("Loading");
+      }
     }
-
-    if (!password) {
-      Alert.alert("Password field is required.");
-    }
-
-    signIn(email, password);
     setEmail("");
     setPassword("");
-    navigation.navigate("Loading");
   };
+  // const onSubmit = () => {
+  //   if (!email) {
+  //     Alert.alert("Email field is required.");
+  //   }
+
+  //   if (!password) {
+  //     Alert.alert("Password field is required.");
+  //   }
+
+  //   signIn(email, password);
+  //   setEmail("");
+  //   setPassword("");
+  //   navigation.navigate("Loading");
+  // };
+
 
   return (
-    <Layout style={styles.container}>
-      <Layout style={styles.header} level="1">
-        <Text category="h1">Agile Calendar</Text>
-      </Layout>
-
-      <Layout style={styles.loginForm} level="1">
-        <Layout style={styles.header} level="1">
-          <Text category="h2">Logga in</Text>
-        </Layout>
-
-        <Input
-          style={styles.formInput}
-          autoCapitalize="none"
-          value={email}
-          onChangeText={(email) => setEmail(email)}
-          keyboardType="email-address"
-          placeholder="E-postadress"
-        />
-
-
-        <Input
-          style={styles.formInput}
-          autoCapitalize="none"
-          value={password}
-          onChangeText={(password) => setPassword(password)}
-          placeholder="Lösenord"
-        />
-      </Layout>
-      <Button style={styles.loginBtn} onPress={onSubmit}>
-        Logga in
-      </Button>
-      <Button
-        style={styles.loginBtn}
-        onPress={() => navigation.navigate("Sign Up")}
-      >
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </Button>
-      <Layout
-        style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }}
-      >
-        <Button
-          style={{ height: 1, width: 1 }}
-          accessoryLeft={SunIcon}
-          onPress={themeContext.toggleTheme}
-        ></Button>
-      </Layout>
-
-
-      <View >
-
-        <Draggable x={75} y={100} renderSize={56} renderColor='black' renderText='A' isCircle shouldReverse onShortPressRelease={() => alert('touched!!')} />
-        <Draggable x={200} y={300} renderColor='red' renderText='B' />
-        <Draggable />
-        <Draggable x={50} y={50}>
-
-        </Draggable>
+    <View style={styles.container}>
+      <View level="1">
+        <Text style={{ fontSize: 45, marginTop: 52 }} >Agile Calendar</Text>
       </View>
-    </Layout>
+
+      <View style={styles.loginForm} level="1">
+        <View level="1">
+          <Text style={{ fontSize: 35, marginTop: 12, color: '#0080FF' }} >Logga in</Text>
+        </View>
+        <SafeAreaView>
+          <TextInput
+            style={{
+              marginTop: 12,
+              width: 300,
+              fontSize: 25,
+              borderBottomWidth: 1,
+            }}
+            onChangeText={(email) => setEmail(email)}
+            autoCapitalize="none"
+            value={email}
+            keyboardType="email-address"
+            placeholder="E-postadress"
+          // keyboardType="numeric"
+          />
+        </SafeAreaView>
+
+        <SafeAreaView>
+          <TextInput
+            style={{
+              marginTop: 12,
+              width: 300,
+              fontSize: 25,
+              borderBottomWidth: 1,
+            }}
+            onChangeText={(password) => setPassword(password)}
+            autoCapitalize="none"
+            value={password}
+            placeholder="Lösenord"
+          // keyboardType="numeric"
+          />
+        </SafeAreaView>
+
+      </View>
+      <View style={{
+        marginTop: 12,
+        width: 300,
+      }}>
+        <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="#0080FF"
+            />
+          }
+          type="outline"
+          iconRight
+          title="Logga in  " onPress={onSubmit}
+
+        />
+      </View>
+      <View style={{
+        marginTop: 12,
+        width: 300,
+      }}>
+        <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+            />
+          }
+          iconRight
+          title="Sign Up  "
+          onPress={() => navigation.navigate("Sign Up")}
+
+        />
+      </View>
+    </View>
   );
 };
 
@@ -118,6 +160,17 @@ const styles = StyleSheet.create({
   },
   formInput: {
     margin: 4,
+  },
+  titleText: {
+    fontSize: 14,
+    lineHeight: 24,
+    fontWeight: "bold",
+  },
+  box: {
+    height: 150,
+    width: 150,
+    backgroundColor: "white",
+    borderRadius: 5,
   },
 });
 

@@ -13,7 +13,9 @@ import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
 import { ThemeContext } from "../../../config/ThemeContext";
-import { Button } from "@ui-kitten/components";
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 class InsatsDetailScreen extends Component {
   constructor(props) {
@@ -177,7 +179,20 @@ class InsatsDetailScreen extends Component {
           />
         </View>
 
+
         <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+            />
+          }
+          iconRight
+          title="Datum  "
+          onPress={() => this.setModalVisible(true)}
+        />
+        {/* <Button
           style={{
             height: 40,
             width: 84,
@@ -185,7 +200,7 @@ class InsatsDetailScreen extends Component {
           onPress={() => this.setModalVisible(true)}
         >
           Datum
-        </Button>
+        </Button> */}
 
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
@@ -242,7 +257,7 @@ class InsatsDetailScreen extends Component {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+            Alert.alert("Nuvarande datum för insatsen: " + date);
             this.setModalVisible(!modalVisible);
           }}
         >
@@ -252,18 +267,21 @@ class InsatsDetailScreen extends Component {
         </Modal>
 
         <View style={styles.button}>
-          <Button
-            style={{ width: 120, backgroundColor: "#19AC52" }}
-            onPress={() => this.updateInsats()}
-          >
-            Update
-          </Button>
-          <Button
-            style={{ width: 120, backgroundColor: "red" }}
-            onPress={this.openTwoButtonAlert}
-          >
-            Delete
-          </Button>
+          <View style={{ width: 120, }}>
+            <Button
+              onPress={() => this.updateInsats()}
+              title="Update "
+              type="outline"
+            />
+          </View>
+          <View style={{ width: 120, backgroundColor: "red", color:'#00000' }}>
+            <Button
+
+              onPress={this.openTwoButtonAlert}
+              title="Delete "
+              type="outline"
+            />
+          </View>
         </View>
       </ScrollView>
     );
