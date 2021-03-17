@@ -1,20 +1,16 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Alert,
-  SafeAreaView,
-  TextInput,
-  Text,
-  Button,
-} from "react-native";
+import { View, StyleSheet, Alert, SafeAreaView, TextInput,  } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { ThemeContext } from "../../../config/ThemeContext";
 import { signIn } from "../../API/firebaseMethods";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Button, Input, Text } from 'react-native-elements';
+
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
   const themeContext = React.useContext(ThemeContext);
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
@@ -50,17 +46,16 @@ const LoginScreen = ({ navigation }) => {
   //   navigation.navigate("Loading");
   // };
 
+
   return (
     <View style={styles.container}>
       <View level="1">
-        <Text style={{ fontSize: 45, marginTop: 52 }}>Agile Calendar</Text>
+        <Text style={{ fontSize: 45, marginTop: 52 }} >Agile Calendar</Text>
       </View>
 
       <View style={styles.loginForm} level="1">
         <View level="1">
-          <Text style={{ fontSize: 35, marginTop: 12, color: "#0080FF" }}>
-            Logga in
-          </Text>
+          <Text style={{ fontSize: 35, marginTop: 12, color: '#0080FF' }} >Logga in</Text>
         </View>
         <SafeAreaView>
           <TextInput
@@ -75,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
             value={email}
             keyboardType="email-address"
             placeholder="E-postadress"
-            // keyboardType="numeric"
+          // keyboardType="numeric"
           />
         </SafeAreaView>
 
@@ -91,27 +86,45 @@ const LoginScreen = ({ navigation }) => {
             autoCapitalize="none"
             value={password}
             placeholder="Lösenord"
-            // keyboardType="numeric"
+          // keyboardType="numeric"
           />
         </SafeAreaView>
+
       </View>
-      <View
-        style={{
-          marginTop: 12,
-          width: 300,
-        }}
-      >
-        <Button title="Logga in  " onPress={onSubmit} />
-      </View>
-      <View
-        style={{
-          marginTop: 12,
-          width: 300,
-        }}
-      >
+      <View style={{
+        marginTop: 12,
+        width: 300,
+      }}>
         <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="#0080FF"
+            />
+          }
+          type="outline"
+          iconRight
+          title="Logga in  " onPress={onSubmit}
+
+        />
+      </View>
+      <View style={{
+        marginTop: 12,
+        width: 300,
+      }}>
+        <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+            />
+          }
+          iconRight
           title="Sign Up  "
           onPress={() => navigation.navigate("Sign Up")}
+
         />
       </View>
     </View>
