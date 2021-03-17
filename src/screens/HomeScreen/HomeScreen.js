@@ -11,14 +11,13 @@ import {
   FlatList,
   ListItem,
   useWindowDimensions,
+  Button
 } from "react-native";
 import moment from "moment";
 // import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
-import { Button } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -150,8 +149,6 @@ export default class HomeScreen extends Component {
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Button
             title="Lägg till insats  "
-            icon={<Icon name="plus" size={15} color="white" />}
-            iconRight
             style={{ height: 40, width: 140 }}
             onPress={() => {
               this.props.navigation.navigate("AddInsatsScreen");
