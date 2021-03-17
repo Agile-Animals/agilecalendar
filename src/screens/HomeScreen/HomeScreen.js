@@ -130,7 +130,7 @@ export default class HomeScreen extends Component {
             <Draggable message={"Fritext"} />
           </View>
           <View>
-            <Draggable message={"Tvätta"} />
+            <Draggable message={"Tvätta "} />
           </View>
         </ImageBackground>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
