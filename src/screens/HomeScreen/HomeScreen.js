@@ -78,6 +78,20 @@ export default class HomeScreen extends Component {
     this.props.navigation.replace("Login");
   }
 
+  async getUserInfo() {
+    let doc = await firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser.uid)
+      .get();
+    if (!doc.exists) {
+      Alert.alert("No user data found!");
+    } else {
+      let dataObj = doc.data();
+      setFirstName(dataObj.firstName);
+    }
+  }
+
   render() {
     const { insatser, dragging } = this.state;
     // const window = useWindowDimensions();
