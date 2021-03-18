@@ -17,7 +17,7 @@ import moment from "moment";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
-import { Button } from "react-native-elements";
+import { Button, ThemeProvider} from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class HomeScreen extends Component {
@@ -133,17 +133,7 @@ export default class HomeScreen extends Component {
             <Draggable message={"Tvätta "} />
           </View>
         </ImageBackground>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Button
-            title="Lägg till insats  "
-            icon={<Icon name="plus" size={15} color="white" />}
-            iconRight
-            style={{ height: 40, width: 140 }}
-            onPress={() => {
-              this.props.navigation.navigate("AddInsatsScreen");
-            }}
-          ></Button>
-        </View>
+
         <View style={styles.listContainer}>
           <View style={{ width: 140 }}>
             <Text> Idag {moment(today).format("MM-DD")}</Text>
@@ -314,8 +304,24 @@ export default class HomeScreen extends Component {
             />
           </View>
         </View>
+
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <ThemeProvider>
+            <Button
+              title="Lägg till insats  "
+              icon={<Icon name="plus" size={15} color="white" />}
+              iconRight
+              style={{ height: 40, width: 140 }}
+              onPress={() => {
+                this.props.navigation.navigate("AddInsatsScreen");
+              }}
+            />
+          </ThemeProvider>
+        </View>
         <View style={{ height: 40, width: 140, alignSelf: 'flex-end' }}>
-          <Button title="Logga Ut" onPress={() => this.logOut()} />
+          <ThemeProvider>
+            <Button title="Logga Ut" onPress={() => this.logOut()} />
+          </ThemeProvider>
         </View>
       </View>
     );
