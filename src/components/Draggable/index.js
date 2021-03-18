@@ -1,4 +1,3 @@
-import { ThemeService } from "@ui-kitten/components/theme/theme/theme.service";
 import React, { Component } from "react";
 import { StyleSheet, View, PanResponder, Animated, Text } from "react-native";
 import firebase from "../../database/firebaseDb";

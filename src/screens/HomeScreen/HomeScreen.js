@@ -12,12 +12,12 @@ import {
   ListItem,
   useWindowDimensions,
 } from "react-native";
-import moment from "moment";
+import moment from "moment-with-locales-es6";
 // import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
-import { Button, ThemeProvider} from "react-native-elements";
+import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class HomeScreen extends Component {
@@ -80,8 +80,9 @@ export default class HomeScreen extends Component {
 
   render() {
     const { insatser, dragging } = this.state;
-    // const window = useWindowDimensions();
 
+    var localLocale = moment();
+    localLocale.locale("sv");
     var today = new Date();
     today = moment(today).add(0, "day").format("YYYY-MM-DD");
     var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
@@ -90,6 +91,7 @@ export default class HomeScreen extends Component {
     var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
     var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
     var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+
     var timeData = [
       [
         "08:00",
@@ -136,12 +138,12 @@ export default class HomeScreen extends Component {
 
         <View style={styles.listContainer}>
           <View style={{ width: 140 }}>
-            <Text> Idag {moment(today).format("MM-DD")}</Text>
+            <Text>{localLocale.add(0, "day").format("dddd MM-DD")}</Text>
             <FlatList
               scrollEnabled={!dragging}
               data={insatser}
               renderItem={({ item, index }) =>
-                item.date == moment(today).format("YYYY-MM-DD") ? (
+                item.date == today ? (
                   <Pressable
                     style={styles.instatsList}
                     onPress={() => {
@@ -160,7 +162,7 @@ export default class HomeScreen extends Component {
             />
           </View>
           <View style={{ width: 140 }}>
-            <Text> {moment(today).add(1, "day").format("MM-DD")}</Text>
+            <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>
             <FlatList
               scrollEnabled={!dragging}
               data={insatser}
@@ -184,7 +186,7 @@ export default class HomeScreen extends Component {
             />
           </View>
           <View style={{ width: 140 }}>
-            <Text> {moment(today).add(2, "day").format("MM-DD")}</Text>
+            <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>
             <FlatList
               scrollEnabled={!dragging}
               data={insatser}
@@ -208,7 +210,7 @@ export default class HomeScreen extends Component {
             />
           </View>
           <View style={{ width: 140 }}>
-            <Text> {moment(today).add(3, "day").format("MM-DD")}</Text>
+            <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>
             <FlatList
               scrollEnabled={!dragging}
               data={insatser}
@@ -232,7 +234,7 @@ export default class HomeScreen extends Component {
             />
           </View>
           <View style={{ width: 140 }}>
-            <Text> {moment(today).add(4, "day").format("MM-DD")}</Text>
+            <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>
             <FlatList
               scrollEnabled={!dragging}
               data={insatser}
@@ -256,7 +258,7 @@ export default class HomeScreen extends Component {
             />
           </View>
           <View style={{ width: 140 }}>
-            <Text> {moment(today).add(5, "day").format("MM-DD")}</Text>
+            <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>
             <FlatList
               scrollEnabled={!dragging}
               data={insatser}
@@ -280,7 +282,7 @@ export default class HomeScreen extends Component {
             />
           </View>
           <View style={{ width: 140 }}>
-            <Text> {moment(today).add(6, "day").format("MM-DD")}</Text>
+            <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>
             <FlatList
               scrollEnabled={!dragging}
               data={insatser}
@@ -306,7 +308,7 @@ export default class HomeScreen extends Component {
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <ThemeProvider>
+          <ThemeProvider>
             <Button
               title="Lägg till insats  "
               icon={<Icon name="plus" size={15} color="white" />}
@@ -318,7 +320,7 @@ export default class HomeScreen extends Component {
             />
           </ThemeProvider>
         </View>
-        <View style={{ height: 40, width: 140, alignSelf: 'flex-end' }}>
+        <View style={{ height: 40, width: 140, alignSelf: "flex-end" }}>
           <ThemeProvider>
             <Button title="Logga Ut" onPress={() => this.logOut()} />
           </ThemeProvider>

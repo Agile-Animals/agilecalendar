@@ -176,23 +176,14 @@ class InsatsDetailScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-
-        <Button
-          icon={<Icon name="arrow-right" size={15} color="white" />}
-          iconRight
-          title="Datum  "
-          onPress={() => this.setModalVisible(true)}
-        />
-        {/* <Button
-          style={{
-            height: 40,
-            width: 84,
-          }}
-          onPress={() => this.setModalVisible(true)}
-        >
-          Datum
-        </Button> */}
-
+        <View style={{ width: 120 }}>
+          <Button
+            icon={<Icon name="arrow-right" size={15} color="white" />}
+            iconRight
+            title="Datum  "
+            onPress={() => this.setModalVisible(true)}
+          />
+        </View>
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
             <Text>Från:</Text>
