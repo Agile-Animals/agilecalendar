@@ -7,12 +7,11 @@ import {
   View,
   Text,
   Modal,
-  Alert
+  Alert,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
-import { ThemeContext } from "../../../config/ThemeContext";
 import { Button, ThemeProvider } from "react-native-elements";
 import { loggingOut } from "../../API/firebaseMethods";
 import { BorderlessButton } from "react-native-gesture-handler";
@@ -120,39 +119,36 @@ class AddInsatsScreen extends Component {
 
     return (
       <ScrollView style={styles.container}>
-        <View style={{
-          justifyContent: 'flex-end',
-          margin: 90,
-          borderBottomWidth: 1,
-          fontSize: 20
-
-        }}>
+        <View
+          style={{
+            justifyContent: "flex-end",
+            margin: 90,
+            borderBottomWidth: 1,
+            fontSize: 20,
+          }}
+        >
           <TextInput
             style={{
               borderBottomWidth: 1,
-              fontSize: 30
+              fontSize: 30,
             }}
             placeholder={"Hjälpare"}
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        <View style={{
-          justifyContent: 'flex-end',
-          marginBottom: 30,
-          marginLeft: 80,
-          marginRight: 80,
-        }}>
-          <Button
-            title="Datum"
-            onPress={() => this.setModalVisible(true)}
-
-          />
+        <View
+          style={{
+            justifyContent: "flex-end",
+            marginBottom: 30,
+            marginLeft: 80,
+            marginRight: 80,
+          }}
+        >
+          <Button title="Datum" onPress={() => this.setModalVisible(true)} />
         </View>
 
         <View style={styles.timeDropdown}>
-
-
           <View style={styles.timeFrom}>
             <Text>Från:</Text>
             <DropdownMenu
@@ -200,7 +196,7 @@ class AddInsatsScreen extends Component {
             <TextInput
               style={{
                 borderBottomWidth: 1,
-                fontSize: 30
+                fontSize: 30,
               }}
               placeholder={"Fritext..."}
               value={this.state.freeText}
@@ -225,7 +221,6 @@ class AddInsatsScreen extends Component {
           <Button
             style={{ width: 120, backgroundColor: "#19AC52" }}
             onPress={() => this.storeInsats()}
-
             title="Spara Insats"
           />
         </View>
@@ -263,14 +258,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     marginLeft: 400,
-    marginTop: 50
-
+    marginTop: 50,
   },
   timeFrom: {
     width: 160,
     paddingRight: 20,
-
-
   },
   timeTo: {
     width: 140,

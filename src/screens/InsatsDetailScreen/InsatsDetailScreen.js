@@ -12,10 +12,8 @@ import {
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
-import { ThemeContext } from "../../../config/ThemeContext";
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { Button } from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 class InsatsDetailScreen extends Component {
   constructor(props) {
@@ -121,12 +119,12 @@ class InsatsDetailScreen extends Component {
 
   openTwoButtonAlert = () => {
     Alert.alert(
-      "Delete Insats",
-      "Are you sure?",
+      "Ta Bort",
+      "Är du säker?",
       [
-        { text: "Yes", onPress: () => this.deleteInsats() },
+        { text: "Ja", onPress: () => this.deleteInsats() },
         {
-          text: "No",
+          text: "Nej",
           onPress: () => console.log("No item was removed"),
           style: "cancel",
         },
@@ -179,15 +177,8 @@ class InsatsDetailScreen extends Component {
           />
         </View>
 
-
         <Button
-          icon={
-            <Icon
-              name="arrow-right"
-              size={15}
-              color="white"
-            />
-          }
+          icon={<Icon name="arrow-right" size={15} color="white" />}
           iconRight
           title="Datum  "
           onPress={() => this.setModalVisible(true)}
@@ -267,18 +258,17 @@ class InsatsDetailScreen extends Component {
         </Modal>
 
         <View style={styles.button}>
-          <View style={{ width: 120, }}>
+          <View style={{ width: 120 }}>
             <Button
               onPress={() => this.updateInsats()}
-              title="Update "
+              title="Updatera"
               type="outline"
             />
           </View>
-          <View style={{ width: 120, backgroundColor: "red", color:'#00000' }}>
+          <View style={{ width: 120, backgroundColor: "#b22222" }}>
             <Button
-
               onPress={this.openTwoButtonAlert}
-              title="Delete "
+              title="Ta Bort"
               type="outline"
             />
           </View>

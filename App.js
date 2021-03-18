@@ -4,23 +4,21 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { LoginStack } from "./src/navigation";
-import { ThemeContext } from "./config/ThemeContext";
 import firebase from "./src/database/firebaseDb";
 
 const App = () => {
   if (!firebase.apps.length) {
-    console.log('Connected with Firebase')
+    console.log("Connected with Firebase");
     firebase.initializeApp(apiKeys.firebaseConfig);
   }
-  
 
   return (
     <>
-          <SafeAreaView style={styles.container}>
-            <NavigationContainer>
-              <LoginStack />
-            </NavigationContainer>
-          </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <NavigationContainer>
+          <LoginStack />
+        </NavigationContainer>
+      </SafeAreaView>
     </>
   );
 };

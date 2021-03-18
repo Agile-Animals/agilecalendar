@@ -69,7 +69,7 @@ export default class Draggable extends Component {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday7, "date");
           this.storeInsats();
-        }        
+        }
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
@@ -81,56 +81,56 @@ export default class Draggable extends Component {
 
   isDropArea1(gesture) {
     return (
-      gesture.moveY < 644 &&
-      gesture.moveY > 210 &&
+      gesture.moveY < 630 &&
+      gesture.moveY > 180 &&
       gesture.moveX < 420 &&
       gesture.moveX > 280
     );
   }
   isDropArea2(gesture) {
     return (
-      gesture.moveY < 644 &&
-      gesture.moveY > 210 &&
+      gesture.moveY < 630 &&
+      gesture.moveY > 180 &&
       gesture.moveX < 560 &&
       gesture.moveX > 420
     );
   }
   isDropArea3(gesture) {
     return (
-      gesture.moveY < 644 &&
-      gesture.moveY > 210 &&
+      gesture.moveY < 630 &&
+      gesture.moveY > 180 &&
       gesture.moveX < 700 &&
       gesture.moveX > 560
     );
   }
   isDropArea4(gesture) {
     return (
-      gesture.moveY < 644 &&
-      gesture.moveY > 210 &&
+      gesture.moveY < 630 &&
+      gesture.moveY > 180 &&
       gesture.moveX < 840 &&
       gesture.moveX > 700
     );
   }
   isDropArea5(gesture) {
     return (
-      gesture.moveY < 644 &&
-      gesture.moveY > 210 &&
+      gesture.moveY < 630 &&
+      gesture.moveY > 180 &&
       gesture.moveX < 980 &&
       gesture.moveX > 840
     );
   }
   isDropArea6(gesture) {
     return (
-      gesture.moveY < 644 &&
-      gesture.moveY > 210 &&
+      gesture.moveY < 630 &&
+      gesture.moveY > 180 &&
       gesture.moveX < 1120 &&
       gesture.moveX > 980
     );
   }
   isDropArea7(gesture) {
     return (
-      gesture.moveY < 644 &&
-      gesture.moveY > 210 &&
+      gesture.moveY < 630 &&
+      gesture.moveY > 180 &&
       gesture.moveX < 1260 &&
       gesture.moveX > 1120
     );

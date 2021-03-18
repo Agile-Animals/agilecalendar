@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, SafeAreaView, TextInput,  } from "react-native";
+import { View, StyleSheet, Alert, SafeAreaView, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
-import { ThemeContext } from "../../../config/ThemeContext";
 import { signIn } from "../../API/firebaseMethods";
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Button, Input, Text, ThemeProvider } from 'react-native-elements';
-
+import Icon from "react-native-vector-icons/FontAwesome";
+import { Button, Input, Text, ThemeProvider } from "react-native-elements";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
-  const themeContext = React.useContext(ThemeContext);
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
   const onSubmit = () => {
@@ -46,11 +43,10 @@ const LoginScreen = ({ navigation }) => {
   //   navigation.navigate("Loading");
   // };
 
-
   return (
     <View style={styles.container}>
       <View level="1">
-        <Text style={styles.logo} >Agile Calendar</Text>
+        <Text style={styles.logo}>Agile Calendar</Text>
       </View>
 
       <View style={styles.loginForm} level="1">
@@ -63,7 +59,7 @@ const LoginScreen = ({ navigation }) => {
             keyboardType="email-address"
             placeholder="E-postadress"
             placeholderTextColor="#003f5c"
-          // keyboardType="numeric"
+            // keyboardType="numeric"
           />
         </SafeAreaView>
 
@@ -75,43 +71,29 @@ const LoginScreen = ({ navigation }) => {
             value={password}
             placeholder="Lösenord"
             placeholderTextColor="#003f5c"
-          // keyboardType="numeric"
+            // keyboardType="numeric"
           />
         </SafeAreaView>
-
       </View>
       <View style={styles.loginBtn}>
         <ThemeProvider>
           <Button
-            icon={
-              <Icon
-                name="arrow-right"
-                size={15}
-                color="#000000"
-              />
-            }
+            icon={<Icon name="arrow-right" size={15} color="#000000" />}
             type="outline"
             iconRight
-            title="Logga in  " onPress={onSubmit}
-
+            title="Logga in  "
+            onPress={onSubmit}
           />
         </ThemeProvider>
       </View>
       <View style={styles.loginBtn}>
         <ThemeProvider>
           <Button
-            icon={
-              <Icon
-                name="arrow-right"
-                size={15}
-                color="white"
-              />
-            }
+            icon={<Icon name="arrow-right" size={15} color="white" />}
             iconRight
             title="Sign Up  "
-            color='red'
+            color="red"
             onPress={() => navigation.navigate("Sign Up")}
-
           />
         </ThemeProvider>
       </View>
@@ -124,8 +106,8 @@ const styles = StyleSheet.create({
     flex: 1,
     //flexDirection: "column",
     alignItems: "center",
-    justifyContent: 'center',
-    backgroundColor: '#003f5c',
+    justifyContent: "center",
+    backgroundColor: "#003f5c",
   },
   heading: {
     fontSize: 28,
@@ -138,34 +120,34 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 30,
   },
-  logo:{
-    fontWeight:"bold",
-    fontSize:70,
-    color:"#fb5b5a",
-    marginBottom:40
+  logo: {
+    fontWeight: "bold",
+    fontSize: 70,
+    color: "#fb5b5a",
+    marginBottom: 40,
   },
   loginForm: {
     //maxWidth: 300,
     //justifyContent: "center",
     alignItems: "center",
-    width:"30%",
-    backgroundColor:"#465881",
-    borderRadius:50,
-    height:130,
-    marginBottom:50,
-    justifyContent:"center",
-    padding:30
+    width: "30%",
+    backgroundColor: "#465881",
+    borderRadius: 50,
+    height: 130,
+    marginBottom: 50,
+    justifyContent: "center",
+    padding: 30,
   },
   loginBtn: {
     // FontColor: '#0000',
-    width:"80%",
-    backgroundColor:"#fb5b5a",
-    borderRadius:25,
-    height:50,
-    alignItems:"center",
-    justifyContent:"center",
-    marginTop:40,
-    marginBottom:10
+    width: "80%",
+    backgroundColor: "#fb5b5a",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    marginBottom: 10,
   },
   formInput: {
     margin: 4,
