@@ -28,20 +28,6 @@ const LoginScreen = ({ navigation }) => {
     setEmail("");
     setPassword("");
   };
-  // const onSubmit = () => {
-  //   if (!email) {
-  //     Alert.alert("Email field is required.");
-  //   }
-
-  //   if (!password) {
-  //     Alert.alert("Password field is required.");
-  //   }
-
-  //   signIn(email, password);
-  //   setEmail("");
-  //   setPassword("");
-  //   navigation.navigate("Loading");
-  // };
 
   return (
     <View style={styles.container}>
