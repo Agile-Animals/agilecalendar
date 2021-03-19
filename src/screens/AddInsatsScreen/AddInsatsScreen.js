@@ -133,6 +133,7 @@ class AddInsatsScreen extends Component {
               fontSize: 30,
             }}
             placeholder={"Hjälpare"}
+            placeholderTextColor="white"
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
@@ -150,7 +151,7 @@ class AddInsatsScreen extends Component {
 
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
-            <Text>Från:</Text>
+            <Text style={styles.text}>Från:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -164,7 +165,7 @@ class AddInsatsScreen extends Component {
           </View>
 
           <View style={styles.timeTo}>
-            <Text>Till:</Text>
+            <Text style={styles.text}>Till:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -178,7 +179,7 @@ class AddInsatsScreen extends Component {
           </View>
 
           <View style={styles.insatsTyp}>
-            <Text>Insats typ:</Text>
+            <Text style={styles.text}>Insats typ:</Text>
             <DropdownMenu
               style={{
                 flex: 1,
@@ -199,6 +200,7 @@ class AddInsatsScreen extends Component {
                 fontSize: 30,
               }}
               placeholder={"Fritext..."}
+              placeholderTextColor="white"
               value={this.state.freeText}
               onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
             />
@@ -218,11 +220,15 @@ class AddInsatsScreen extends Component {
         </Modal>
 
         <View style={styles.button}>
+        <View style={{ width: 120, backgroundColor: "white" }}>
           <Button
-            style={{ width: 120, backgroundColor: "#19AC52" }}
             onPress={() => this.storeInsats()}
             title="Spara Insats"
+            
+            type="outline"
+
           />
+        </View>
         </View>
       </ScrollView>
     );
@@ -233,6 +239,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 35,
+    backgroundColor: "#003f5c",
   },
   inputGroup: {
     flex: 1,
@@ -272,6 +279,7 @@ const styles = StyleSheet.create({
     padding: 0,
     marginBottom: 49,
     alignSelf: "flex-end",
+    backgroundColor: "white",
   },
   insatsTyp: {
     width: 140,
@@ -285,6 +293,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "flex-end",
   },
+  text: {
+    color: "white",
+    fontSize: 25,
+  }
 });
 
 export default AddInsatsScreen;

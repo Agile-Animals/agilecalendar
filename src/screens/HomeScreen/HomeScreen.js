@@ -306,9 +306,9 @@ export default class HomeScreen extends Component {
             />
           </View>
         </View>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <ThemeProvider>
+        <View style={styles.buttonI} >
+        <View style={{ width: 120, backgroundColor: "white"  }}>
+   
             <Button
               title="Lägg till insats  "
               icon={<Icon name="plus" size={15} color="white" />}
@@ -317,13 +317,17 @@ export default class HomeScreen extends Component {
               onPress={() => {
                 this.props.navigation.navigate("AddInsatsScreen");
               }}
+              type="outline"
+             
             />
-          </ThemeProvider>
+         
         </View>
-        <View style={{ height: 40, width: 140, alignSelf: "flex-end" }}>
-          <ThemeProvider>
-            <Button title="Logga Ut" onPress={() => this.logOut()} />
-          </ThemeProvider>
+        </View>
+        <View style={styles.button}>
+        <View style={{ width: 120, backgroundColor: "white" }}>
+            <Button title="Logga Ut" onPress={() => this.logOut()} type="outline" />
+        
+        </View>
         </View>
       </View>
     );
@@ -336,6 +340,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     // width: window.width * 1,
     // height: window.width * 1,
+    backgroundColor: "#00ced1",
   },
   header: {
     alignItems: "center",
@@ -394,4 +399,21 @@ const styles = StyleSheet.create({
     height: 100,
     width: 220,
   },
+  button: {
+    height: 40, 
+    width: 140, 
+    alignSelf: "flex-end",
+    //backgroundColor: "#483d8b",
+  //   borderWidth: 2,
+  //   borderColor: "white",
+  //   borderRadius: 20,
+  //   color: "red",
+    },
+  buttonI: {
+    padding: 0,
+    backgroundColor: "white",
+    alignSelf: "flex-start",
+    width: 140, 
+   
+  }
 });

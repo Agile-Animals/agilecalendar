@@ -171,22 +171,32 @@ class InsatsDetailScreen extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
+            style={{
+              borderBottomWidth: 1,
+              fontSize: 30,
+            }}
             placeholder={"Hjälpare"}
+            placeholderTextColor="white"
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        <View style={{ width: 120 }}>
-          <Button
-            icon={<Icon name="arrow-right" size={15} color="white" />}
-            iconRight
-            title="Datum  "
-            onPress={() => this.setModalVisible(true)}
-          />
+        <View 
+          style={{
+            justifyContent: "flex-end",
+            marginBottom: 30,
+            marginLeft: 80,
+            marginRight: 80,
+            //backgroundColor:"white",
+            type:"outline",
+
+          }}
+        >
+          <Button title="Datum" backgroundColor="white" onPress={() => this.setModalVisible(true)} />
         </View>
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
-            <Text>Från:</Text>
+            <Text style={styles.text}>Från:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -200,7 +210,7 @@ class InsatsDetailScreen extends Component {
           </View>
 
           <View style={styles.timeTo}>
-            <Text>Till:</Text>
+            <Text style={styles.text}>Till:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -214,7 +224,7 @@ class InsatsDetailScreen extends Component {
           </View>
 
           <View style={styles.insatsTyp}>
-            <Text>Insats typ:</Text>
+            <Text style={styles.text}>Insats typ:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -249,14 +259,15 @@ class InsatsDetailScreen extends Component {
         </Modal>
 
         <View style={styles.button}>
-          <View style={{ width: 120 }}>
+          <View style={{ width: 120, backgroundColor: "white" }}>
             <Button
               onPress={() => this.updateInsats()}
               title="Updatera"
               type="outline"
+              color="white"
             />
           </View>
-          <View style={{ width: 120, backgroundColor: "#b22222" }}>
+          <View style={{ width: 120, backgroundColor: "white" }}>
             <Button
               onPress={this.openTwoButtonAlert}
               title="Ta Bort"
@@ -273,13 +284,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 35,
+    backgroundColor: "#003f5c",
   },
   inputGroup: {
-    flex: 1,
-    padding: 0,
-    marginBottom: 15,
+    justifyContent: "flex-end",
+    margin: 90,
     borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
+    fontSize: 20,
   },
   preloader: {
     left: 0,
@@ -296,18 +307,19 @@ const styles = StyleSheet.create({
   },
   timeDropdown: {
     flex: 1,
-    marginBottom: 250,
     flexDirection: "row",
+    marginLeft: 400,
+    marginTop: 50,
   },
   timeFrom: {
-    width: 120,
+    width: 160,
     paddingRight: 20,
   },
   timeTo: {
-    width: 100,
+    width: 140,
   },
   insatsTyp: {
-    width: 120,
+    width: 140,
     paddingLeft: 20,
   },
   button: {
@@ -324,6 +336,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "flex-end",
   },
+  text: {
+    color: "white",
+    fontSize: 20,
+  }
 });
 
 export default InsatsDetailScreen;
