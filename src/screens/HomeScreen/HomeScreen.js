@@ -84,7 +84,7 @@ export default class HomeScreen extends Component {
     var localLocale = moment();
     localLocale.locale("sv");
     var today = new Date();
-    today = moment(today).add(0, "day").format("YYYY-MM-DD");
+    today = moment(today).format("YYYY-MM-DD");
     var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
     var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
     var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
@@ -152,10 +152,7 @@ export default class HomeScreen extends Component {
                       });
                     }}
                   >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
+                    <Text>{item.insatsType}</Text>
                   </Pressable>
                 ) : null
               }
@@ -306,11 +303,10 @@ export default class HomeScreen extends Component {
             />
           </View>
         </View>
-        <View style={styles.buttonI} >
-        <View style={{ width: 120, backgroundColor: "white"  }}>
-   
+        <View style={styles.buttonI}>
+          <View style={{ width: 120, backgroundColor: "white" }}>
             <Button
-              title="Lägg till insats  "
+              title="Lägg till insats"
               icon={<Icon name="plus" size={15} color="white" />}
               iconRight
               style={{ height: 40, width: 140 }}
@@ -318,16 +314,17 @@ export default class HomeScreen extends Component {
                 this.props.navigation.navigate("AddInsatsScreen");
               }}
               type="outline"
-             
             />
-         
-        </View>
+          </View>
         </View>
         <View style={styles.button}>
-        <View style={{ width: 120, backgroundColor: "white" }}>
-            <Button title="Logga Ut" onPress={() => this.logOut()} type="outline" />
-        
-        </View>
+          <View style={{ width: 120, backgroundColor: "white" }}>
+            <Button
+              title="Logga Ut"
+              onPress={() => this.logOut()}
+              type="outline"
+            />
+          </View>
         </View>
       </View>
     );
@@ -375,6 +372,8 @@ const styles = StyleSheet.create({
     color: "red",
     borderColor: "black",
     // shadowOffset: { width: 0, height: 2 },
+    borderWidth: 2,
+    backgroundColor: "white",
     shadowOpacity: 0.8,
     shadowRadius: 2,
   },
@@ -400,20 +399,18 @@ const styles = StyleSheet.create({
     width: 220,
   },
   button: {
-    height: 40, 
-    width: 140, 
+    height: 40,
+    width: 140,
     alignSelf: "flex-end",
     //backgroundColor: "#483d8b",
-  //   borderWidth: 2,
-  //   borderColor: "white",
-  //   borderRadius: 20,
-  //   color: "red",
-    },
+    //   borderWidth: 2,
+    //   borderColor: "white",
+    //   borderRadius: 20,
+    //   color: "red",
+  },
   buttonI: {
     padding: 0,
     backgroundColor: "white",
     alignSelf: "flex-start",
-    width: 140, 
-   
-  }
+  },
 });
