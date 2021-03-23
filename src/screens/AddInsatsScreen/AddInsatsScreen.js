@@ -7,14 +7,14 @@ import {
   View,
   Text,
   Modal,
-  Alert,
+  Alert
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
-import { Button, ThemeProvider } from "react-native-elements";
+import { ThemeContext } from "../../../config/ThemeContext";
+import { Button } from "@ui-kitten/components";
 import { loggingOut } from "../../API/firebaseMethods";
-import { BorderlessButton } from "react-native-gesture-handler";
 
 class AddInsatsScreen extends Component {
   constructor(props) {
@@ -119,39 +119,26 @@ class AddInsatsScreen extends Component {
 
     return (
       <ScrollView style={styles.container}>
-        <View
-          style={{
-            justifyContent: "flex-end",
-            margin: 90,
-            borderBottomWidth: 1,
-            fontSize: 20,
-          }}
-        >
+        <View style={styles.inputGroup}>
           <TextInput
-            style={{
-              borderBottomWidth: 1,
-              fontSize: 30,
-            }}
             placeholder={"Hjälpare"}
-            placeholderTextColor="white"
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        <View
+        <Button
           style={{
-            justifyContent: "flex-end",
-            marginBottom: 30,
-            marginLeft: 80,
-            marginRight: 80,
+            height: 40,
+            width: 84,
           }}
+          onPress={() => this.setModalVisible(true)}
         >
-          <Button title="Datum" onPress={() => this.setModalVisible(true)} />
-        </View>
+          Datum
+        </Button>
 
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
-            <Text style={styles.text}>Från:</Text>
+            <Text>Från:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -165,7 +152,7 @@ class AddInsatsScreen extends Component {
           </View>
 
           <View style={styles.timeTo}>
-            <Text style={styles.text}>Till:</Text>
+            <Text>Till:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -179,11 +166,9 @@ class AddInsatsScreen extends Component {
           </View>
 
           <View style={styles.insatsTyp}>
-            <Text style={styles.text}>Insats typ:</Text>
+            <Text>Insats typ:</Text>
             <DropdownMenu
-              style={{
-                flex: 1,
-              }}
+              style={{ flex: 1 }}
               bgColor={"white"}
               tintColor={"#666666"}
               activityTintColor={"green"}
@@ -195,17 +180,13 @@ class AddInsatsScreen extends Component {
           </View>
           <View style={styles.freeText}>
             <TextInput
-              style={{
-                borderBottomWidth: 1,
-                fontSize: 30,
-              }}
               placeholder={"Fritext..."}
-              placeholderTextColor="white"
               value={this.state.freeText}
               onChangeText={(val) => this.inputValueUpdate(val, "freeText")}
             />
           </View>
         </View>
+
         <Modal
           animationType="slide"
           visible={modalVisible}
@@ -220,15 +201,12 @@ class AddInsatsScreen extends Component {
         </Modal>
 
         <View style={styles.button}>
-        <View style={{ width: 120, backgroundColor: "white" }}>
           <Button
+            style={{ width: 120, backgroundColor: "#19AC52" }}
             onPress={() => this.storeInsats()}
-            title="Spara Insats"
-            
-            type="outline"
-
-          />
-        </View>
+          >
+            Spara Insats
+          </Button>
         </View>
       </ScrollView>
     );
@@ -239,7 +217,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 35,
-    backgroundColor: "#003f5c",
   },
   inputGroup: {
     flex: 1,
@@ -263,26 +240,24 @@ const styles = StyleSheet.create({
   },
   timeDropdown: {
     flex: 1,
+    marginBottom: 250,
     flexDirection: "row",
-    marginLeft: 400,
-    marginTop: 50,
   },
   timeFrom: {
-    width: 160,
+    width: 120,
     paddingRight: 20,
   },
   timeTo: {
-    width: 140,
+    width: 100,
   },
   button: {
     flex: 1,
     padding: 0,
     marginBottom: 49,
     alignSelf: "flex-end",
-    backgroundColor: "white",
   },
   insatsTyp: {
-    width: 140,
+    width: 120,
     paddingLeft: 20,
   },
   freeText: {
@@ -293,10 +268,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "flex-end",
   },
-  text: {
-    color: "white",
-    fontSize: 25,
-  }
 });
 
 export default AddInsatsScreen;
