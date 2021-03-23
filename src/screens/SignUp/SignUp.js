@@ -55,20 +55,23 @@ export default function SignUp({ navigation }) {
           <ScrollView onBlur={Keyboard.dismiss}>
             <TextInput
               style={styles.textInput}
-              placeholder="First name*"
+              placeholder="First name"
+              placeholderTextColor="white"
               value={firstName}
               onChangeText={(name) => setFirstName(name)}
             />
             <TextInput
               style={styles.textInput}
               placeholder="Last name"
+              placeholderTextColor="white"
               value={lastName}
               onChangeText={(name) => setLastName(name)}
             />
 
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your email*"
+              placeholder="Enter your email"
+              placeholderTextColor="white"
               value={email}
               onChangeText={(email) => setEmail(email)}
               keyboardType="email-address"
@@ -77,14 +80,16 @@ export default function SignUp({ navigation }) {
 
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your password*"
+              placeholder="Enter your password"
+              placeholderTextColor="white"
               value={password}
               onChangeText={(password) => setPassword(password)}
               secureTextEntry={true}
             />
             <TextInput
               style={styles.textInput}
-              placeholder="Retype your password to confirm*"
+              placeholder="Retype your password to confirm"
+              placeholderTextColor="white"
               value={confirmPassword}
               onChangeText={(password2) => setConfirmPassword(password2)}
               secureTextEntry={true}
@@ -111,14 +116,14 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
-    backgroundColor: "#3FC5AB",
+    backgroundColor: "#003f5c",
     alignItems: "center",
     justifyContent: "center",
   },
   button: {
     width: 200,
     padding: 5,
-    backgroundColor: "#ff9999",
+    backgroundColor: "#483d8b",
     borderWidth: 2,
     borderColor: "white",
     borderRadius: 15,
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
   inlineText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "navy",
+    color: "white",
     textAlign: "center",
     marginTop: "5%",
   },
@@ -144,13 +149,13 @@ const styles = StyleSheet.create({
     margin: "5%",
     marginTop: "15%",
     fontWeight: "bold",
-    color: "#2E6194",
+    color: "white",
   },
   textInput: {
     width: 300,
     fontSize: 18,
     borderWidth: 1,
-    borderColor: "#a4eddf",
+    borderColor: "white",
     padding: 10,
     margin: 5,
   },
