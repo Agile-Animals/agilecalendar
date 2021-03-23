@@ -12,8 +12,10 @@ import {
 import firebase from "../../database/firebaseDb";
 import DropdownMenu from "react-native-dropdown-menu";
 import CalendarPicker from "react-native-calendar-picker";
-import { Button } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { ThemeContext } from "../../../config/ThemeContext";
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 class InsatsDetailScreen extends Component {
   constructor(props) {
@@ -119,12 +121,12 @@ class InsatsDetailScreen extends Component {
 
   openTwoButtonAlert = () => {
     Alert.alert(
-      "Ta Bort",
-      "Är du säker?",
+      "Delete Insats",
+      "Are you sure?",
       [
-        { text: "Ja", onPress: () => this.deleteInsats() },
+        { text: "Yes", onPress: () => this.deleteInsats() },
         {
-          text: "Nej",
+          text: "No",
           onPress: () => console.log("No item was removed"),
           style: "cancel",
         },
@@ -171,32 +173,38 @@ class InsatsDetailScreen extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.inputGroup}>
           <TextInput
-            style={{
-              borderBottomWidth: 1,
-              fontSize: 30,
-            }}
             placeholder={"Hjälpare"}
-            placeholderTextColor="white"
             value={this.state.helperName}
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        <View 
-          style={{
-            justifyContent: "flex-end",
-            marginBottom: 30,
-            marginLeft: 80,
-            marginRight: 80,
-            //backgroundColor:"white",
-            type:"outline",
 
+
+        <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+            />
+          }
+          iconRight
+          title="Datum  "
+          onPress={() => this.setModalVisible(true)}
+        />
+        {/* <Button
+          style={{
+            height: 40,
+            width: 84,
           }}
+          onPress={() => this.setModalVisible(true)}
         >
-          <Button title="Datum" backgroundColor="white" onPress={() => this.setModalVisible(true)} />
-        </View>
+          Datum
+        </Button> */}
+
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
-            <Text style={styles.text}>Från:</Text>
+            <Text>Från:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -210,7 +218,7 @@ class InsatsDetailScreen extends Component {
           </View>
 
           <View style={styles.timeTo}>
-            <Text style={styles.text}>Till:</Text>
+            <Text>Till:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -224,7 +232,7 @@ class InsatsDetailScreen extends Component {
           </View>
 
           <View style={styles.insatsTyp}>
-            <Text style={styles.text}>Insats typ:</Text>
+            <Text>Insats typ:</Text>
             <DropdownMenu
               style={{ flex: 1 }}
               bgColor={"white"}
@@ -259,18 +267,18 @@ class InsatsDetailScreen extends Component {
         </Modal>
 
         <View style={styles.button}>
-          <View style={{ width: 120, backgroundColor: "white" }}>
+          <View style={{ width: 120, }}>
             <Button
               onPress={() => this.updateInsats()}
-              title="Updatera"
+              title="Update "
               type="outline"
-              color="white"
             />
           </View>
-          <View style={{ width: 120, backgroundColor: "white" }}>
+          <View style={{ width: 120, backgroundColor: "red", color:'#00000' }}>
             <Button
+
               onPress={this.openTwoButtonAlert}
-              title="Ta Bort"
+              title="Delete "
               type="outline"
             />
           </View>
@@ -284,13 +292,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 35,
-    backgroundColor: "#003f5c",
   },
   inputGroup: {
-    justifyContent: "flex-end",
-    margin: 90,
+    flex: 1,
+    padding: 0,
+    marginBottom: 15,
     borderBottomWidth: 1,
-    fontSize: 20,
+    borderBottomColor: "#cccccc",
   },
   preloader: {
     left: 0,
@@ -307,19 +315,18 @@ const styles = StyleSheet.create({
   },
   timeDropdown: {
     flex: 1,
+    marginBottom: 250,
     flexDirection: "row",
-    marginLeft: 400,
-    marginTop: 50,
   },
   timeFrom: {
-    width: 160,
+    width: 120,
     paddingRight: 20,
   },
   timeTo: {
-    width: 140,
+    width: 100,
   },
   insatsTyp: {
-    width: 140,
+    width: 120,
     paddingLeft: 20,
   },
   button: {
@@ -336,10 +343,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "flex-end",
   },
-  text: {
-    color: "white",
-    fontSize: 20,
-  }
 });
 
 export default InsatsDetailScreen;

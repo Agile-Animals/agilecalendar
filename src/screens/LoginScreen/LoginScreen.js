@@ -1,211 +1,176 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Alert,
-  SafeAreaView,
-  TextInput,
-  ScrollView,
-  Keyboard,
-} from "react-native";
+import { View, StyleSheet, Alert, SafeAreaView, TextInput,  } from "react-native";
 import { useForm, Controller } from "react-hook-form";
+import { ThemeContext } from "../../../config/ThemeContext";
 import { signIn } from "../../API/firebaseMethods";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Button, Input, Text, ThemeProvider } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Button, Input, Text } from 'react-native-elements';
+
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
+  const themeContext = React.useContext(ThemeContext);
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!password && !email) {
       Alert.alert("E-postadress och Lösenord saknas.");
-      setEmail("");
-      setPassword("");
     } else if (!email) {
       Alert.alert("E-postadress saknas.");
-      setEmail("");
-      setPassword("");
     } else if (!password) {
       Alert.alert("Lösenord saknas.");
-      setEmail("");
-      setPassword("");
     } else {
-      await signIn(email, password);
-      setEmail("");
-      setPassword("");
-      navigation.navigate("Loading");
+      if (signIn(email, password)) {
+        setEmail("");
+        setPassword("");
+        navigation.navigate("Loading");
+      }
     }
+    setEmail("");
+    setPassword("");
   };
+  // const onSubmit = () => {
+  //   if (!email) {
+  //     Alert.alert("Email field is required.");
+  //   }
+
+  //   if (!password) {
+  //     Alert.alert("Password field is required.");
+  //   }
+
+  //   signIn(email, password);
+  //   setEmail("");
+  //   setPassword("");
+  //   navigation.navigate("Loading");
+  // };
+
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <Text style={styles.text}>Agile Calendar</Text>
+    <View style={styles.container}>
+      <View level="1">
+        <Text style={{ fontSize: 45, marginTop: 52 }} >Agile Calendar</Text>
+      </View>
 
-          <ScrollView onBlur={Keyboard.dismiss}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your email"
-              placeholderTextColor="white"
-              value={email}
-              onChangeText={(email) => setEmail(email)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your password"
-              placeholderTextColor="white"
-              value={password}
-              onChangeText={(password) => setPassword(password)}
-              secureTextEntry={true}
-            />
-
-            {/* <View style={styles.loginBtn}>
-        <ThemeProvider>
-          <Button
-            icon={<Icon name="arrow-right" size={15} color="#000000" />}
-            type="outline"
-            iconRight
-            title="Logga in  "
-            onPress={onSubmit}
-          />
-        </ThemeProvider>
-      </View> */}
-            <TouchableOpacity style={styles.button} onPress={onSubmit}>
-              <Text style={styles.buttonText}>Logga in</Text>
-            </TouchableOpacity>
-
-            <Text style={styles.inlineText}>Create account</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate("Sign Up")}
-            >
-              <Text style={styles.buttonText}>Sign In</Text>
-            </TouchableOpacity>
-          </ScrollView>
+      <View style={styles.loginForm} level="1">
+        <View level="1">
+          <Text style={{ fontSize: 35, marginTop: 12, color: '#0080FF' }} >Logga in</Text>
         </View>
-      </SafeAreaView>
-    </ScrollView>
+        <SafeAreaView>
+          <TextInput
+            style={{
+              marginTop: 12,
+              width: 300,
+              fontSize: 25,
+              borderBottomWidth: 1,
+            }}
+            onChangeText={(email) => setEmail(email)}
+            autoCapitalize="none"
+            value={email}
+            keyboardType="email-address"
+            placeholder="E-postadress"
+          // keyboardType="numeric"
+          />
+        </SafeAreaView>
+
+        <SafeAreaView>
+          <TextInput
+            style={{
+              marginTop: 12,
+              width: 300,
+              fontSize: 25,
+              borderBottomWidth: 1,
+            }}
+            onChangeText={(password) => setPassword(password)}
+            autoCapitalize="none"
+            value={password}
+            placeholder="Lösenord"
+          // keyboardType="numeric"
+          />
+        </SafeAreaView>
+
+      </View>
+      <View style={{
+        marginTop: 12,
+        width: 300,
+      }}>
+        <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="#0080FF"
+            />
+          }
+          type="outline"
+          iconRight
+          title="Logga in  " onPress={onSubmit}
+
+        />
+      </View>
+      <View style={{
+        marginTop: 12,
+        width: 300,
+      }}>
+        <Button
+          icon={
+            <Icon
+              name="arrow-right"
+              size={15}
+              color="white"
+            />
+          }
+          iconRight
+          title="Sign Up  "
+          onPress={() => navigation.navigate("Sign Up")}
+
+        />
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    width: "100%",
-    //flexDirection: "column",
-    backgroundColor: "#003f5c",
+    flex: 1,
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
   },
-  // heading: {
-  //   fontSize: 28,
-  // },
+  heading: {
+    fontSize: 28,
+  },
   text: {
-    textAlign: "center",
-    fontSize: 60,
-    margin: "5%",
-    marginTop: "15%",
-    fontWeight: "bold",
-    color: "white",
+    margin: 2,
   },
-  // header: {
-  //   alignItems: "center",
-  //   padding: 20,
-  //   paddingTop: 30,
-  // },
-  // logo: {
-  //   fontWeight: "bold",
-  //   fontSize: 70,
-  //   color: "#fb5b5a",
-  //   marginBottom: 40,
-  // },
-  // // loginForm: {
-  //   //maxWidth: 300,
-  //   //justifyContent: "center",
-  //   alignItems: "center",
-  //   width: "30%",
-  //   backgroundColor: "#465881",
-  //   borderRadius: 50,
-  //   height: 130,
-  //   marginBottom: 50,
-  //   justifyContent: "center",
-  //   padding: 30,
-  // },
-  // loginBtn: {
-  //   // FontColor: '#0000',
-  //   width: "80%",
-  //   backgroundColor: "#fb5b5a",
-  //   borderRadius: 25,
-  //   height: 50,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   marginTop: 40,
-  //   marginBottom: 10,
-  // },
-  // formInput: {
-  //   margin: 4,
-  // },
-  // titleText: {
-  //   fontSize: ,
-  //   lineHeight: 24,
-  //   fontWeight: "bold",
-  //   color: "white",
-  // },
-  // box: {
-  //   height: 150,
-  //   width: 150,
-  //   backgroundColor: "white",
-  //   borderRadius: 5,
-  // },
-  // TextInput: {
-  //   //marginTop: 12,
-  //   width: 300,
-  //   fontSize: 30,
-  //   borderBottomWidth: 1,
-  //   height: 50,
-  //   //flex: 1,
-  //   //padding: 10,
-  //   //marginLeft: 20,
-  //   color: "white",
-  // },
-  button: {
-    width: 200,
-    padding: 5,
-    backgroundColor: "#483d8b",
-    borderWidth: 2,
-    borderColor: "white",
-    borderRadius: 20,
-    alignSelf: "center",
-    margin: "5%",
+  header: {
+    alignItems: "center",
+    padding: 20,
+    paddingTop: 30,
   },
-  buttonText: {
-    fontSize: 20,
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
+  loginForm: {
+    maxWidth: 300,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  inlineText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-    textAlign: "center",
-    marginTop: "50%",
-  },
-  textInput: {
+  loginBtn: {
+    // FontColor: '#0000',
+    marginTop: 12,
     width: 300,
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: "white",
-    padding: 10,
-    margin: 20,
+  },
+  formInput: {
+    margin: 4,
+  },
+  titleText: {
+    fontSize: 14,
+    lineHeight: 24,
+    fontWeight: "bold",
+  },
+  box: {
+    height: 150,
+    width: 150,
+    backgroundColor: "white",
+    borderRadius: 5,
   },
 });
 
