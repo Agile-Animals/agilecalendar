@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, SafeAreaView, TextInput, ScrollView, Keyboard } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  SafeAreaView,
+  TextInput,
+  ScrollView,
+  Keyboard,
+} from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { signIn } from "../../API/firebaseMethods";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -12,52 +20,54 @@ const LoginScreen = ({ navigation }) => {
   const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!password && !email) {
       Alert.alert("E-postadress och Lösenord saknas.");
+      setEmail("");
+      setPassword("");
     } else if (!email) {
       Alert.alert("E-postadress saknas.");
+      setEmail("");
+      setPassword("");
     } else if (!password) {
       Alert.alert("Lösenord saknas.");
+      setEmail("");
+      setPassword("");
     } else {
-      if (signIn(email, password)) {
-        setEmail("");
-        setPassword("");
-        navigation.navigate("Loading");
-      }
+      await signIn(email, password);
+      setEmail("");
+      setPassword("");
+      navigation.navigate("Loading");
     }
-    setEmail("");
-    setPassword("");
   };
 
   return (
     <ScrollView>
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Text style={styles.text}>Agile Calendar</Text>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
+          <Text style={styles.text}>Agile Calendar</Text>
 
-        <ScrollView onBlur={Keyboard.dismiss}>
-          <TextInput
-                style={styles.textInput}
-                placeholder="Enter your email"
-                placeholderTextColor="white"
-                value={email}
-                onChangeText={(email) => setEmail(email)}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-      
-          <TextInput
-                style={styles.textInput}
-                placeholder="Enter your password"
-                placeholderTextColor="white"
-                value={password}
-                onChangeText={(password) => setPassword(password)}
-                secureTextEntry={true}
-              />
-        
-   
-      {/* <View style={styles.loginBtn}>
+          <ScrollView onBlur={Keyboard.dismiss}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your email"
+              placeholderTextColor="white"
+              value={email}
+              onChangeText={(email) => setEmail(email)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your password"
+              placeholderTextColor="white"
+              value={password}
+              onChangeText={(password) => setPassword(password)}
+              secureTextEntry={true}
+            />
+
+            {/* <View style={styles.loginBtn}>
         <ThemeProvider>
           <Button
             icon={<Icon name="arrow-right" size={15} color="#000000" />}
@@ -69,35 +79,31 @@ const LoginScreen = ({ navigation }) => {
         </ThemeProvider>
       </View> */}
             <TouchableOpacity style={styles.button} onPress={onSubmit}>
-                    <Text style={styles.buttonText}>Logga in</Text>
-              </TouchableOpacity>
+              <Text style={styles.buttonText}>Logga in</Text>
+            </TouchableOpacity>
 
             <Text style={styles.inlineText}>Create account</Text>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate("Sign Up")}
-              >
-                <Text style={styles.buttonText}>Sign In</Text>
-              </TouchableOpacity>
-              
-            </ScrollView>
-         </View>
-       </SafeAreaView>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("Sign Up")}
+            >
+              <Text style={styles.buttonText}>Sign In</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     </ScrollView>
-    
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    
     height: "100%",
     width: "100%",
     //flexDirection: "column",
     backgroundColor: "#003f5c",
     alignItems: "center",
     justifyContent: "center",
-    
   },
   // heading: {
   //   fontSize: 28,
