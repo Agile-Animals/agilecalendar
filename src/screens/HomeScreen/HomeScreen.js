@@ -117,8 +117,8 @@ export default class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text category="h2">
-            Översikt user: {firebase.auth().currentUser.uid}
+          <Text category="h2" style={{ fontSize: 20 }}>
+            Översikt
           </Text>
         </View>
         <ImageBackground
