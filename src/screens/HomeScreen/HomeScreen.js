@@ -11,18 +11,29 @@ import {
   FlatList,
   ListItem,
   useWindowDimensions,
+  ScrollView,
 } from "react-native";
-import moment from "moment";
+import moment from "moment-with-locales-es6";
 // import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { Button, ThemeProvider } from "react-native-elements";
+import Icon from "react-native-vector-icons/FontAwesome";
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Rows,
+  Col,
+  Cols,
+  Cell,
+} from "react-native-table-component";
 
 export default class HomeScreen extends Component {
   constructor(props) {
+    var localLocale = moment();
+    localLocale.locale("sv");
     super(props);
     this.firestoreRef = firebase
       .firestore()
@@ -34,7 +45,20 @@ export default class HomeScreen extends Component {
       dragging: false,
       dropzones: [],
       dropzoneLayouts: [],
+
     };
+    this.state1 = {
+      tableHead: [
+        "The Time",
+        <Text>{localLocale.add(0, "day").format("dddd MM-DD")}</Text>,
+        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
+        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
+        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
+        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
+        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
+        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
+      ],
+    }
   }
 
   componentDidMount() {
@@ -81,16 +105,18 @@ export default class HomeScreen extends Component {
 
   render() {
     const { insatser, dragging } = this.state;
-    // const window = useWindowDimensions();
-
+    const state = this.state1;
+    var localLocale = moment();
+    localLocale.locale("sv");
     var today = new Date();
-    today = moment(today).add(0, "day").format("YYYY-MM-DD");
+    today = moment(today).format("YYYY-MM-DD");
     var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
     var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
     var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
     var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
     var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
     var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+
     var timeData = [
       [
         "08:00",
@@ -116,8 +142,8 @@ export default class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text category="h2">
-            Översikt user: {firebase.auth().currentUser.uid}
+          <Text category="h2" style={{ fontSize: 20 }}>
+            Översikt
           </Text>
         </View>
         <ImageBackground
@@ -131,208 +157,226 @@ export default class HomeScreen extends Component {
             <Draggable message={"Fritext"} />
           </View>
           <View>
-            <Draggable message={"Tvätta"} />
+            <Draggable message={"Tvätta "} />
           </View>
         </ImageBackground>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Pressable
-            style={{ height: 40, width: 140 }}
-            onPress={() => {
-              this.props.navigation.navigate("AddInsatsScreen");
-            }}
-          >
+
+        <ScrollView>
+            <View
+              data={state.tableHead}
+              style={styles.head}
+              textStyle={styles.text}
+            />
+          <View style={styles.listContainer}>
+            {/* _____________________ */}
+
+            <View style={{ width: 140 }}>
+              {/* <Text>The Time</Text> */}
+              {/* <ScrollView> */}
+              <Text style={styles.instatsList}>8:00</Text>
+              <Text style={styles.instatsList}>9:00</Text>
+              <Text style={styles.instatsList}>10:00</Text>
+              <Text style={styles.instatsList}>11:00</Text>
+              <Text style={styles.instatsList}>12:00</Text>
+              <Text style={styles.instatsList}>13:00</Text>
+              <Text style={styles.instatsList}>14:00</Text>
+              <Text style={styles.instatsList}>15:00</Text>
+              <Text style={styles.instatsList}>16:00</Text>
+              <Text style={styles.instatsList}>17:00</Text>
+              <Text style={styles.instatsList}>18:00</Text>
+              <Text style={styles.instatsList}>19:00 </Text>
+              {/* </ScrollView> */}
+            </View>
+
+            {/* ____________ */}
+
+            <View style={{ width: 140 }}>
+              {/* <Text>{localLocale.add(0, "day").format("dddd MM-DD")}</Text> */}
+
+              {insatser.map((item, index) => {
+                return item.date == today ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>{item.insatsType}</Text>
+                  </Pressable>
+                ) : null;
+              })}
+              {/* <FlatList
+              scrollEnabled={!dragging}
+              data={insatser}
+              renderItem={({ item, index }) =>
+                item.date == today ? (
+                  <Pressable
+                    style={styles.instatsList}
+                    onPress={() => {
+                      this.props.navigation.navigate("InsatsDetailScreen", {
+                        insatskey: item.key,
+                      });
+                    }}
+                  >
+                    <Text>{item.insatsType}</Text>
+                  </Pressable>
+                ) : null
+              }
+            /> */}
+            </View>
+            <View style={{ width: 140 }}>
+              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
+              <FlatList
+                scrollEnabled={!dragging}
+                data={insatser}
+                renderItem={({ item, index }) =>
+                  item.date === aday2 ? (
+                    <Pressable
+                      style={styles.instatsList}
+                      onPress={() => {
+                        this.props.navigation.navigate("InsatsDetailScreen", {
+                          insatskey: item.key,
+                        });
+                      }}
+                    >
+                      <Text>{item.insatsType}</Text>
+                    </Pressable>
+                  ) : null
+                }
+              />
+            </View>
+            <View style={{ width: 140 }}>
+              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
+              <FlatList
+                scrollEnabled={!dragging}
+                data={insatser}
+                renderItem={({ item, index }) =>
+                  item.date === aday3 ? (
+                    <Pressable
+                      style={styles.instatsList}
+                      onPress={() => {
+                        this.props.navigation.navigate("InsatsDetailScreen", {
+                          insatskey: item.key,
+                        });
+                      }}
+                    >
+                      <Text>{item.insatsType}</Text>
+                    </Pressable>
+                  ) : null
+                }
+              />
+            </View>
+            <View style={{ width: 140 }}>
+              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
+              <FlatList
+                scrollEnabled={!dragging}
+                data={insatser}
+                renderItem={({ item, index }) =>
+                  item.date === aday4 ? (
+                    <Pressable
+                      style={styles.instatsList}
+                      onPress={() => {
+                        this.props.navigation.navigate("InsatsDetailScreen", {
+                          insatskey: item.key,
+                        });
+                      }}
+                    >
+                      <Text>{item.insatsType}</Text>
+                    </Pressable>
+                  ) : null
+                }
+              />
+            </View>
+            <View style={{ width: 140 }}>
+              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
+              <FlatList
+                scrollEnabled={!dragging}
+                data={insatser}
+                renderItem={({ item, index }) =>
+                  item.date === aday5 ? (
+                    <Pressable
+                      style={styles.instatsList}
+                      onPress={() => {
+                        this.props.navigation.navigate("InsatsDetailScreen", {
+                          insatskey: item.key,
+                        });
+                      }}
+                    >
+                      <Text>{item.insatsType}</Text>
+                    </Pressable>
+                  ) : null
+                }
+              />
+            </View>
+            <View style={{ width: 140 }}>
+              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
+              <FlatList
+                scrollEnabled={!dragging}
+                data={insatser}
+                renderItem={({ item, index }) =>
+                  item.date === aday6 ? (
+                    <Pressable
+                      style={styles.instatsList}
+                      onPress={() => {
+                        this.props.navigation.navigate("InsatsDetailScreen", {
+                          insatskey: item.key,
+                        });
+                      }}
+                    >
+                      <Text>{item.insatsType}</Text>
+                    </Pressable>
+                  ) : null
+                }
+              />
+            </View>
+            <View style={{ width: 140 }}>
+              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
+              <FlatList
+                scrollEnabled={!dragging}
+                data={insatser}
+                renderItem={({ item, index }) =>
+                  item.date === aday7 ? (
+                    <Pressable
+                      style={styles.instatsList}
+                      onPress={() => {
+                        this.props.navigation.navigate("InsatsDetailScreen", {
+                          insatskey: item.key,
+                        });
+                      }}
+                    >
+                      <Text>{item.insatsType}</Text>
+                    </Pressable>
+                  ) : null
+                }
+              />
+            </View>
+          </View>
+        </ScrollView>
+        <View style={styles.buttonI}>
+          <View style={{ width: 120, backgroundColor: "white" }}>
             <Button
-              icon={
-                <Icon
-                  name="arrow-right"
-                  size={15}
-                  color="white"
-                />
-              }
+              title="Lägg till insats"
+              icon={<Icon name="plus" size={15} color="white" />}
               iconRight
-              title="Lägg till insats  "
-            />
-          </Pressable>
-        </View>
-        <View style={styles.listContainer}>
-          <View style={{ width: 140 }}>
-            <Text> Idag {moment(today).format("MM-DD")}</Text>
-            <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date == moment(today).format("YYYY-MM-DD") ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
-                  </Pressable>
-                ) : null
-              }
-            />
-          </View>
-          <View style={{ width: 140 }}>
-            <Text> {moment(today).add(1, "day").format("MM-DD")}</Text>
-            <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date === aday2 ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
-                  </Pressable>
-                ) : null
-              }
-            />
-          </View>
-          <View style={{ width: 140 }}>
-            <Text> {moment(today).add(2, "day").format("MM-DD")}</Text>
-            <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date === aday3 ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
-                  </Pressable>
-                ) : null
-              }
-            />
-          </View>
-          <View style={{ width: 140 }}>
-            <Text> {moment(today).add(3, "day").format("MM-DD")}</Text>
-            <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date === aday4 ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
-                  </Pressable>
-                ) : null
-              }
-            />
-          </View>
-          <View style={{ width: 140 }}>
-            <Text> {moment(today).add(4, "day").format("MM-DD")}</Text>
-            <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date === aday5 ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
-                  </Pressable>
-                ) : null
-              }
-            />
-          </View>
-          <View style={{ width: 140 }}>
-            <Text> {moment(today).add(5, "day").format("MM-DD")}</Text>
-            <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date === aday6 ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
-                  </Pressable>
-                ) : null
-              }
-            />
-          </View>
-          <View style={{ width: 140 }}>
-            <Text> {moment(today).add(6, "day").format("MM-DD")}</Text>
-            <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date === aday7 ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>
-                      {item.fromTime}-{item.toTime} {"\n\n"}
-                      {item.insatsType}
-                    </Text>
-                  </Pressable>
-                ) : null
-              }
+              style={{ height: 40, width: 140 }}
+              onPress={() => {
+                this.props.navigation.navigate("AddInsatsScreen");
+              }}
+              type="outline"
             />
           </View>
         </View>
-        <Pressable
-          style={{ height: 40, width: 140 }}
-          onPress={() => this.logOut()}
-        >
-          <Button
-            title="Logga Ut "
-            type="outline"
-          />
-        </Pressable>
+        <View style={styles.button}>
+          <View style={{ width: 120, backgroundColor: "white" }}>
+            <Button
+              title="Logga Ut"
+              onPress={() => this.logOut()}
+              type="outline"
+            />
+          </View>
+        </View>
       </View>
     );
   }
@@ -344,6 +388,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     // width: window.width * 1,
     // height: window.width * 1,
+    backgroundColor: "#00ced1",
   },
   header: {
     alignItems: "center",
@@ -351,19 +396,21 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
+    backgroundColor: "white",
+    width: "100%",
     flex: 1,
     flexDirection: "row",
     marginTop: 10,
-    margin: 10,
+    // margin: 10,
+
     borderRadius: 10,
     borderColor: "black",
-    shadowColor: "black",
+    // shadowColor: "black",
     shadowColor: "red",
-    paddingLeft: 280,
+    paddingLeft: 140,
     // width: 500,
   },
   item: {
-    backgroundColor: "red",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
@@ -375,9 +422,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     flex: 10,
-    color: "red",
+    paddingLeft: 7,
     borderColor: "black",
-    // shadowOffset: { width: 0, height: 2 },
+    borderWidth: 2,
+    backgroundColor: "#ccc",
     shadowOpacity: 0.8,
     shadowRadius: 2,
   },
@@ -402,7 +450,21 @@ const styles = StyleSheet.create({
     height: 100,
     width: 220,
   },
+  button: {
+    height: 40,
+    width: 140,
+    alignSelf: "flex-end",
+    //backgroundColor: "#483d8b",
+    //   borderWidth: 2,
+    //   borderColor: "white",
+    //   borderRadius: 20,
+    //   color: "red",
+  },
+  buttonI: {
+    padding: 0,
+    backgroundColor: "white",
+    alignSelf: "flex-start",
+  },
+  head: { height: 40, backgroundColor: "#f1f8ff" },
+  text: { margin: 6 }
 });
-
-
-
