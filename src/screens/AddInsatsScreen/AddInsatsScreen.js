@@ -220,15 +220,13 @@ class AddInsatsScreen extends Component {
         </Modal>
 
         <View style={styles.button}>
-        <View style={{ width: 120, backgroundColor: "white" }}>
-          <Button
-            onPress={() => this.storeInsats()}
-            title="Spara Insats"
-            
-            type="outline"
-
-          />
-        </View>
+          <View style={{ width: 120, backgroundColor: "white" }}>
+            <Button
+              onPress={() => this.storeInsats()}
+              title="Spara Insats"
+              type="outline"
+            />
+          </View>
         </View>
       </ScrollView>
     );
@@ -296,7 +294,7 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
     fontSize: 25,
-  }
+  },
 });
 
 export default AddInsatsScreen;

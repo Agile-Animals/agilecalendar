@@ -223,17 +223,17 @@ export default class HomeScreen extends Component {
               <Text style={styles.instatsList}>24:00 </Text>
             </View>
             <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date == today ? (
-                  <Animated.View
-                    style={{
-                      transform: [
-                        { translateX: this.state.pan.x },
-                        { translateY: this.state.pan.y },
-                      ],
-                    }}
-                    {...this.panResponder.panHandlers}
-                  >
+              <Animated.View
+                style={{
+                  transform: [
+                    { translateX: this.state.pan.x },
+                    { translateY: this.state.pan.y },
+                  ],
+                }}
+                {...this.panResponder.panHandlers}
+              >
+                {this.state.insatser.map((item, index) => {
+                  return item.date == today ? (
                     <Pressable
                       style={styles.item}
                       onPress={() => {
@@ -244,9 +244,9 @@ export default class HomeScreen extends Component {
                     >
                       <Text>{item.insatsType}</Text>
                     </Pressable>
-                  </Animated.View>
-                ) : null;
-              })}
+                  ) : null;
+                })}
+              </Animated.View>
             </View>
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {

@@ -26,7 +26,6 @@ export default function Dashboard({ navigation }) {
     navigation.replace("HomeScreen");
   });
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Dashboard</Text>
