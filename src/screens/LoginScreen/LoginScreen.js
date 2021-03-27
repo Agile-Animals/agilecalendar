@@ -34,10 +34,14 @@ const LoginScreen = ({ navigation }) => {
       setEmail("");
       setPassword("");
     } else {
-      await signIn(email, password);
-      setEmail("");
-      setPassword("");
-      navigation.navigate("Loading");
+      if (await signIn(email, password)) {
+        setEmail("");
+        setPassword("");
+        navigation.navigate("HomeScreen");
+      } else {
+        setEmail("");
+        setPassword("");
+      }
     }
   };
 
@@ -66,18 +70,6 @@ const LoginScreen = ({ navigation }) => {
               onChangeText={(password) => setPassword(password)}
               secureTextEntry={true}
             />
-
-            {/* <View style={styles.loginBtn}>
-        <ThemeProvider>
-          <Button
-            icon={<Icon name="arrow-right" size={15} color="#000000" />}
-            type="outline"
-            iconRight
-            title="Logga in  "
-            onPress={onSubmit}
-          />
-        </ThemeProvider>
-      </View> */}
             <TouchableOpacity style={styles.button} onPress={onSubmit}>
               <Text style={styles.buttonText}>Logga in</Text>
             </TouchableOpacity>
@@ -87,7 +79,7 @@ const LoginScreen = ({ navigation }) => {
               style={styles.button}
               onPress={() => navigation.navigate("Sign Up")}
             >
-              <Text style={styles.buttonText}>Sign In</Text>
+              <Text style={styles.buttonText}>Skapa konto</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -100,14 +92,10 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
-    //flexDirection: "column",
     backgroundColor: "#003f5c",
     alignItems: "center",
     justifyContent: "center",
   },
-  // heading: {
-  //   fontSize: 28,
-  // },
   text: {
     textAlign: "center",
     fontSize: 60,
@@ -116,66 +104,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-  // header: {
-  //   alignItems: "center",
-  //   padding: 20,
-  //   paddingTop: 30,
-  // },
-  // logo: {
-  //   fontWeight: "bold",
-  //   fontSize: 70,
-  //   color: "#fb5b5a",
-  //   marginBottom: 40,
-  // },
-  // // loginForm: {
-  //   //maxWidth: 300,
-  //   //justifyContent: "center",
-  //   alignItems: "center",
-  //   width: "30%",
-  //   backgroundColor: "#465881",
-  //   borderRadius: 50,
-  //   height: 130,
-  //   marginBottom: 50,
-  //   justifyContent: "center",
-  //   padding: 30,
-  // },
-  // loginBtn: {
-  //   // FontColor: '#0000',
-  //   width: "80%",
-  //   backgroundColor: "#fb5b5a",
-  //   borderRadius: 25,
-  //   height: 50,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   marginTop: 40,
-  //   marginBottom: 10,
-  // },
-  // formInput: {
-  //   margin: 4,
-  // },
-  // titleText: {
-  //   fontSize: ,
-  //   lineHeight: 24,
-  //   fontWeight: "bold",
-  //   color: "white",
-  // },
-  // box: {
-  //   height: 150,
-  //   width: 150,
-  //   backgroundColor: "white",
-  //   borderRadius: 5,
-  // },
-  // TextInput: {
-  //   //marginTop: 12,
-  //   width: 300,
-  //   fontSize: 30,
-  //   borderBottomWidth: 1,
-  //   height: 50,
-  //   //flex: 1,
-  //   //padding: 10,
-  //   //marginLeft: 20,
-  //   color: "white",
-  // },
   button: {
     width: 200,
     padding: 5,

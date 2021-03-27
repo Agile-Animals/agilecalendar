@@ -21,10 +21,8 @@ export default class Draggable extends Component {
   }
 
   componentWillMount() {
-    // Add a listener for the delta value change
     this._val = { x: 0, y: 0 };
     this.state.pan.addListener((value) => (this._val = value));
-    // Initialize PanResponder with move handling
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
       onPanResponderMove: Animated.event(
@@ -80,13 +78,21 @@ export default class Draggable extends Component {
 
   isDropArea1(gesture) {
     return (
+      gesture.moveY < 1200 &&
+      gesture.moveY > 180 &&
+      gesture.moveX < 280 &&
+      gesture.moveX > 140
+    );
+  }
+  isDropArea2(gesture) {
+    return (
       gesture.moveY < 630 &&
       gesture.moveY > 180 &&
       gesture.moveX < 420 &&
       gesture.moveX > 280
     );
   }
-  isDropArea2(gesture) {
+  isDropArea3(gesture) {
     return (
       gesture.moveY < 630 &&
       gesture.moveY > 180 &&
@@ -94,7 +100,7 @@ export default class Draggable extends Component {
       gesture.moveX > 420
     );
   }
-  isDropArea3(gesture) {
+  isDropArea4(gesture) {
     return (
       gesture.moveY < 630 &&
       gesture.moveY > 180 &&
@@ -102,7 +108,7 @@ export default class Draggable extends Component {
       gesture.moveX > 560
     );
   }
-  isDropArea4(gesture) {
+  isDropArea5(gesture) {
     return (
       gesture.moveY < 630 &&
       gesture.moveY > 180 &&
@@ -110,7 +116,7 @@ export default class Draggable extends Component {
       gesture.moveX > 700
     );
   }
-  isDropArea5(gesture) {
+  isDropArea6(gesture) {
     return (
       gesture.moveY < 630 &&
       gesture.moveY > 180 &&
@@ -118,20 +124,12 @@ export default class Draggable extends Component {
       gesture.moveX > 840
     );
   }
-  isDropArea6(gesture) {
+  isDropArea7(gesture) {
     return (
       gesture.moveY < 630 &&
       gesture.moveY > 180 &&
       gesture.moveX < 1120 &&
       gesture.moveX > 980
-    );
-  }
-  isDropArea7(gesture) {
-    return (
-      gesture.moveY < 630 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 1260 &&
-      gesture.moveX > 1120
     );
   }
 

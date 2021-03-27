@@ -27,6 +27,7 @@ export async function signIn(email, password) {
   } catch (err) {
     Alert.alert("Fel lösenord eller e-postadress.", err.message);
   }
+  return 1;
 }
 
 export async function loggingOut() {
