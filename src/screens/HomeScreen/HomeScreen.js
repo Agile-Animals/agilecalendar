@@ -157,7 +157,7 @@ export default class HomeScreen extends Component {
             <View style={{ width: 120, backgroundColor: "black" }}>
               <Button
                 title="Logga Ut"
-                onPress={() => this.dynamicDays()}
+                onPress={() => this.logOut()}
                 type="outline"
               />
             </View>

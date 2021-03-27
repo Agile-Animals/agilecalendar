@@ -37,7 +37,7 @@ const LoginScreen = ({ navigation }) => {
       if (await signIn(email, password)) {
         setEmail("");
         setPassword("");
-        navigation.navigate("HomeScreen");
+        navigation.navigate("Loading");
       } else {
         setEmail("");
         setPassword("");
