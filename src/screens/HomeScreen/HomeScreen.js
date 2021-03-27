@@ -12,13 +12,14 @@ import {
   useWindowDimensions,
   ScrollView,
   SafeAreaView,
+  PanResponder,
 } from "react-native";
-import moment from "moment-with-locales-es6";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
 import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
+import moment from "moment";
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -42,7 +43,33 @@ export default class HomeScreen extends Component {
       ],
       dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       days: ["", "", "", "", "", "", ""],
+      pan: new Animated.ValueXY(),
     };
+    this.panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        this.state.dragging = true;
+        this.state.pan.setOffset({
+          x: this.state.pan.x._value,
+          y: this.state.pan.y._value,
+        });
+      },
+      onPanResponderMove: Animated.event([
+        null,
+        {
+          dx: this.state.pan.x,
+          dy: this.state.pan.y,
+        },
+      ]),
+      onPanResponderRelease: () => {
+        this.state.dragging = false;
+        Animated.spring(this.state.pan, {
+          toValue: { x: 0, y: 0 },
+          friction: 5,
+          useNativeDriver: false,
+        }).start();
+      },
+    });
   }
 
   componentDidMount() {
@@ -109,7 +136,6 @@ export default class HomeScreen extends Component {
     const { insatser, dragging, days } = this.state;
     var today = new Date();
     today = moment(today).format("YYYY-MM-DD");
-
     var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
     var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
     var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
@@ -173,7 +199,7 @@ export default class HomeScreen extends Component {
           <Text style={styles.headItems}>{this.state.days[5]}</Text>
           <Text style={styles.headItems}>{this.state.days[6]}</Text>
         </View>
-        <ScrollView>
+        <ScrollView scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
             <View style={{ width: 140 }}>
               <Text style={styles.instatsList}>06:00 </Text>
@@ -196,23 +222,33 @@ export default class HomeScreen extends Component {
               <Text style={styles.instatsList}>23:00 </Text>
               <Text style={styles.instatsList}>24:00 </Text>
             </View>
-            <View>
+            <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date == today ? (
-                  <Pressable
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
+                  <Animated.View
+                    style={{
+                      transform: [
+                        { translateX: this.state.pan.x },
+                        { translateY: this.state.pan.y },
+                      ],
                     }}
+                    {...this.panResponder.panHandlers}
                   >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                    <Pressable
+                      style={styles.item}
+                      onPress={() => {
+                        this.props.navigation.navigate("InsatsDetailScreen", {
+                          insatskey: item.key,
+                        });
+                      }}
+                    >
+                      <Text>{item.insatsType}</Text>
+                    </Pressable>
+                  </Animated.View>
                 ) : null;
               })}
             </View>
-            <View>
+            <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday2 ? (
                   <Pressable
@@ -228,7 +264,7 @@ export default class HomeScreen extends Component {
                 ) : null;
               })}
             </View>
-            <View>
+            <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday3 ? (
                   <Pressable
@@ -244,7 +280,7 @@ export default class HomeScreen extends Component {
                 ) : null;
               })}
             </View>
-            <View>
+            <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday4 ? (
                   <Pressable
@@ -260,7 +296,7 @@ export default class HomeScreen extends Component {
                 ) : null;
               })}
             </View>
-            <View>
+            <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday5 ? (
                   <Pressable
@@ -276,7 +312,7 @@ export default class HomeScreen extends Component {
                 ) : null;
               })}
             </View>
-            <View>
+            <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday6 ? (
                   <Pressable
@@ -292,7 +328,7 @@ export default class HomeScreen extends Component {
                 ) : null;
               })}
             </View>
-            <View>
+            <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday7 ? (
                   <Pressable
@@ -337,7 +373,6 @@ const styles = StyleSheet.create({
   },
   item: {
     height: 43.5,
-    width: 140,
     backgroundColor: "#ccc",
     alignItems: "center",
     justifyContent: "center",

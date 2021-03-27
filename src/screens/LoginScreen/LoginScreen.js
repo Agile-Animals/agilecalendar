@@ -34,14 +34,10 @@ const LoginScreen = ({ navigation }) => {
       setEmail("");
       setPassword("");
     } else {
-      if (await signIn(email, password)) {
-        setEmail("");
-        setPassword("");
-        navigation.navigate("Loading");
-      } else {
-        setEmail("");
-        setPassword("");
-      }
+      await signIn(email, password);
+      setEmail("");
+      setPassword("");
+      navigation.navigate("Loading");
     }
   };
 
