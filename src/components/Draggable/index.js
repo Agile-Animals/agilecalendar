@@ -18,11 +18,7 @@ export default class Draggable extends Component {
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
     };
-  }
 
-  componentWillMount() {
-    this._val = { x: 0, y: 0 };
-    this.state.pan.addListener((value) => (this._val = value));
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
       onPanResponderMove: Animated.event(
