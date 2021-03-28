@@ -21,7 +21,7 @@ import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
 
-export default class HomeScreen extends Component {
+export default class DayScreen extends Component {
   constructor(props) {
     super(props);
     this.firestoreRef = firebase
@@ -136,12 +136,6 @@ export default class HomeScreen extends Component {
     const { insatser, dragging, days } = this.state;
     var today = new Date();
     today = moment(today).format("YYYY-MM-DD");
-    var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
-    var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
-    var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
-    var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
-    var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
-    var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
     this.dynamicDays();
     if (this.state.isLoading) {
       return (
@@ -154,8 +148,8 @@ export default class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text category="h2" style={{ fontSize: 20 }}>
-            Veckovy
+          <Text category="h2" style={{ fontSize: 30 }}>
+            Dagvy
           </Text>
         </View>
         <View
@@ -165,20 +159,6 @@ export default class HomeScreen extends Component {
             zIndex: 100,
           }}
         >
-          <ImageBackground
-            source={require("../../../assets/moln.png")}
-            style={styles.moln}
-          >
-            <Draggable message={"Handla"} />
-            <View style={{ padding: 3 }}>
-              <Draggable message={"Städa"} />
-              <Draggable message={"Duscha"} />
-              <Draggable message={"Fritext"} />
-            </View>
-            <View>
-              <Draggable message={"Tvätta "} />
-            </View>
-          </ImageBackground>
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "black" }}>
               <Button
@@ -188,26 +168,11 @@ export default class HomeScreen extends Component {
               />
             </View>
           </View>
-          <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
-              <Button
-                title="DagVy"
-                onPress={() => this.props.navigation.navigate("DayScreen")}
-                type="outline"
-              />
-            </View>
-          </View>
-          
         </View>
         <View style={styles.head}>
           <Text style={styles.headItems}></Text>
           <Text style={styles.headItems}>{this.state.days[0]}</Text>
-          <Text style={styles.headItems}>{this.state.days[1]}</Text>
-          <Text style={styles.headItems}>{this.state.days[2]}</Text>
-          <Text style={styles.headItems}>{this.state.days[3]}</Text>
-          <Text style={styles.headItems}>{this.state.days[4]}</Text>
-          <Text style={styles.headItems}>{this.state.days[5]}</Text>
-          <Text style={styles.headItems}>{this.state.days[6]}</Text>
+
         </View>
         <ScrollView scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
@@ -258,102 +223,7 @@ export default class HomeScreen extends Component {
                 })}
               </Animated.View>
             </View>
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday2 ? (
-                  <Pressable
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
-                ) : null;
-              })}
-            </View>
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday3 ? (
-                  <Pressable
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
-                ) : null;
-              })}
-            </View>
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday4 ? (
-                  <Pressable
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
-                ) : null;
-              })}
-            </View>
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday5 ? (
-                  <Pressable
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
-                ) : null;
-              })}
-            </View>
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday6 ? (
-                  <Pressable
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
-                ) : null;
-              })}
-            </View>
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday7 ? (
-                  <Pressable
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
-                ) : null;
-              })}
-            </View>
+
           </View>
         </ScrollView>
       </View>
@@ -396,14 +266,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     shadowOpacity: 0.8,
     shadowRadius: 2,
-  },
-  moln: {
-    flexDirection: "row",
-    resizeMode: "cover",
-    justifyContent: "center",
-    alignItems: "center",
-    height: 100,
-    width: 220,
   },
   button: {
     height: 40,
