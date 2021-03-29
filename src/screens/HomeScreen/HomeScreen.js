@@ -77,6 +77,9 @@ export default class HomeScreen extends Component {
         "Fritext C",
       ],
     };
+
+    this.weekStart = moment().startOf("isoWeek").format("YYYY-MM-DD");
+    this.weekEnd = moment().endOf("isoWeek").format("YYYY-MM-DD");
   }
 
   componentDidMount() {
@@ -139,6 +142,20 @@ export default class HomeScreen extends Component {
     }
   }
 
+  checkConsumedInsats(tmpType) {
+    for (let i = 0; i < this.state.insatser.length; ++i) {
+      if (
+        this.state.insatser[i].date >= this.weekStart &&
+        this.state.insatser[i].date <= this.weekEnd
+      ) {
+        if (tmpType == this.state.insatser[i].insatsType) {
+          return -1;
+        }
+      }
+    }
+    return 1;
+  }
+
   render() {
     const { insatser, dragging, days, insatsTypes } = this.state;
     var today = new Date();
@@ -177,11 +194,11 @@ export default class HomeScreen extends Component {
             style={styles.moln}
           >
             {this.state.insatsTypes.map((item, index) => {
-              return (
+              return 1 === this.checkConsumedInsats(item) ? (
                 <View key={index}>
                   <Draggable message={item} />
                 </View>
-              );
+              ) : null;
             })}
           </ImageBackground>
           <View style={styles.button}>
