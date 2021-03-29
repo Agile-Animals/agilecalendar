@@ -8,15 +8,15 @@ import {
   Animated,
   Pressable,
   ImageBackground,
-  ListItem,
   useWindowDimensions,
   ScrollView,
-  SafeAreaView,
   PanResponder,
+  TouchableOpacity,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
+import Insats from "../../components/Insats";
 import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
@@ -32,7 +32,6 @@ export default class HomeScreen extends Component {
       isLoading: true,
       insatser: [],
       dragging: false,
-      dropZoneValues: null,
       tmpDays: [
         "Måndag",
         "Tisdag",
@@ -65,46 +64,7 @@ export default class HomeScreen extends Component {
         { time: "23:00", id: "23" },
         { time: "24:00", id: "24" },
       ],
-      pan: [],
     };
-  }
-
-  getPanResponder(index) {
-    this.state.pan[index] = new Animated.ValueXY();
-    console.log(index);
-    console.log(this.state.pan[index]);
-    return PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderGrant: (e, gesture) => {
-        console.log(index);
-        this.setState({ dragging: true });
-        this.state.pan[index].setOffset({
-          x: this.state.pan[index].x._value,
-          y: this.state.pan[index].y._value,
-        });
-      },
-      onPanResponderTerminationRequest: (e, gestureState) => false,
-      onPanResponderMove: Animated.event(
-        [
-          null,
-          {
-            dx: this.state.pan[index].x,
-            dy: this.state.pan[index].y,
-          },
-        ],
-        { useNativeDriver: false }
-      ),
-      onPanResponderRelease: (e, gesture) => {
-        if (this.isDropZone(gesture)) {
-          this.state.dragging = false;
-          Animated.spring(this.state.pan[index], {
-            toValue: { x: 0, y: 0 },
-            friction: 5,
-            useNativeDriver: false,
-          }).start();
-        }
-      },
-    });
   }
 
   componentDidMount() {
@@ -198,7 +158,6 @@ export default class HomeScreen extends Component {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-            zIndex: 100,
           }}
         >
           <ImageBackground
@@ -248,7 +207,7 @@ export default class HomeScreen extends Component {
 
         <ScrollView scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            <View style={{ width: 140 }} key={"345"}>
+            <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={item.id}>
@@ -259,40 +218,29 @@ export default class HomeScreen extends Component {
             </View>
 
             <View style={{ width: 140 }}>
-              <Animated.View>
-                {this.state.insatser.map((item, index) => {
-                  return item.date == today ? (
-                    <Pressable
-                      key={item.key}
-                      {...this.getPanResponder(index).panHandlers}
-                      style={styles.item}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null;
-                })}
-              </Animated.View>
+              {this.state.insatser.map((item, index) => {
+                return item.date == today ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
             </View>
 
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday2 ? (
-                  <Pressable
-                    key={item.key}
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
                 ) : null;
               })}
             </View>
@@ -300,17 +248,13 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday3 ? (
-                  <Pressable
-                    key={item.key}
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
                 ) : null;
               })}
             </View>
@@ -318,17 +262,13 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday4 ? (
-                  <Pressable
-                    key={item.key}
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
                 ) : null;
               })}
             </View>
@@ -336,17 +276,13 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday5 ? (
-                  <Pressable
-                    key={item.key}
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
                 ) : null;
               })}
             </View>
@@ -354,17 +290,13 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday6 ? (
-                  <Pressable
-                    key={item.key}
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
                 ) : null;
               })}
             </View>
@@ -372,17 +304,13 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date === aday7 ? (
-                  <Pressable
-                    key={item.key}
-                    style={styles.item}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
                 ) : null;
               })}
             </View>
@@ -436,6 +364,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 100,
     width: 220,
+    zIndex: 10,
   },
   button: {
     height: 40,
@@ -463,31 +392,3 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
 });
-
-{
-  /* <Animated.View
-                style={{
-                  transform: [
-                    { translateX: this.state.pan.x },
-                    { translateY: this.state.pan.y },
-                  ],
-                }}
-                {...this.panResponder.panHandlers}
-              >
-                {this.state.insatser.map((item, index) => {
-                  return item.date == today ? (
-                    <Pressable
-                      keyExtractor={(item) => "" + item.key}
-                      style={styles.item}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null;
-                })}
-              </Animated.View> */
-}
