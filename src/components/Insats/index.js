@@ -183,7 +183,6 @@ let styles = StyleSheet.create({
     flexDirection: "row",
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: "30%",
     borderColor: "black",
     borderWidth: 2,
     backgroundColor: "#ccc",

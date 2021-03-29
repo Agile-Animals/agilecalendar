@@ -64,6 +64,18 @@ export default class HomeScreen extends Component {
         { time: "23:00", id: "23" },
         { time: "24:00", id: "24" },
       ],
+      insatsTypes: [
+        "Städa",
+        "Tvätta",
+        "Matlagning",
+        "Handla",
+        "Personalbesök",
+        "Aktivitet",
+        "Dusch",
+        "Fritext A",
+        "Fritext B",
+        "Fritext C",
+      ],
     };
   }
 
@@ -128,7 +140,7 @@ export default class HomeScreen extends Component {
   }
 
   render() {
-    const { insatser, dragging, days } = this.state;
+    const { insatser, dragging, days, insatsTypes } = this.state;
     var today = new Date();
     today = moment(today).format("YYYY-MM-DD");
     var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
@@ -164,15 +176,13 @@ export default class HomeScreen extends Component {
             source={require("../../../assets/moln.png")}
             style={styles.moln}
           >
-            <Draggable message={"Handla"} />
-            <View style={{ padding: 3 }}>
-              <Draggable message={"Städa"} />
-              <Draggable message={"Duscha"} />
-              <Draggable message={"Fritext"} />
-            </View>
-            <View>
-              <Draggable message={"Tvätta "} />
-            </View>
+            {this.state.insatsTypes.map((item, index) => {
+              return (
+                <View key={index}>
+                  <Draggable message={item} />
+                </View>
+              );
+            })}
           </ImageBackground>
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "black" }}>
@@ -362,6 +372,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "center",
     alignItems: "center",
+    flexWrap: "wrap",
     height: 100,
     width: 220,
     zIndex: 10,

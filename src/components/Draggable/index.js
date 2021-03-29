@@ -17,6 +17,8 @@ export default class Draggable extends Component {
       toTime: "09:00",
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
+      opacity: new Animated.Value(1),
+      used: false,
     };
 
     this.panResponder = PanResponder.create({
@@ -38,30 +40,100 @@ export default class Draggable extends Component {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(today, "date");
           this.storeInsats();
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: 1000,
+          }).start(
+            () =>
+              this.setState({
+                used: true,
+              }),
+            { useNativeDriver: false }
+          );
         } else if (this.isDropArea2(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday2, "date");
           this.storeInsats();
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: 1000,
+          }).start(
+            () =>
+              this.setState({
+                used: true,
+              }),
+            { useNativeDriver: false }
+          );
         } else if (this.isDropArea3(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday3, "date");
           this.storeInsats();
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: 1000,
+          }).start(
+            () =>
+              this.setState({
+                used: true,
+              }),
+            { useNativeDriver: false }
+          );
         } else if (this.isDropArea4(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday4, "date");
           this.storeInsats();
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: 1000,
+          }).start(
+            () =>
+              this.setState({
+                used: true,
+              }),
+            { useNativeDriver: false }
+          );
         } else if (this.isDropArea5(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday5, "date");
           this.storeInsats();
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: 1000,
+          }).start(
+            () =>
+              this.setState({
+                used: true,
+              }),
+            { useNativeDriver: false }
+          );
         } else if (this.isDropArea6(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday6, "date");
           this.storeInsats();
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: 1000,
+          }).start(
+            () =>
+              this.setState({
+                used: true,
+              }),
+            { useNativeDriver: false }
+          );
         } else if (this.isDropArea7(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday7, "date");
           this.storeInsats();
+          Animated.timing(this.state.opacity, {
+            toValue: 0,
+            duration: 1000,
+          }).start(
+            () =>
+              this.setState({
+                used: true,
+              }),
+            { useNativeDriver: false }
+          );
         }
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
@@ -148,30 +220,33 @@ export default class Draggable extends Component {
   }
 
   render() {
-    const { message } = this.state;
+    return <View>{this.renderDraggable()}</View>;
+  }
+
+  renderDraggable() {
+    const { message, used, opacity } = this.state;
 
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),
     };
-    return (
-      <Animated.View
-        {...this.panResponder.panHandlers}
-        style={[panStyle, styles.circle]}
-      >
-        <Text> {this.state.message} </Text>
-      </Animated.View>
-    );
+    if (!this.state.used) {
+      return (
+        <Animated.View
+          {...this.panResponder.panHandlers}
+          style={[panStyle, styles.circle, { opacity: this.state.opacity }]}
+        >
+          <Text> {this.state.message} </Text>
+        </Animated.View>
+      );
+    }
   }
 }
 
 let styles = StyleSheet.create({
   circle: {
-    width: 60,
-    height: 25,
     borderRadius: 12,
-    marginTop: 3,
-    marginBottom: 3,
+    marginTop: 1,
+    marginBottom: 1,
     borderWidth: 1,
-    alignItems: "center",
   },
 });
