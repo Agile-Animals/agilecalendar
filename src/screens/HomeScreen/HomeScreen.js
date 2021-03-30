@@ -8,32 +8,21 @@ import {
   Animated,
   Pressable,
   ImageBackground,
-  FlatList,
-  ListItem,
   useWindowDimensions,
   ScrollView,
+  PanResponder,
+  TouchableOpacity,
 } from "react-native";
-import moment from "moment-with-locales-es6";
-// import { useForm, Controller } from "react-hook-form";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
+import Insats from "../../components/Insats";
 import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import {
-  Table,
-  TableWrapper,
-  Row,
-  Rows,
-  Col,
-  Cols,
-  Cell,
-} from "react-native-table-component";
+import moment from "moment";
 
 export default class HomeScreen extends Component {
   constructor(props) {
-    var localLocale = moment();
-    localLocale.locale("sv");
     super(props);
     this.firestoreRef = firebase
       .firestore()
@@ -43,22 +32,59 @@ export default class HomeScreen extends Component {
       isLoading: true,
       insatser: [],
       dragging: false,
-      dropzones: [],
-      dropzoneLayouts: [],
-
-    };
-    this.state1 = {
-      tableHead: [
-        "The Time",
-        <Text>{localLocale.add(0, "day").format("dddd MM-DD")}</Text>,
-        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
-        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
-        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
-        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
-        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
-        <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text>,
+      tmpDays: [
+        "Måndag",
+        "Tisdag",
+        "Onsdag",
+        "Torsdag",
+        "Fredag",
+        "Lördag",
+        "Söndag",
       ],
-    }
+      dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      days: ["", "", "", "", "", "", ""],
+      times: [
+        { time: "00:00", id: "0" },
+        { time: "01:00", id: "1" },
+        { time: "02:00", id: "2" },
+        { time: "03:00", id: "3" },
+        { time: "04:00", id: "4" },
+        { time: "05:00", id: "5" },
+        { time: "06:00", id: "6" },
+        { time: "07:00", id: "7" },
+        { time: "08:00", id: "8" },
+        { time: "09:00", id: "9" },
+        { time: "10:00", id: "10" },
+        { time: "11:00", id: "11" },
+        { time: "12:00", id: "12" },
+        { time: "13:00", id: "13" },
+        { time: "14:00", id: "14" },
+        { time: "15:00", id: "15" },
+        { time: "16:00", id: "16" },
+        { time: "17:00", id: "17" },
+        { time: "18:00", id: "18" },
+        { time: "19:00", id: "19" },
+        { time: "20:00", id: "20" },
+        { time: "21:00", id: "21" },
+        { time: "22:00", id: "22" },
+        { time: "23:00", id: "23" },
+      ],
+      insatsTypes: [
+        "Städa",
+        "Tvätta",
+        "Matlagning",
+        "Handla",
+        "Personalbesök",
+        "Aktivitet",
+        "Dusch",
+        "Fritext A",
+        "Fritext B",
+        "Fritext C",
+      ],
+    };
+
+    this.weekStart = moment().startOf("isoWeek").format("YYYY-MM-DD");
+    this.weekEnd = moment().endOf("isoWeek").format("YYYY-MM-DD");
   }
 
   componentDidMount() {
@@ -103,11 +129,41 @@ export default class HomeScreen extends Component {
     this.props.navigation.replace("Login");
   }
 
+  dynamicDays() {
+    for (let i = 0; i < 7; ++i) {
+      if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
+        var week = moment().startOf("isoWeek");
+        for (let a = 0; a < 7; ++a) {
+          let dayIndex = (i + a) % 7;
+          if (dayIndex == i) {
+            this.state.days[dayIndex] = "Idag";
+          } else {
+            this.state.days[dayIndex] = this.state.tmpDays[dayIndex];
+          }
+          this.state.days[dayIndex] +=
+            " " + moment(this.state.today).add(dayIndex, "day").format("MM-DD");
+        }
+        i = 9;
+      }
+    }
+  }
+
+  checkConsumedInsats(tmpType) {
+    for (let i = 0; i < this.state.insatser.length; ++i) {
+      if (
+        this.state.insatser[i].date >= this.weekStart &&
+        this.state.insatser[i].date <= this.weekEnd
+      ) {
+        if (tmpType == this.state.insatser[i].insatsType) {
+          return -1;
+        }
+      }
+    }
+    return 1;
+  }
+
   render() {
-    const { insatser, dragging } = this.state;
-    const state = this.state1;
-    var localLocale = moment();
-    localLocale.locale("sv");
+    const { insatser, dragging, days, insatsTypes } = this.state;
     var today = new Date();
     today = moment(today).format("YYYY-MM-DD");
     var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
@@ -116,21 +172,7 @@ export default class HomeScreen extends Component {
     var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
     var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
     var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
-
-    var timeData = [
-      [
-        "08:00",
-        "09:00",
-        "10:00",
-        "11:00",
-        "12:00",
-        "13:00",
-        "14:00",
-        "15:00",
-        "16:00",
-        "17:00",
-      ],
-    ];
+    this.dynamicDays();
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
@@ -143,240 +185,171 @@ export default class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text category="h2" style={{ fontSize: 20 }}>
-            Översikt
+            Veckovy
           </Text>
         </View>
-        <ImageBackground
-          source={require("../../../assets/moln.png")}
-          style={styles.moln}
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
         >
-          <Draggable message={"Handla"} />
-          <View style={{ padding: 3 }}>
-            <Draggable message={"Städa"} />
-            <Draggable message={"Duscha"} />
-            <Draggable message={"Fritext"} />
+          <ImageBackground
+            source={require("../../../assets/moln.png")}
+            style={styles.moln}
+          >
+            {this.state.insatsTypes.map((item, index) => {
+              return 1 === this.checkConsumedInsats(item) ? (
+                <View key={index}>
+                  <Draggable message={item} />
+                </View>
+              ) : null;
+            })}
+          </ImageBackground>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "black" }}>
+              <Button
+                title="Logga Ut"
+                onPress={() => this.logOut()}
+                type="outline"
+              />
+            </View>
           </View>
-          <View>
-            <Draggable message={"Tvätta "} />
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "black" }}>
+              <Button
+                title="DagVy"
+                onPress={() => this.props.navigation.navigate("DayScreen")}
+                type="outline"
+              />
+            </View>
           </View>
-        </ImageBackground>
+        </View>
 
-        <ScrollView>
-            <View
-              data={state.tableHead}
-              style={styles.head}
-              textStyle={styles.text}
-            />
+        <View style={styles.head}>
+          <Text style={styles.headItems}></Text>
+          {this.state.days.map((item, index) => {
+            return (
+              <Text style={styles.headItems} key={index}>
+                {item}
+              </Text>
+            );
+          })}
+        </View>
+
+        <ScrollView scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            {/* _____________________ */}
-
             <View style={{ width: 140 }}>
-              {/* <Text>The Time</Text> */}
-              {/* <ScrollView> */}
-              <Text style={styles.instatsList}>8:00</Text>
-              <Text style={styles.instatsList}>9:00</Text>
-              <Text style={styles.instatsList}>10:00</Text>
-              <Text style={styles.instatsList}>11:00</Text>
-              <Text style={styles.instatsList}>12:00</Text>
-              <Text style={styles.instatsList}>13:00</Text>
-              <Text style={styles.instatsList}>14:00</Text>
-              <Text style={styles.instatsList}>15:00</Text>
-              <Text style={styles.instatsList}>16:00</Text>
-              <Text style={styles.instatsList}>17:00</Text>
-              <Text style={styles.instatsList}>18:00</Text>
-              <Text style={styles.instatsList}>19:00 </Text>
-              {/* </ScrollView> */}
+              {this.state.times.map((item, index) => {
+                return (
+                  <Text style={styles.instatsList} key={item.id}>
+                    {item.time}
+                  </Text>
+                );
+              })}
             </View>
 
-            {/* ____________ */}
-
             <View style={{ width: 140 }}>
-              {/* <Text>{localLocale.add(0, "day").format("dddd MM-DD")}</Text> */}
-
-              {insatser.map((item, index) => {
+              {this.state.insatser.map((item, index) => {
                 return item.date == today ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
                 ) : null;
               })}
-              {/* <FlatList
-              scrollEnabled={!dragging}
-              data={insatser}
-              renderItem={({ item, index }) =>
-                item.date == today ? (
-                  <Pressable
-                    style={styles.instatsList}
-                    onPress={() => {
-                      this.props.navigation.navigate("InsatsDetailScreen", {
-                        insatskey: item.key,
-                      });
-                    }}
-                  >
-                    <Text>{item.insatsType}</Text>
-                  </Pressable>
-                ) : null
-              }
-            /> */}
             </View>
+
             <View style={{ width: 140 }}>
-              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
-              <FlatList
-                scrollEnabled={!dragging}
-                data={insatser}
-                renderItem={({ item, index }) =>
-                  item.date === aday2 ? (
-                    <Pressable
-                      style={styles.instatsList}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null
-                }
-              />
+              {this.state.insatser.map((item, index) => {
+                return item.date === aday2 ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
             </View>
+
             <View style={{ width: 140 }}>
-              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
-              <FlatList
-                scrollEnabled={!dragging}
-                data={insatser}
-                renderItem={({ item, index }) =>
-                  item.date === aday3 ? (
-                    <Pressable
-                      style={styles.instatsList}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null
-                }
-              />
+              {this.state.insatser.map((item, index) => {
+                return item.date === aday3 ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
             </View>
+
             <View style={{ width: 140 }}>
-              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
-              <FlatList
-                scrollEnabled={!dragging}
-                data={insatser}
-                renderItem={({ item, index }) =>
-                  item.date === aday4 ? (
-                    <Pressable
-                      style={styles.instatsList}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null
-                }
-              />
+              {this.state.insatser.map((item, index) => {
+                return item.date === aday4 ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
             </View>
+
             <View style={{ width: 140 }}>
-              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
-              <FlatList
-                scrollEnabled={!dragging}
-                data={insatser}
-                renderItem={({ item, index }) =>
-                  item.date === aday5 ? (
-                    <Pressable
-                      style={styles.instatsList}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null
-                }
-              />
+              {this.state.insatser.map((item, index) => {
+                return item.date === aday5 ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
             </View>
+
             <View style={{ width: 140 }}>
-              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
-              <FlatList
-                scrollEnabled={!dragging}
-                data={insatser}
-                renderItem={({ item, index }) =>
-                  item.date === aday6 ? (
-                    <Pressable
-                      style={styles.instatsList}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null
-                }
-              />
+              {this.state.insatser.map((item, index) => {
+                return item.date === aday6 ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
             </View>
+
             <View style={{ width: 140 }}>
-              {/* <Text>{localLocale.add(1, "day").format("dddd MM-DD")}</Text> */}
-              <FlatList
-                scrollEnabled={!dragging}
-                data={insatser}
-                renderItem={({ item, index }) =>
-                  item.date === aday7 ? (
-                    <Pressable
-                      style={styles.instatsList}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null
-                }
-              />
+              {this.state.insatser.map((item, index) => {
+                return item.date === aday7 ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
             </View>
           </View>
         </ScrollView>
-        <View style={styles.buttonI}>
-          <View style={{ width: 120, backgroundColor: "white" }}>
-            <Button
-              title="Lägg till insats"
-              icon={<Icon name="plus" size={15} color="white" />}
-              iconRight
-              style={{ height: 40, width: 140 }}
-              onPress={() => {
-                this.props.navigation.navigate("AddInsatsScreen");
-              }}
-              type="outline"
-            />
-          </View>
-        </View>
-        <View style={styles.button}>
-          <View style={{ width: 120, backgroundColor: "white" }}>
-            <Button
-              title="Logga Ut"
-              onPress={() => this.logOut()}
-              type="outline"
-            />
-          </View>
-        </View>
       </View>
     );
   }
@@ -386,9 +359,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    // width: window.width * 1,
-    // height: window.width * 1,
-    backgroundColor: "#00ced1",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   header: {
     alignItems: "center",
@@ -400,28 +371,19 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 1,
     flexDirection: "row",
-    marginTop: 10,
-    // margin: 10,
-
     borderRadius: 10,
     borderColor: "black",
-    // shadowColor: "black",
     shadowColor: "red",
-    paddingLeft: 140,
-    // width: 500,
   },
   item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
+    height: 43.5,
+    backgroundColor: "#ccc",
+    alignItems: "center",
+    justifyContent: "center",
   },
   instatsList: {
     paddingTop: 10,
     paddingBottom: 10,
-    flex: 10,
     paddingLeft: 7,
     borderColor: "black",
     borderWidth: 2,
@@ -429,42 +391,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
   },
-  titleText: {
-    fontSize: 14,
-    lineHeight: 24,
-    fontWeight: "bold",
-  },
-  box: {
-    height: 40,
-    width: 100,
-    backgroundColor: "white",
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   moln: {
     flexDirection: "row",
     resizeMode: "cover",
     justifyContent: "center",
     alignItems: "center",
+    flexWrap: "wrap",
     height: 100,
     width: 220,
+    zIndex: 10,
   },
   button: {
     height: 40,
     width: 140,
     alignSelf: "flex-end",
-    //backgroundColor: "#483d8b",
-    //   borderWidth: 2,
-    //   borderColor: "white",
-    //   borderRadius: 20,
-    //   color: "red",
   },
-  buttonI: {
-    padding: 0,
-    backgroundColor: "white",
-    alignSelf: "flex-start",
+  head: {
+    height: 40,
+    backgroundColor: "#f1f8ff",
+    flexDirection: "row",
+    marginTop: 5,
   },
-  head: { height: 40, backgroundColor: "#f1f8ff" },
-  text: { margin: 6 }
+  headItems: {
+    width: 140,
+    alignSelf: "center",
+  },
 });

@@ -9,6 +9,7 @@ import InsatsDetailScreen from "../screens/InsatsDetailScreen";
 import LoadingScreen from "../screens/LoadingScreen";
 import Dashboard from "../screens/Dashboard";
 import SignUp from "../screens/SignUp";
+import DayScreen from "../screens/DayScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -43,6 +44,11 @@ const LoginStack = () => (
       options={{
         header: () => null,
       }}
+    />
+    <Stack.Screen
+      name="DayScreen"
+      component={DayScreen}
+      options={{ title: "" }}
     />
     <Stack.Screen
       name="HomeScreen"
