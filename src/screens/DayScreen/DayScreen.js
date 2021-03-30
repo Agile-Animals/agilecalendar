@@ -7,18 +7,16 @@ import {
   View,
   Animated,
   Pressable,
-  ImageBackground,
   ListItem,
   useWindowDimensions,
   ScrollView,
   SafeAreaView,
-  PanResponder,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
-import Draggable from "../../components/Draggable";
 import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Insats from "../../components/Insats";
 import moment from "moment";
 
 export default class DayScreen extends Component {
@@ -31,7 +29,6 @@ export default class DayScreen extends Component {
     this.state = {
       isLoading: true,
       insatser: [],
-      dragging: false,
       tmpDays: [
         "Måndag",
         "Tisdag",
@@ -43,33 +40,33 @@ export default class DayScreen extends Component {
       ],
       dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       days: ["", "", "", "", "", "", ""],
-      pan: new Animated.ValueXY(),
+      times: [
+        { time: "00:00", id: "0" },
+        { time: "01:00", id: "1" },
+        { time: "02:00", id: "2" },
+        { time: "03:00", id: "3" },
+        { time: "04:00", id: "4" },
+        { time: "05:00", id: "5" },
+        { time: "06:00", id: "6" },
+        { time: "07:00", id: "7" },
+        { time: "08:00", id: "8" },
+        { time: "09:00", id: "9" },
+        { time: "10:00", id: "10" },
+        { time: "11:00", id: "11" },
+        { time: "12:00", id: "12" },
+        { time: "13:00", id: "13" },
+        { time: "14:00", id: "14" },
+        { time: "15:00", id: "15" },
+        { time: "16:00", id: "16" },
+        { time: "17:00", id: "17" },
+        { time: "18:00", id: "18" },
+        { time: "19:00", id: "19" },
+        { time: "20:00", id: "20" },
+        { time: "21:00", id: "21" },
+        { time: "22:00", id: "22" },
+        { time: "23:00", id: "23" },
+      ],
     };
-    this.panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        this.state.dragging = true;
-        this.state.pan.setOffset({
-          x: this.state.pan.x._value,
-          y: this.state.pan.y._value,
-        });
-      },
-      onPanResponderMove: Animated.event([
-        null,
-        {
-          dx: this.state.pan.x,
-          dy: this.state.pan.y,
-        },
-      ]),
-      onPanResponderRelease: () => {
-        this.state.dragging = false;
-        Animated.spring(this.state.pan, {
-          toValue: { x: 0, y: 0 },
-          friction: 5,
-          useNativeDriver: false,
-        }).start();
-      },
-    });
   }
 
   componentDidMount() {
@@ -117,23 +114,15 @@ export default class DayScreen extends Component {
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
-        var week = moment().startOf("isoWeek");
-        for (let a = 0; a < 7; ++a) {
-          if ((i + a) % 7 == i) {
-            this.state.days[(i + a) % 7] = "Idag";
-          } else {
-            this.state.days[(i + a) % 7] = this.state.tmpDays[(i + a) % 7];
-          }
-          this.state.days[(i + a) % 7] +=
-            " " + moment(this.state.today).add(a, "day").format("MM-DD");
-        }
+        this.state.days[0] = "Idag";
+        this.state.days[0] += " " + moment(this.state.today).format("MM-DD");
         i = 9;
       }
     }
   }
 
   render() {
-    const { insatser, dragging, days } = this.state;
+    const { insatser, days } = this.state;
     var today = new Date();
     today = moment(today).format("YYYY-MM-DD");
     this.dynamicDays();
@@ -168,62 +157,45 @@ export default class DayScreen extends Component {
               />
             </View>
           </View>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "black" }}>
+              <Button
+                title="VeckoVy"
+                onPress={() => this.props.navigation.navigate("HomeScreen")}
+                type="outline"
+              />
+            </View>
+          </View>
         </View>
         <View style={styles.head}>
           <Text style={styles.headItems}></Text>
           <Text style={styles.headItems}>{this.state.days[0]}</Text>
-
         </View>
-        <ScrollView scrollEnabled={!dragging}>
+        <ScrollView>
           <View style={styles.listContainer}>
             <View style={{ width: 140 }}>
-              <Text style={styles.instatsList}>06:00 </Text>
-              <Text style={styles.instatsList}>07:00 </Text>
-              <Text style={styles.instatsList}>08:00</Text>
-              <Text style={styles.instatsList}>09:00</Text>
-              <Text style={styles.instatsList}>10:00</Text>
-              <Text style={styles.instatsList}>11:00</Text>
-              <Text style={styles.instatsList}>12:00</Text>
-              <Text style={styles.instatsList}>13:00</Text>
-              <Text style={styles.instatsList}>14:00</Text>
-              <Text style={styles.instatsList}>15:00</Text>
-              <Text style={styles.instatsList}>16:00</Text>
-              <Text style={styles.instatsList}>17:00</Text>
-              <Text style={styles.instatsList}>18:00</Text>
-              <Text style={styles.instatsList}>19:00 </Text>
-              <Text style={styles.instatsList}>20:00 </Text>
-              <Text style={styles.instatsList}>21:00 </Text>
-              <Text style={styles.instatsList}>22:00 </Text>
-              <Text style={styles.instatsList}>23:00 </Text>
-              <Text style={styles.instatsList}>24:00 </Text>
-            </View>
-            <View style={{ width: 140 }}>
-              <Animated.View
-                style={{
-                  transform: [
-                    { translateX: this.state.pan.x },
-                    { translateY: this.state.pan.y },
-                  ],
-                }}
-                {...this.panResponder.panHandlers}
-              >
-                {this.state.insatser.map((item, index) => {
-                  return item.date == today ? (
-                    <Pressable
-                      style={styles.item}
-                      onPress={() => {
-                        this.props.navigation.navigate("InsatsDetailScreen", {
-                          insatskey: item.key,
-                        });
-                      }}
-                    >
-                      <Text>{item.insatsType}</Text>
-                    </Pressable>
-                  ) : null;
-                })}
-              </Animated.View>
+              {this.state.times.map((item, index) => {
+                return (
+                  <Text style={styles.instatsList} key={item.id}>
+                    {item.time}
+                  </Text>
+                );
+              })}
             </View>
 
+            <View style={{ width: 140 }}>
+              {this.state.insatser.map((item, index) => {
+                return item.date == today ? (
+                  <View key={item.key}>
+                    <Insats
+                      message={item.insatsType}
+                      id={item.key}
+                      navigation={this.props.navigation}
+                    />
+                  </View>
+                ) : null;
+              })}
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -250,12 +222,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "black",
     shadowColor: "red",
-  },
-  item: {
-    height: 43.5,
-    backgroundColor: "#ccc",
-    alignItems: "center",
-    justifyContent: "center",
   },
   instatsList: {
     paddingTop: 10,

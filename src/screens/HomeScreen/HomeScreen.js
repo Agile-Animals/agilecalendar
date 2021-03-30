@@ -44,6 +44,12 @@ export default class HomeScreen extends Component {
       dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       days: ["", "", "", "", "", "", ""],
       times: [
+        { time: "00:00", id: "0" },
+        { time: "01:00", id: "1" },
+        { time: "02:00", id: "2" },
+        { time: "03:00", id: "3" },
+        { time: "04:00", id: "4" },
+        { time: "05:00", id: "5" },
         { time: "06:00", id: "6" },
         { time: "07:00", id: "7" },
         { time: "08:00", id: "8" },
@@ -62,7 +68,6 @@ export default class HomeScreen extends Component {
         { time: "21:00", id: "21" },
         { time: "22:00", id: "22" },
         { time: "23:00", id: "23" },
-        { time: "24:00", id: "24" },
       ],
       insatsTypes: [
         "Städa",
@@ -129,13 +134,14 @@ export default class HomeScreen extends Component {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
         var week = moment().startOf("isoWeek");
         for (let a = 0; a < 7; ++a) {
-          if ((i + a) % 7 == i) {
-            this.state.days[(i + a) % 7] = "Idag";
+          let dayIndex = (i + a) % 7;
+          if (dayIndex == i) {
+            this.state.days[dayIndex] = "Idag";
           } else {
-            this.state.days[(i + a) % 7] = this.state.tmpDays[(i + a) % 7];
+            this.state.days[dayIndex] = this.state.tmpDays[dayIndex];
           }
-          this.state.days[(i + a) % 7] +=
-            " " + moment(this.state.today).add(a, "day").format("MM-DD");
+          this.state.days[dayIndex] +=
+            " " + moment(this.state.today).add(dayIndex, "day").format("MM-DD");
         }
         i = 9;
       }
@@ -408,15 +414,5 @@ const styles = StyleSheet.create({
   headItems: {
     width: 140,
     alignSelf: "center",
-  },
-  text: {
-    margin: 6,
-  },
-  text: {
-    marginTop: 25,
-    marginLeft: 5,
-    marginRight: 5,
-    textAlign: "center",
-    color: "#fff",
   },
 });
