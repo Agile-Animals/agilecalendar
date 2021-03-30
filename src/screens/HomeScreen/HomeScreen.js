@@ -84,8 +84,12 @@ export default class HomeScreen extends Component {
       today: moment().format("YYYY-MM-DD"),
     };
 
-    this.weekStart = moment().startOf("isoWeek").format("YYYY-MM-DD");
-    this.weekEnd = moment().endOf("isoWeek").format("YYYY-MM-DD");
+    this.weekStart = moment(this.state.today)
+      .startOf("isoWeek")
+      .format("YYYY-MM-DD");
+    this.weekEnd = moment(this.state.today)
+      .endOf("isoWeek")
+      .format("YYYY-MM-DD");
   }
 
   componentDidMount() {
@@ -134,11 +138,24 @@ export default class HomeScreen extends Component {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
         var week = moment(this.state.today).startOf("isoWeek");
+        console.log("this week:");
+        console.log(week);
+        console.log(week);
+        console.log(week);
+        console.log("previous week:");
+        console.log(moment(week).add(-1, "week"));
+        console.log(moment(week).add(-1, "week"));
+        console.log(moment(week).add(-1, "week"));
+        console.log("next week:");
+        console.log(moment(week).add(1, "week"));
+        console.log(moment(week).add(1, "week"));
+        console.log(moment(week).add(1, "week"));
         for (let a = 0; a < 7; ++a) {
-          console.log("dynamicDays");
-          console.log(this.state.today);
           let dayIndex = (i + a) % 7;
-          if (dayIndex == i) {
+          if (
+            dayIndex == i &&
+            week.toString() == moment().startOf("isoWeek").toString()
+          ) {
             this.state.days[dayIndex] = "Idag";
           } else {
             this.state.days[dayIndex] = this.state.tmpDays[dayIndex];
@@ -166,12 +183,9 @@ export default class HomeScreen extends Component {
   }
 
   setToday(newDay) {
-    this.state.today = moment(this.state.today)
-      .add(newDay, "day")
-      .format("YYYY-MM-DD");
-    console.log("setToday");
-    console.log(this.state.today);
-    this.dynamicDays();
+    this.setState({
+      today: moment(this.state.today).add(newDay, "day").format("YYYY-MM-DD"),
+    });
   }
 
   render() {
@@ -212,7 +226,7 @@ export default class HomeScreen extends Component {
             {this.state.insatsTypes.map((item, index) => {
               return 1 === this.checkConsumedInsats(item) ? (
                 <View key={index}>
-                  <Draggable message={item} />
+                  <Draggable message={item} today={this.state.today} />
                 </View>
               ) : null;
             })}
