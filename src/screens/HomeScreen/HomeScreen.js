@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
-    backgroundColor: "white",
+    backgroundColor: "black",
     width: "100%",
     flex: 1,
     flexDirection: "row",
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   button: {
-    height: 40,
+    height: 50,
     width: 140,
     alignSelf: "flex-end",
   },
