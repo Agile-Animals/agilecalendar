@@ -81,6 +81,7 @@ export default class HomeScreen extends Component {
         "Fritext B",
         "Fritext C",
       ],
+      today: moment().format("YYYY-MM-DD"),
     };
 
     this.weekStart = moment().startOf("isoWeek").format("YYYY-MM-DD");
@@ -132,8 +133,10 @@ export default class HomeScreen extends Component {
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
-        var week = moment().startOf("isoWeek");
+        var week = moment(this.state.today).startOf("isoWeek");
         for (let a = 0; a < 7; ++a) {
+          console.log("dynamicDays");
+          console.log(this.state.today);
           let dayIndex = (i + a) % 7;
           if (dayIndex == i) {
             this.state.days[dayIndex] = "Idag";
@@ -162,16 +165,23 @@ export default class HomeScreen extends Component {
     return 1;
   }
 
+  setToday(newDay) {
+    this.state.today = moment(this.state.today)
+      .add(newDay, "day")
+      .format("YYYY-MM-DD");
+    console.log("setToday");
+    console.log(this.state.today);
+    this.dynamicDays();
+  }
+
   render() {
-    const { insatser, dragging, days, insatsTypes } = this.state;
-    var today = new Date();
-    today = moment(today).format("YYYY-MM-DD");
-    var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
-    var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
-    var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
-    var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
-    var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
-    var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+    const { insatser, dragging, days, insatsTypes, today } = this.state;
+    var aday2 = moment(this.state.today).add(1, "day").format("YYYY-MM-DD");
+    var aday3 = moment(this.state.today).add(2, "day").format("YYYY-MM-DD");
+    var aday4 = moment(this.state.today).add(3, "day").format("YYYY-MM-DD");
+    var aday5 = moment(this.state.today).add(4, "day").format("YYYY-MM-DD");
+    var aday6 = moment(this.state.today).add(5, "day").format("YYYY-MM-DD");
+    var aday7 = moment(this.state.today).add(6, "day").format("YYYY-MM-DD");
     this.dynamicDays();
     if (this.state.isLoading) {
       return (
@@ -185,7 +195,7 @@ export default class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text category="h2" style={{ fontSize: 20 }}>
-            Veckovy
+            Vecka {moment(this.state.today).format("WW")}
           </Text>
         </View>
 
@@ -210,8 +220,32 @@ export default class HomeScreen extends Component {
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "black" }}>
               <Button
+                title={
+                  "Vecka " +
+                  moment(this.state.today).add(-1, "week").format("WW")
+                }
+                onPress={() => this.setToday(-7)}
+                type="outline"
+              />
+            </View>
+          </View>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "black" }}>
+              <Button
                 title="Logga Ut"
                 onPress={() => this.logOut()}
+                type="outline"
+              />
+            </View>
+          </View>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "black" }}>
+              <Button
+                title={
+                  "Vecka " +
+                  moment(this.state.today).add(1, "week").format("WW")
+                }
+                onPress={() => this.setToday(7)}
                 type="outline"
               />
             </View>
