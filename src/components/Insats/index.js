@@ -25,52 +25,12 @@ export default class Insats extends Component {
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
-      onPanResponderGrant: (e, gesture) => {
-        console.log(this.state.message);
-        console.log(this.state.id);
-      },
+      onPanResponderGrant: (e, gesture) => {},
       onPanResponderMove: Animated.event(
         [null, { dx: this.state.pan.x, dy: this.state.pan.y }],
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        // var today = new Date();
-        // today = moment(today).add(0, "day").format("YYYY-MM-DD");
-        // var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
-        // var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
-        // var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
-        // var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
-        // var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
-        // var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
-        // if (this.isDropArea1(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(today, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea2(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday2, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea3(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday3, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea4(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday4, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea5(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday5, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea6(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday6, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea7(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday7, "date");
-        //   this.storeInsats();
-        // }
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
@@ -88,60 +48,6 @@ export default class Insats extends Component {
   //     gesture.moveX > 140
   //   );
   // }
-  // isDropArea2(gesture) {
-  //   return (
-  //     gesture.moveY < 630 &&
-  //     gesture.moveY > 180 &&
-  //     gesture.moveX < 420 &&
-  //     gesture.moveX > 280
-  //   );
-  // }
-  // isDropArea3(gesture) {
-  //   return (
-  //     gesture.moveY < 630 &&
-  //     gesture.moveY > 180 &&
-  //     gesture.moveX < 560 &&
-  //     gesture.moveX > 420
-  //   );
-  // }
-  // isDropArea4(gesture) {
-  //   return (
-  //     gesture.moveY < 630 &&
-  //     gesture.moveY > 180 &&
-  //     gesture.moveX < 700 &&
-  //     gesture.moveX > 560
-  //   );
-  // }
-  // isDropArea5(gesture) {
-  //   return (
-  //     gesture.moveY < 630 &&
-  //     gesture.moveY > 180 &&
-  //     gesture.moveX < 840 &&
-  //     gesture.moveX > 700
-  //   );
-  // }
-  // isDropArea6(gesture) {
-  //   return (
-  //     gesture.moveY < 630 &&
-  //     gesture.moveY > 180 &&
-  //     gesture.moveX < 980 &&
-  //     gesture.moveX > 840
-  //   );
-  // }
-  // isDropArea7(gesture) {
-  //   return (
-  //     gesture.moveY < 630 &&
-  //     gesture.moveY > 180 &&
-  //     gesture.moveX < 1120 &&
-  //     gesture.moveX > 980
-  //   );
-  // }
-
-  // inputValueUpdate = (val, prop) => {
-  //   const state = this.state;
-  //   state[prop] = val;
-  //   this.setState(state);
-  // };
 
   // storeInsats() {
   //   this.dbRef.add({
@@ -167,6 +73,7 @@ export default class Insats extends Component {
       >
         <Text key={this.state.id}>{this.state.message}</Text>
         <Button
+          style={styles.edit}
           onPress={() => {
             this.state.navigation.navigate("InsatsDetailScreen", {
               insatskey: this.state.id,
@@ -191,4 +98,5 @@ let styles = StyleSheet.create({
     justifyContent: "space-between",
     shadowRadius: 2,
   },
+  edit: {},
 });
