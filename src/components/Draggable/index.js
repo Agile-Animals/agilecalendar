@@ -27,16 +27,6 @@ export default class Draggable extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        // this.setState({
-        //   weekStart: moment(this.state.props.weekStart).format("YYYY-MM-DD"),
-        // });
-        console.log(this.state.weekStart);
-        console.log(this.state.weekStart);
-        console.log(this.state.weekStart);
-        console.log(this.state.weekStart);
-        console.log(this.state.weekStart);
-        console.log(this.state.weekStart);
-        console.log(this.state.weekStart);
         var aday2 = moment(this.state.weekStart)
           .add(1, "day")
           .format("YYYY-MM-DD");
@@ -99,10 +89,15 @@ export default class Draggable extends Component {
       },
     });
   }
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.weekStart != this.props.weekStart) return true;
+    return true;
+  }
 
-  componentDidUpdate(nextProps) {
-    if (this.props.weekStart !== nextProps.weekStart) {
-      this.setState({ weekStart: nextProps.weekStart });
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.weekStart !== prevProps.weekStart) {
+      this.setState({ weekStart: this.props.weekStart });
     }
   }
 
