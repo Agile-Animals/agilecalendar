@@ -172,6 +172,9 @@ export default class HomeScreen extends Component {
       weekStart: moment(this.state.weekStart)
         .add(newWeek, "week")
         .format("YYYY-MM-DD"),
+      weekEnd: moment(this.state.weekEnd)
+        .add(newWeek, "week")
+        .format("YYYY-MM-DD"),
     });
   }
 
@@ -403,7 +406,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     width: "100%",
     flex: 1,
     flexDirection: "row",
