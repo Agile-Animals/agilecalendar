@@ -17,7 +17,7 @@ export default class Draggable extends Component {
       toTime: "09:00",
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
-      today: props.today,
+      weekStart: "",
     };
 
     this.panResponder = PanResponder.create({
@@ -27,20 +27,33 @@ export default class Draggable extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        this.setState({
-          today: moment(this.state.today).format("YYYY-MM-DD"),
-        });
-        var aday2 = moment(this.state.today).add(1, "day").format("YYYY-MM-DD");
-        var aday3 = moment(this.state.today).add(2, "day").format("YYYY-MM-DD");
-        var aday4 = moment(this.state.today).add(3, "day").format("YYYY-MM-DD");
-        var aday5 = moment(this.state.today).add(4, "day").format("YYYY-MM-DD");
-        var aday6 = moment(this.state.today).add(5, "day").format("YYYY-MM-DD");
-        var aday7 = moment(this.state.today).add(6, "day").format("YYYY-MM-DD");
+        // this.setState({
+        //   weekStart: moment(this.state.props.weekStart).format("YYYY-MM-DD"),
+        // });
+        console.log(this.state.weekStart);
+        var aday2 = moment(this.state.weekStart)
+          .add(1, "day")
+          .format("YYYY-MM-DD");
+        var aday3 = moment(this.state.weekStart)
+          .add(2, "day")
+          .format("YYYY-MM-DD");
+        var aday4 = moment(this.state.weekStart)
+          .add(3, "day")
+          .format("YYYY-MM-DD");
+        var aday5 = moment(this.state.weekStart)
+          .add(4, "day")
+          .format("YYYY-MM-DD");
+        var aday6 = moment(this.state.weekStart)
+          .add(5, "day")
+          .format("YYYY-MM-DD");
+        var aday7 = moment(this.state.weekStart)
+          .add(6, "day")
+          .format("YYYY-MM-DD");
         if (this.isDropArea1(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.today, "date");
+          this.inputValueUpdate(this.state.weekStart, "date");
           this.storeInsats();
-          console.log(this.state.today);
+          console.log(this.state.weekStart);
         } else if (this.isDropArea2(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday2, "date");
@@ -161,7 +174,7 @@ export default class Draggable extends Component {
   }
 
   renderDraggable() {
-    const { message, today } = this.state;
+    const { message, weekStart } = this.state;
 
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),

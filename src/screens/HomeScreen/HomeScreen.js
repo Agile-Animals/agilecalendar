@@ -82,14 +82,10 @@ export default class HomeScreen extends Component {
         "Fritext C",
       ],
       today: moment().format("YYYY-MM-DD"),
-    };
 
-    this.weekStart = moment(this.state.today)
-      .startOf("isoWeek")
-      .format("YYYY-MM-DD");
-    this.weekEnd = moment(this.state.today)
-      .endOf("isoWeek")
-      .format("YYYY-MM-DD");
+      weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
+      weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
+    };
   }
 
   componentDidMount() {
@@ -138,18 +134,6 @@ export default class HomeScreen extends Component {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
         var week = moment(this.state.today).startOf("isoWeek");
-        console.log("this week:");
-        console.log(week);
-        console.log(week);
-        console.log(week);
-        console.log("previous week:");
-        console.log(moment(week).add(-1, "week"));
-        console.log(moment(week).add(-1, "week"));
-        console.log(moment(week).add(-1, "week"));
-        console.log("next week:");
-        console.log(moment(week).add(1, "week"));
-        console.log(moment(week).add(1, "week"));
-        console.log(moment(week).add(1, "week"));
         for (let a = 0; a < 7; ++a) {
           let dayIndex = (i + a) % 7;
           if (
@@ -161,7 +145,8 @@ export default class HomeScreen extends Component {
             this.state.days[dayIndex] = this.state.tmpDays[dayIndex];
           }
           this.state.days[dayIndex] +=
-            " " + moment(this.state.today).add(dayIndex, "day").format("MM-DD");
+            " " +
+            moment(this.state.weekStart).add(dayIndex, "day").format("MM-DD");
         }
         i = 9;
       }
@@ -171,8 +156,8 @@ export default class HomeScreen extends Component {
   checkConsumedInsats(tmpType) {
     for (let i = 0; i < this.state.insatser.length; ++i) {
       if (
-        this.state.insatser[i].date >= this.weekStart &&
-        this.state.insatser[i].date <= this.weekEnd
+        this.state.insatser[i].date >= this.state.weekStart &&
+        this.state.insatser[i].date <= this.state.weekEnd
       ) {
         if (tmpType == this.state.insatser[i].insatsType) {
           return -1;
@@ -182,20 +167,24 @@ export default class HomeScreen extends Component {
     return 1;
   }
 
-  setToday(newDay) {
+  setWeek(newWeek) {
     this.setState({
-      today: moment(this.state.today).add(newDay, "day").format("YYYY-MM-DD"),
+      weekStart: moment(this.state.weekStart)
+        .add(newWeek, "week")
+        .format("YYYY-MM-DD"),
     });
   }
 
   render() {
-    const { insatser, dragging, days, insatsTypes, today } = this.state;
-    var aday2 = moment(this.state.today).add(1, "day").format("YYYY-MM-DD");
-    var aday3 = moment(this.state.today).add(2, "day").format("YYYY-MM-DD");
-    var aday4 = moment(this.state.today).add(3, "day").format("YYYY-MM-DD");
-    var aday5 = moment(this.state.today).add(4, "day").format("YYYY-MM-DD");
-    var aday6 = moment(this.state.today).add(5, "day").format("YYYY-MM-DD");
-    var aday7 = moment(this.state.today).add(6, "day").format("YYYY-MM-DD");
+    const { insatser, dragging, days, insatsTypes, weekStart } = this.state;
+
+    var today = moment(this.state.weekStart).format("YYYY-MM-DD");
+    var aday2 = moment(this.state.weekStart).add(1, "day").format("YYYY-MM-DD");
+    var aday3 = moment(this.state.weekStart).add(2, "day").format("YYYY-MM-DD");
+    var aday4 = moment(this.state.weekStart).add(3, "day").format("YYYY-MM-DD");
+    var aday5 = moment(this.state.weekStart).add(4, "day").format("YYYY-MM-DD");
+    var aday6 = moment(this.state.weekStart).add(5, "day").format("YYYY-MM-DD");
+    var aday7 = moment(this.state.weekStart).add(6, "day").format("YYYY-MM-DD");
     this.dynamicDays();
     if (this.state.isLoading) {
       return (
@@ -209,7 +198,7 @@ export default class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text category="h2" style={{ fontSize: 20 }}>
-            Vecka {moment(this.state.today).format("WW")}
+            Vecka {moment(this.state.weekStart).format("WW")}
           </Text>
         </View>
 
@@ -226,7 +215,7 @@ export default class HomeScreen extends Component {
             {this.state.insatsTypes.map((item, index) => {
               return 1 === this.checkConsumedInsats(item) ? (
                 <View key={index}>
-                  <Draggable message={item} today={this.state.today} />
+                  <Draggable message={item} weekStart={this.state.weekStart} />
                 </View>
               ) : null;
             })}
@@ -236,9 +225,9 @@ export default class HomeScreen extends Component {
               <Button
                 title={
                   "Vecka " +
-                  moment(this.state.today).add(-1, "week").format("WW")
+                  moment(this.state.weekStart).add(-1, "week").format("WW")
                 }
-                onPress={() => this.setToday(-7)}
+                onPress={() => this.setWeek(-1)}
                 type="outline"
               />
             </View>
@@ -257,9 +246,9 @@ export default class HomeScreen extends Component {
               <Button
                 title={
                   "Vecka " +
-                  moment(this.state.today).add(1, "week").format("WW")
+                  moment(this.state.weekStart).add(1, "week").format("WW")
                 }
-                onPress={() => this.setToday(7)}
+                onPress={() => this.setWeek(1)}
                 type="outline"
               />
             </View>
