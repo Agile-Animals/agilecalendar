@@ -17,7 +17,7 @@ export default class Draggable extends Component {
       toTime: "09:00",
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
-      weekStart: "",
+      weekStart: props.weekStart,
     };
 
     this.panResponder = PanResponder.create({
@@ -30,6 +30,12 @@ export default class Draggable extends Component {
         // this.setState({
         //   weekStart: moment(this.state.props.weekStart).format("YYYY-MM-DD"),
         // });
+        console.log(this.state.weekStart);
+        console.log(this.state.weekStart);
+        console.log(this.state.weekStart);
+        console.log(this.state.weekStart);
+        console.log(this.state.weekStart);
+        console.log(this.state.weekStart);
         console.log(this.state.weekStart);
         var aday2 = moment(this.state.weekStart)
           .add(1, "day")
@@ -92,6 +98,12 @@ export default class Draggable extends Component {
         }).start();
       },
     });
+  }
+
+  componentDidUpdate(nextProps) {
+    if (this.props.weekStart !== nextProps.weekStart) {
+      this.setState({ weekStart: nextProps.weekStart });
+    }
   }
 
   isDropArea1(gesture) {
