@@ -29,6 +29,7 @@ export default class HomeScreen extends Component {
       .collection("insatser")
       .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
+      
       isLoading: true,
       insatser: [],
       dragging: false,
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
-    backgroundColor: "white",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
     width: "100%",
     flex: 1,
     flexDirection: "row",
