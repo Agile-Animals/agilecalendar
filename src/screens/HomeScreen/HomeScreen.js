@@ -29,6 +29,7 @@ export default class HomeScreen extends Component {
       .collection("insatser")
       .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
+      
       isLoading: true,
       insatser: [],
       dragging: false,
@@ -41,6 +42,7 @@ export default class HomeScreen extends Component {
         "Lördag",
         "Söndag",
       ],
+
       dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       days: ["", "", "", "", "", "", ""],
       times: [
@@ -81,10 +83,12 @@ export default class HomeScreen extends Component {
         "Fritext B",
         "Fritext C",
       ],
-    };
+      today: moment().format("YYYY-MM-DD"),
 
-    this.weekStart = moment().startOf("isoWeek").format("YYYY-MM-DD");
-    this.weekEnd = moment().endOf("isoWeek").format("YYYY-MM-DD");
+      weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
+      weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
+      scrollOfsetY: "",
+    };
   }
 
   componentDidMount() {
@@ -94,6 +98,8 @@ export default class HomeScreen extends Component {
   componentWillUnmount() {
     this.unsubscribe();
   }
+
+
 
   getCollection = (querySnapshot) => {
     const insatser = [];
@@ -132,16 +138,20 @@ export default class HomeScreen extends Component {
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
-        var week = moment().startOf("isoWeek");
+        var week = moment(this.state.today).startOf("isoWeek");
         for (let a = 0; a < 7; ++a) {
           let dayIndex = (i + a) % 7;
-          if (dayIndex == i) {
+          if (
+            dayIndex == i &&
+            week.toString() == moment().startOf("isoWeek").toString()
+          ) {
             this.state.days[dayIndex] = "Idag";
           } else {
             this.state.days[dayIndex] = this.state.tmpDays[dayIndex];
           }
           this.state.days[dayIndex] +=
-            " " + moment(this.state.today).add(dayIndex, "day").format("MM-DD");
+            " " +
+            moment(this.state.weekStart).add(dayIndex, "day").format("MM-DD");
         }
         i = 9;
       }
@@ -151,8 +161,8 @@ export default class HomeScreen extends Component {
   checkConsumedInsats(tmpType) {
     for (let i = 0; i < this.state.insatser.length; ++i) {
       if (
-        this.state.insatser[i].date >= this.weekStart &&
-        this.state.insatser[i].date <= this.weekEnd
+        this.state.insatser[i].date >= this.state.weekStart &&
+        this.state.insatser[i].date <= this.state.weekEnd
       ) {
         if (tmpType == this.state.insatser[i].insatsType) {
           return -1;
@@ -162,16 +172,30 @@ export default class HomeScreen extends Component {
     return 1;
   }
 
+  setWeek(newWeek) {
+    this.setState({
+      weekStart: moment(this.state.weekStart)
+        .add(newWeek, "week")
+        .format("YYYY-MM-DD"),
+      weekEnd: moment(this.state.weekEnd)
+        .add(newWeek, "week")
+        .format("YYYY-MM-DD"),
+    });
+  }
+
+  handleScroll = (event) => {
+    this.state.scrollOfsetY = event.nativeEvent.contentOffset.y;
+  };
   render() {
-    const { insatser, dragging, days, insatsTypes } = this.state;
-    var today = new Date();
-    today = moment(today).format("YYYY-MM-DD");
-    var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
-    var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
-    var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
-    var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
-    var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
-    var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+    const { insatser, dragging, days, insatsTypes, weekStart } = this.state;
+
+    var today = moment(this.state.weekStart).format("YYYY-MM-DD");
+    var aday2 = moment(this.state.weekStart).add(1, "day").format("YYYY-MM-DD");
+    var aday3 = moment(this.state.weekStart).add(2, "day").format("YYYY-MM-DD");
+    var aday4 = moment(this.state.weekStart).add(3, "day").format("YYYY-MM-DD");
+    var aday5 = moment(this.state.weekStart).add(4, "day").format("YYYY-MM-DD");
+    var aday6 = moment(this.state.weekStart).add(5, "day").format("YYYY-MM-DD");
+    var aday7 = moment(this.state.weekStart).add(6, "day").format("YYYY-MM-DD");
     this.dynamicDays();
     if (this.state.isLoading) {
       return (
@@ -185,7 +209,7 @@ export default class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text category="h2" style={{ fontSize: 20 }}>
-            Veckovy
+            Vecka {moment(this.state.weekStart).format("WW")}
           </Text>
         </View>
 
@@ -202,7 +226,7 @@ export default class HomeScreen extends Component {
             {this.state.insatsTypes.map((item, index) => {
               return 1 === this.checkConsumedInsats(item) ? (
                 <View key={index}>
-                  <Draggable message={item} />
+                  <Draggable message={item} scrollOfsetY={this.state.scrollOfsetY}  weekStart={this.state.weekStart} />
                 </View>
               ) : null;
             })}
@@ -210,8 +234,32 @@ export default class HomeScreen extends Component {
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "black" }}>
               <Button
+                title={
+                  "Vecka " +
+                  moment(this.state.weekStart).add(-1, "week").format("WW")
+                }
+                onPress={() => this.setWeek(-1)}
+                type="outline"
+              />
+            </View>
+          </View>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "black" }}>
+              <Button
                 title="Logga Ut"
                 onPress={() => this.logOut()}
+                type="outline"
+              />
+            </View>
+          </View>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "black" }}>
+              <Button
+                title={
+                  "Vecka " +
+                  moment(this.state.weekStart).add(1, "week").format("WW")
+                }
+                onPress={() => this.setWeek(1)}
                 type="outline"
               />
             </View>
@@ -238,7 +286,9 @@ export default class HomeScreen extends Component {
           })}
         </View>
 
-        <ScrollView scrollEnabled={!dragging}>
+        <ScrollView
+         onScroll={this.handleScroll}
+         scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
@@ -253,10 +303,9 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date == today ? (
-                  <View key={item.key}>
+                  <View style={{backgroundColor:"red"}} key={item.key}>
                     <Insats
                       message={item.insatsType}
-                      
                       id={item.key}
                       navigation={this.props.navigation}
                     />
@@ -367,7 +416,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
-    backgroundColor: "white",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
     width: "100%",
     flex: 1,
     flexDirection: "row",
@@ -402,7 +451,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   button: {
-    height: 40,
+    height: 50,
     width: 140,
     alignSelf: "flex-end",
   },

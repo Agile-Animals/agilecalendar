@@ -13,8 +13,15 @@ import { signIn } from "../../API/firebaseMethods";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, Input, Text, ThemeProvider } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Dimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+  const windowWidth = useWindowDimensions().width;
+  const windowHeight = useWindowDimensions().height;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
@@ -88,15 +95,15 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
-    backgroundColor: "#003f5c",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
     textAlign: "center",
     fontSize: 60,
-    margin: "5%",
-    marginTop: "15%",
+    margin: "3%",
+    marginTop: "5%",
     fontWeight: "bold",
     color: "white",
   },

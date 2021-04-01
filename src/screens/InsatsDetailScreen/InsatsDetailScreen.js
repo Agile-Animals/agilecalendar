@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 35,
-    backgroundColor: "#003f5c",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   inputGroup: {
     justifyContent: "flex-end",

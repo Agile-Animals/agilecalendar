@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    backgroundColor: "#00ced1",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   header: {
     alignItems: "center",
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
-    backgroundColor: "white",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
     width: "100%",
     flex: 1,
     flexDirection: "row",

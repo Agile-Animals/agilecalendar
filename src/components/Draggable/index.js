@@ -13,10 +13,12 @@ export default class Draggable extends Component {
       helperName: "test",
       insatsType: "Fritext",
       boende: firebase.auth().currentUser.uid,
-      fromTime: "",
-      toTime: "",
+      fromTime: "08:00",
+      toTime: "09:00",
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
+      weekStart: props.weekStart,
+      scrollOfsetY: props.scrollOfsetY,
     };
 
     this.panResponder = PanResponder.create({
@@ -26,132 +28,250 @@ export default class Draggable extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        var today = new Date();
-        today = moment(today).add(0, "day").format("YYYY-MM-DD");
-        var aday2 = moment(today).add(1, "day").format("YYYY-MM-DD");
-        var aday3 = moment(today).add(2, "day").format("YYYY-MM-DD");
-        var aday4 = moment(today).add(3, "day").format("YYYY-MM-DD");
-        var aday5 = moment(today).add(4, "day").format("YYYY-MM-DD");
-        var aday6 = moment(today).add(5, "day").format("YYYY-MM-DD");
-        var aday7 = moment(today).add(6, "day").format("YYYY-MM-DD");
+        var aday2 = moment(this.state.weekStart)
+          .add(1, "day")
+          .format("YYYY-MM-DD");
+        var aday3 = moment(this.state.weekStart)
+          .add(2, "day")
+          .format("YYYY-MM-DD");
+        var aday4 = moment(this.state.weekStart)
+          .add(3, "day")
+          .format("YYYY-MM-DD");
+        var aday5 = moment(this.state.weekStart)
+          .add(4, "day")
+          .format("YYYY-MM-DD");
+        var aday6 = moment(this.state.weekStart)
+          .add(5, "day")
+          .format("YYYY-MM-DD");
+        var aday7 = moment(this.state.weekStart)
+          .add(6, "day")
+          .format("YYYY-MM-DD");
+
+        // var time0 = "00:00"
 
 
-        // var time1 =  this.fromtime: "00:00";
 
+        if (this.isDropArea1x(gesture) && this.isDropArea1y(gesture, this.state.scrollOfsetY) ) {
 
-
-        if (this.isDropArea1x(gesture) && this.isDropArea1y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('00:00', '01:00');
-        }else if (this.isDropArea1x(gesture) && this.isDropArea2y(gesture)) {
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("00:00", "fromTime");
+          this.inputValueUpdate("01:00", "toTime");
+          this.storeInsats();
+          console.log(this.state.weekStart);
+        } else if (this.isDropArea1x(gesture) && this.isDropArea2y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('01:00', '02:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("01:00", "fromTime");
+          this.inputValueUpdate("02:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea3y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('02:00', '03:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("02:00", "fromTime");
+          this.inputValueUpdate("03:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea4y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('03:00', '04:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("03:00", "fromTime");
+          this.inputValueUpdate("04:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea5y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('04:00', '05:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("04:00", "fromTime");
+          this.inputValueUpdate("05:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea6y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('05:00', '06:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("05:00", "fromTime");
+          this.inputValueUpdate("06:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea7y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('06:00', '07:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("06:00", "fromTime");
+          this.inputValueUpdate("07:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea8y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('07:00', '08:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("07:00", "fromTime");
+          this.inputValueUpdate("08:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea9y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('08:00', '09:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("08:00", "fromTime");
+          this.inputValueUpdate("9:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea10y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('09:00', '10:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("09:00", "fromTime");
+          this.inputValueUpdate("10:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea11y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('10:00', '11:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("10:00", "fromTime");
+          this.inputValueUpdate("11:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea12y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('11:00', '12:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("11:00", "fromTime");
+          this.inputValueUpdate("12:00", "toTime");
+
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea13y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('12:00', '13:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("12:00", "fromTime");
+          this.inputValueUpdate("13:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea14y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('13:00', '14:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("13:00", "fromTime");
+          this.inputValueUpdate("14:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea15y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('14:00', '15:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("14:00", "fromTime");
+          this.inputValueUpdate("15:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea816y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('15:00', '16:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("15:00", "fromTime");
+          this.inputValueUpdate("16:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea17y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('16:00', '17:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("16:00", "fromTime");
+          this.inputValueUpdate("17:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea18y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('17:00', '18:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("17:00", "fromTime");
+          this.inputValueUpdate("18:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea19y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('18:00', '19:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("18:00", "fromTime");
+          this.inputValueUpdate("19:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea20y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('19:00', '20:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("10:00", "fromTime");
+          this.inputValueUpdate("20:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea21y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('21:00', '22:00');
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("20:00", "fromTime");
+          this.inputValueUpdate("21:00", "toTime");
+
+          this.storeInsats();
         }else if (this.isDropArea1x(gesture) && this.isDropArea22y(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(today, "date");
-          this.storeInsats('22:00', '23:00');
-        }
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("21:00", "fromTime");
+          this.inputValueUpdate("22:00", "toTime");
+         
 
+          this.storeInsats();
+        } else if (this.isDropArea1x(gesture) && this.isDropArea23y(gesture)) {
+          this.inputValueUpdate(this.state.message, "insatsType");
+          this.inputValueUpdate(this.state.weekStart, "date");
+          this.inputValueUpdate("22:00", "fromTime");
+          this.inputValueUpdate("23:00", "toTime");
+          console.log(aday7);
+        }
         
-        // else if (this.isDropArea3(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday3, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea4(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday4, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea5(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday5, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea6(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday6, "date");
-        //   this.storeInsats();
-        // } else if (this.isDropArea7(gesture)) {
-        //   this.inputValueUpdate(this.state.message, "insatsType");
-        //   this.inputValueUpdate(aday7, "date");
-        //   this.storeInsats();
-        // }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        else if (this.isDropArea2x(gesture)) {
+          this.inputValueUpdate(this.state.message, "insatsType");
+          this.inputValueUpdate(aday2, "date");
+          this.storeInsats();
+          console.log(aday2);
+        } else if (this.isDropArea3x(gesture)) {
+          this.inputValueUpdate(this.state.message, "insatsType");
+          this.inputValueUpdate(aday3, "date");
+          this.storeInsats();
+          console.log(aday3);
+        } else if (this.isDropArea4x(gesture)) {
+          this.inputValueUpdate(this.state.message, "insatsType");
+          this.inputValueUpdate(aday4, "date");
+          this.storeInsats();
+          console.log(aday4);
+        } else if (this.isDropArea5x(gesture)) {
+          this.inputValueUpdate(this.state.message, "insatsType");
+          this.inputValueUpdate(aday5, "date");
+          this.storeInsats();
+          console.log(aday5);
+        } else if (this.isDropArea6x(gesture)) {
+          this.inputValueUpdate(this.state.message, "insatsType");
+          this.inputValueUpdate(aday6, "date");
+          this.storeInsats();
+          console.log(aday6);
+        } else if (this.isDropArea7x(gesture)) {
+          this.inputValueUpdate(this.state.message, "insatsType");
+          this.inputValueUpdate(aday7, "date");
+          this.storeInsats();
+          console.log(aday7);
+        }
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
@@ -160,152 +280,161 @@ export default class Draggable extends Component {
       },
     });
   }
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.weekStart != this.props.weekStart) return true;
+    if (nextProps.scrollOfsetY != this.props.scrollOfsetY) return true;
+    return true;
+  }
 
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.weekStart !== prevProps.weekStart) {
+      this.setState({ weekStart: this.props.weekStart });
+    }
+    if (this.props.scrollOfsetY !== prevProps.scrollOfsetY) {
+      this.setState({ scrollOfsetY: this.props.scrollOfsetY });
+    }
+  }
 
-
-  isDropArea1y(gesture) {
+  
+  isDropArea1y(gesture, move) {
     return (
-      gesture.moveY > 180 &&
-      gesture.moveY < 270
-    );
+      gesture.moveY > 180 + move  &&
+      gesture.moveY < 270 + move);
   }
 
   isDropArea2y(gesture) {
     return (
       gesture.moveY > 270 && 
-      gesture.moveY < 315 
+      gesture.moveY < 310 
     );
   }
   isDropArea3y(gesture) {
     return (
-      gesture.moveY > 315 &&
-      gesture.moveY < 355 
+      gesture.moveY > 310 &&
+      gesture.moveY < 350 
     );
   }
   isDropArea4y(gesture) {
     return (
-      gesture.moveY > 355 &&
+      gesture.moveY > 350 &&
       gesture.moveY < 400
     );
   }
   isDropArea5y(gesture) {
     return (
       gesture.moveY > 400 &&
-      gesture.moveY < 445
+      gesture.moveY < 440
     );
   }
   isDropArea6y(gesture) {
     return (
-      gesture.moveY > 445 &&
-      gesture.moveY < 490 
+      gesture.moveY > 440 &&
+      gesture.moveY < 480 
     );
   }
   isDropArea7y(gesture) {
     return (
-      gesture.moveY > 490 &&
-      gesture.moveY < 535 
+      gesture.moveY > 480 &&
+      gesture.moveY < 530 
     );
   }
   isDropArea8y(gesture) {
     return (
-      gesture.moveY > 535 &&
+      gesture.moveY > 530 &&
       gesture.moveY < 580 
     );
   }
   isDropArea9y(gesture) {
     return (
       gesture.moveY > 580 &&
-      gesture.moveY < 625
+      gesture.moveY < 620
     );
   }
   isDropArea10y(gesture) {
     return (
-      gesture.moveY > 625 &&
-      gesture.moveY < 670 
+      gesture.moveY > 620 &&
+      gesture.moveY < 660 
     );
   }
   isDropArea11y(gesture) {
     return (
-      gesture.moveY > 670 &&
-      gesture.moveY < 715 
+      gesture.moveY > 660 &&
+      gesture.moveY < 700 
     );
   }
   isDropArea12y(gesture) {
     return (
-      gesture.moveY > 715 &&
-      gesture.moveY < 760
+      gesture.moveY > 700 &&
+      gesture.moveY < 740
     );
   }
   isDropArea13y(gesture) {
     return (
-      gesture.moveY > 760 &&
-      gesture.moveY < 805 
+      gesture.moveY > 740 &&
+      gesture.moveY < 780
     );
   }
   isDropArea14y(gesture) {
     return (
-      gesture.moveY > 805 &&
-      gesture.moveY < 850 
+      gesture.moveY > 780 &&
+      gesture.moveY < 820 
     );
   }
   isDropArea15y(gesture) {
     return (
-      gesture.moveY > 850 &&
-      gesture.moveY < 895
+      gesture.moveY > 820 &&
+      gesture.moveY < 860
     );
   }
   isDropArea16y(gesture) {
     return (
-      gesture.moveY > 895 &&
-      gesture.moveY < 940
+      gesture.moveY > 860 &&
+      gesture.moveY < 900
     );
   }
   isDropArea17y(gesture) {
     return (
-      gesture.moveY > 940 &&
-      gesture.moveY < 985 
+      gesture.moveY > 900 &&
+      gesture.moveY < 940 
     );
   }
   isDropArea18y(gesture) {
     return (
-      gesture.moveY > 985 &&
-      gesture.moveY < 1030  
+      gesture.moveY > 940 &&
+      gesture.moveY < 980 
     );
   }
   isDropArea19y(gesture) {
     return (
-      gesture.moveY > 1030 &&
-      gesture.moveY < 1075
+      gesture.moveY > 980 &&
+      gesture.moveY < 1020
     );
   }
   isDropArea20y(gesture) {
     return (
-      gesture.moveY > 1075 &&
-      gesture.moveY < 1120
+      gesture.moveY > 1020 &&
+      gesture.moveY < 1060
     );
   }
   isDropArea21y(gesture) {
     return (
-      gesture.moveY > 1120 &&
-      gesture.moveY < 1165
+      gesture.moveY > 1060 &&
+      gesture.moveY < 1100
     );
   }
   isDropArea22y(gesture) {
     return (
-      gesture.moveY > 1165 &&
-      gesture.moveY < 1210 
+      gesture.moveY > 1100 &&
+      gesture.moveY < 1140 
     );
   }
   isDropArea23y(gesture) {
     return (
-      gesture.moveY > 1210 &&
-      gesture.moveY < 1255
+      gesture.moveY > 1140 &&
+      gesture.moveY < 1180
     );
   }
-
-
-
-
 
 
 
@@ -364,13 +493,13 @@ export default class Draggable extends Component {
     this.setState(state);
   };
 
-  storeInsats(time1, time2) {
+  storeInsats() {
     this.dbRef.add({
       helperName: "test",
       insatsType: this.state.insatsType,
       boende: firebase.auth().currentUser.uid,
-      fromtime: time1,
-      toTime: time2,
+      fromTime: this.state.fromTime,
+      toTime: this.state.toTime,
       date: this.state.date,
       freeText: "",
     });
@@ -382,7 +511,7 @@ export default class Draggable extends Component {
   }
 
   renderDraggable() {
-    const { message } = this.state;
+    const { message, weekStart } = this.state;
 
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),
