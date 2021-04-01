@@ -13,8 +13,8 @@ import { signIn } from "../../API/firebaseMethods";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, Input, Text, ThemeProvider } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Dimensions } from 'react-native';
-import { useWindowDimensions } from 'react-native';
+import { Dimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
   const guidelineBaseWidth = 350;
@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     textAlign: "center",
-    marginTop: "50%",
   },
   textInput: {
     width: 300,

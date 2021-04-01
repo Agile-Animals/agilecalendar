@@ -29,7 +29,6 @@ export default class HomeScreen extends Component {
       .collection("insatser")
       .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
-      
       isLoading: true,
       insatser: [],
       dragging: false,
@@ -219,7 +218,11 @@ export default class HomeScreen extends Component {
             {this.state.insatsTypes.map((item, index) => {
               return 1 === this.checkConsumedInsats(item) ? (
                 <View key={index}>
-                  <Draggable message={item} weekStart={this.state.weekStart} />
+                  <Draggable
+                    message={item}
+                    weekStart={this.state.weekStart}
+                    insatser={this.state.insatser}
+                  />
                 </View>
               ) : null;
             })}

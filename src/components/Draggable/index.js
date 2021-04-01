@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, PanResponder, Animated, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  PanResponder,
+  Animated,
+  Text,
+  Alert,
+} from "react-native";
 import firebase from "../../database/firebaseDb";
 import moment from "moment";
 
@@ -18,6 +25,7 @@ export default class Draggable extends Component {
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
       weekStart: props.weekStart,
+      insatser: props.insatser,
     };
 
     this.panResponder = PanResponder.create({
@@ -49,37 +57,30 @@ export default class Draggable extends Component {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.state.weekStart, "date");
           this.storeInsats();
-          console.log(this.state.weekStart);
         } else if (this.isDropArea2(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday2, "date");
           this.storeInsats();
-          console.log(aday2);
         } else if (this.isDropArea3(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday3, "date");
           this.storeInsats();
-          console.log(aday3);
         } else if (this.isDropArea4(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday4, "date");
           this.storeInsats();
-          console.log(aday4);
         } else if (this.isDropArea5(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday5, "date");
           this.storeInsats();
-          console.log(aday5);
         } else if (this.isDropArea6(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday6, "date");
           this.storeInsats();
-          console.log(aday6);
         } else if (this.isDropArea7(gesture)) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(aday7, "date");
           this.storeInsats();
-          console.log(aday7);
         }
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
@@ -89,8 +90,10 @@ export default class Draggable extends Component {
       },
     });
   }
+
   shouldComponentUpdate(nextProps) {
     if (nextProps.weekStart != this.props.weekStart) return true;
+    if (nextProps.insatser != this.props.insatser) return true;
     return true;
   }
 
@@ -98,6 +101,9 @@ export default class Draggable extends Component {
     // Typical usage (don't forget to compare props):
     if (this.props.weekStart !== prevProps.weekStart) {
       this.setState({ weekStart: this.props.weekStart });
+    }
+    if (this.props.insatser !== prevProps.insatser) {
+      this.setState({ insatser: this.props.insatser });
     }
   }
 
@@ -165,15 +171,45 @@ export default class Draggable extends Component {
   };
 
   storeInsats() {
-    this.dbRef.add({
-      helperName: "test",
-      insatsType: this.state.insatsType,
-      boende: firebase.auth().currentUser.uid,
-      fromTime: "08:00",
-      toTime: "09:00",
-      date: this.state.date,
-      freeText: "",
-    });
+    let duplet = 0;
+    if (this.state.insatser.length == 0) {
+      this.dbRef.add({
+        helperName: "test",
+        insatsType: this.state.insatsType,
+        boende: firebase.auth().currentUser.uid,
+        fromTime: "08:00",
+        toTime: "09:00",
+        date: this.state.date,
+        freeText: "",
+      });
+      duplet = 1;
+    } else {
+      for (let i = 0; i < this.state.insatser.length; ++i) {
+        if (this.state.date == this.state.insatser[i].date) {
+          if (
+            this.state.fromTime >= this.state.insatser[i].fromTime &&
+            this.state.toTime <= this.state.insatser[i].toTime
+          ) {
+            Alert.alert(
+              "Du har bokat:\n" + this.state.insatser[i].insatsType + " då."
+            );
+            duplet = 1;
+            i = this.state.insatser.length + 2;
+          }
+        }
+      }
+    }
+    if (duplet == 0) {
+      this.dbRef.add({
+        helperName: "test",
+        insatsType: this.state.insatsType,
+        boende: firebase.auth().currentUser.uid,
+        fromTime: "08:00",
+        toTime: "09:00",
+        date: this.state.date,
+        freeText: "",
+      });
+    }
   }
 
   render() {
