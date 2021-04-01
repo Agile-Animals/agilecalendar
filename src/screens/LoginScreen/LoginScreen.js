@@ -13,8 +13,8 @@ import { signIn } from "../../API/firebaseMethods";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, Input, Text, ThemeProvider } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Dimensions } from 'react-native';
-import { useWindowDimensions } from 'react-native';
+import { Dimensions } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
   const guidelineBaseWidth = 350;
@@ -49,45 +49,43 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <Text style={styles.text}>Agile Calendar</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.text}>Agile Calendar</Text>
 
-          <ScrollView onBlur={Keyboard.dismiss}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your email"
-              placeholderTextColor="white"
-              value={email}
-              onChangeText={(email) => setEmail(email)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+        <ScrollView onBlur={Keyboard.dismiss}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Enter your email"
+            placeholderTextColor="white"
+            value={email}
+            onChangeText={(email) => setEmail(email)}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your password"
-              placeholderTextColor="white"
-              value={password}
-              onChangeText={(password) => setPassword(password)}
-              secureTextEntry={true}
-            />
-            <TouchableOpacity style={styles.button} onPress={onSubmit}>
-              <Text style={styles.buttonText}>Logga in</Text>
-            </TouchableOpacity>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Enter your password"
+            placeholderTextColor="white"
+            value={password}
+            onChangeText={(password) => setPassword(password)}
+            secureTextEntry={true}
+          />
+          <TouchableOpacity style={styles.button} onPress={onSubmit}>
+            <Text style={styles.buttonText}>Logga in</Text>
+          </TouchableOpacity>
 
-            <Text style={styles.inlineText}>Create account</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate("Sign Up")}
-            >
-              <Text style={styles.buttonText}>Skapa konto</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </SafeAreaView>
-    </ScrollView>
+          <Text style={styles.inlineText}>Create account</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Sign Up")}
+          >
+            <Text style={styles.buttonText}>Skapa konto</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -29,7 +29,6 @@ export default class HomeScreen extends Component {
       .collection("insatser")
       .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
-      
       isLoading: true,
       insatser: [],
       dragging: false,
@@ -98,8 +97,6 @@ export default class HomeScreen extends Component {
   componentWillUnmount() {
     this.unsubscribe();
   }
-
-
 
   getCollection = (querySnapshot) => {
     const insatser = [];
@@ -184,11 +181,20 @@ export default class HomeScreen extends Component {
   }
 
   handleScroll = (event) => {
-    this.state.scrollOfsetY = event.nativeEvent.contentOffset.y;
+    this.setState({
+      scrollOfsetY: event.nativeEvent.contentOffset.y,
+    });
   };
+
+  onLayout = (e) => {
+    // console.log(e.nativeEvent.layout.width);
+    // console.log(e.nativeEvent.layout.height);
+    // console.log(e.nativeEvent.layout.x);
+    // console.log(e.nativeEvent.layout.y);
+  };
+
   render() {
     const { insatser, dragging, days, insatsTypes, weekStart } = this.state;
-
     var today = moment(this.state.weekStart).format("YYYY-MM-DD");
     var aday2 = moment(this.state.weekStart).add(1, "day").format("YYYY-MM-DD");
     var aday3 = moment(this.state.weekStart).add(2, "day").format("YYYY-MM-DD");
@@ -226,7 +232,11 @@ export default class HomeScreen extends Component {
             {this.state.insatsTypes.map((item, index) => {
               return 1 === this.checkConsumedInsats(item) ? (
                 <View key={index}>
-                  <Draggable message={item} scrollOfsetY={this.state.scrollOfsetY}  weekStart={this.state.weekStart} />
+                  <Draggable
+                    message={item}
+                    scrollOfsetY={this.state.scrollOfsetY}
+                    weekStart={this.state.weekStart}
+                  />
                 </View>
               ) : null;
             })}
@@ -286,14 +296,16 @@ export default class HomeScreen extends Component {
           })}
         </View>
 
-        <ScrollView
-         onScroll={this.handleScroll}
-         scrollEnabled={!dragging}>
+        <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return (
-                  <Text style={styles.instatsList} key={item.id}>
+                  <Text
+                    style={styles.instatsList}
+                    key={item.id}
+                    onLayout={this.onLayout}
+                  >
                     {item.time}
                   </Text>
                 );
@@ -303,7 +315,7 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.insatser.map((item, index) => {
                 return item.date == today ? (
-                  <View style={{backgroundColor:"red"}} key={item.key}>
+                  <View style={{ backgroundColor: "red" }} key={item.key}>
                     <Insats
                       message={item.insatsType}
                       id={item.key}
