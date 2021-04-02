@@ -82,7 +82,7 @@ export default class HomeScreen extends Component {
         "Fritext C",
       ],
       today: moment().format("YYYY-MM-DD"),
-
+      currentWeek: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       scrollOfsetY: "",
@@ -134,7 +134,7 @@ export default class HomeScreen extends Component {
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
-        var week = moment(this.state.today).startOf("isoWeek");
+        var week = moment(this.state.weekStart).startOf("isoWeek");
         for (let a = 0; a < 7; ++a) {
           let dayIndex = (i + a) % 7;
           if (

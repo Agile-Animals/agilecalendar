@@ -41,30 +41,30 @@ export default class DayScreen extends Component {
       dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       days: ["", "", "", "", "", "", ""],
       times: [
-        { time: "00:00", id: "0" },
-        { time: "01:00", id: "1" },
-        { time: "02:00", id: "2" },
-        { time: "03:00", id: "3" },
-        { time: "04:00", id: "4" },
-        { time: "05:00", id: "5" },
-        { time: "06:00", id: "6" },
-        { time: "07:00", id: "7" },
-        { time: "08:00", id: "8" },
-        { time: "09:00", id: "9" },
-        { time: "10:00", id: "10" },
-        { time: "11:00", id: "11" },
-        { time: "12:00", id: "12" },
-        { time: "13:00", id: "13" },
-        { time: "14:00", id: "14" },
-        { time: "15:00", id: "15" },
-        { time: "16:00", id: "16" },
-        { time: "17:00", id: "17" },
-        { time: "18:00", id: "18" },
-        { time: "19:00", id: "19" },
-        { time: "20:00", id: "20" },
-        { time: "21:00", id: "21" },
-        { time: "22:00", id: "22" },
-        { time: "23:00", id: "23" },
+        "0:00",
+        "1:00",
+        "2:00",
+        "3:00",
+        "4:00",
+        "5:00",
+        "6:00",
+        "7:00",
+        "8:00",
+        "9:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+        "18:00",
+        "19:00",
+        "20:00",
+        "21:00",
+        "22:00",
+        "23:00",
       ],
     };
   }
@@ -119,6 +119,32 @@ export default class DayScreen extends Component {
         i = 9;
       }
     }
+  }
+
+  renderDays(time, day, index) {
+    for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < this.state.insatser.length; ++i) {
+        if (
+          this.state.insatser[i].fromTime == time &&
+          this.state.insatser[i].date == day
+        ) {
+          return (
+            <View key={this.state.insatser[i].key}>
+              <Insats
+                message={this.state.insatser[i].insatsType}
+                id={this.state.insatser[i].key}
+                navigation={this.props.navigation}
+              />
+            </View>
+          );
+        }
+      }
+    }
+    return (
+      <View style={styles.instatsListEmpty} key={index}>
+        <Text></Text>
+      </View>
+    );
   }
 
   render() {
@@ -176,24 +202,16 @@ export default class DayScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return (
-                  <Text style={styles.instatsList} key={item.id}>
-                    {item.time}
+                  <Text style={styles.instatsList} key={index}>
+                    {item}
                   </Text>
                 );
               })}
             </View>
 
             <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date == today ? (
-                  <View key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, today, index);
               })}
             </View>
           </View>
@@ -250,5 +268,16 @@ const styles = StyleSheet.create({
   },
   text: {
     margin: 6,
+  },
+  instatsListEmpty: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "black",
+    borderWidth: 2,
+    backgroundColor: "#ccc",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
   },
 });
