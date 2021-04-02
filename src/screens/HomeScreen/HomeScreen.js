@@ -146,7 +146,8 @@ export default class HomeScreen extends Component {
             this.state.days[dayIndex] = this.state.tmpDays[dayIndex];
           }
           this.state.days[dayIndex] +=
-            " " + moment(this.state.weekStart).add(i, "day").format("MM-DD");
+            " " +
+            moment(this.state.weekStart).add(dayIndex, "day").format("MM-DD");
         }
       }
     }

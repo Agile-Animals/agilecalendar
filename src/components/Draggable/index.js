@@ -55,25 +55,6 @@ export default class Draggable extends Component {
       ],
     };
 
-    this.aday2 = moment(this.state.weekStart)
-      .add(1, "day")
-      .format("YYYY-MM-DD");
-    this.aday3 = moment(this.state.weekStart)
-      .add(2, "day")
-      .format("YYYY-MM-DD");
-    this.aday4 = moment(this.state.weekStart)
-      .add(3, "day")
-      .format("YYYY-MM-DD");
-    this.aday5 = moment(this.state.weekStart)
-      .add(4, "day")
-      .format("YYYY-MM-DD");
-    this.aday6 = moment(this.state.weekStart)
-      .add(5, "day")
-      .format("YYYY-MM-DD");
-    this.aday7 = moment(this.state.weekStart)
-      .add(6, "day")
-      .format("YYYY-MM-DD");
-
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
       onPanResponderMove: Animated.event(
@@ -81,6 +62,25 @@ export default class Draggable extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
+        this.aday2 = moment(this.state.weekStart)
+          .add(1, "day")
+          .format("YYYY-MM-DD");
+        this.aday3 = moment(this.state.weekStart)
+          .add(2, "day")
+          .format("YYYY-MM-DD");
+        this.aday4 = moment(this.state.weekStart)
+          .add(3, "day")
+          .format("YYYY-MM-DD");
+        this.aday5 = moment(this.state.weekStart)
+          .add(4, "day")
+          .format("YYYY-MM-DD");
+        this.aday6 = moment(this.state.weekStart)
+          .add(5, "day")
+          .format("YYYY-MM-DD");
+        this.aday7 = moment(this.state.weekStart)
+          .add(6, "day")
+          .format("YYYY-MM-DD");
+
         if (this.isDropAreaY1(gesture)) {
         } else if (this.isDropAreaY2(gesture)) {
         } else if (this.isDropAreaY3(gesture)) {
@@ -88,7 +88,6 @@ export default class Draggable extends Component {
         } else if (this.isDropAreaY5(gesture)) {
         } else if (this.isDropAreaY6(gesture)) {
         } else if (this.isDropAreaY7(gesture)) {
-        } else if (this.isDropAreaY2(gesture)) {
         }
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
@@ -132,8 +131,6 @@ export default class Draggable extends Component {
         this.inputValueUpdate(i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
-        console.log(gesture.moveY);
-        console.log(gesture.moveY + this.state.scrollOfsetY);
       }
     }
   }
@@ -184,6 +181,7 @@ export default class Draggable extends Component {
         this.inputValueUpdate(i + ":00", "fromTime");
         this.inputValueUpdate(i + 1 + ":00", "toTime");
         this.storeInsats();
+        i = 25;
       }
     }
   }
