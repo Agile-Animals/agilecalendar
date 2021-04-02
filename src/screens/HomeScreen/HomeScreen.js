@@ -376,13 +376,11 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
-    backgroundColor: "rgba(49, 118, 197, 1.0)",
+    backgroundColor: "black",
     width: "100%",
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
-    borderColor: "black",
-    shadowColor: "red",
   },
   item: {
     height: 43.5,

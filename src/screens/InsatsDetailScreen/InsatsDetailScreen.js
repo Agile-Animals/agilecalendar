@@ -146,8 +146,16 @@ class InsatsDetailScreen extends Component {
     var data = [["Fritext", "Städa", "Tvätta", "Handla", "Duscha"]];
     var timeData = [
       [
-        "08:00",
-        "09:00",
+        "0:00",
+        "1:00",
+        "2:00",
+        "3:00",
+        "4:00",
+        "5:00",
+        "6:00",
+        "7:00",
+        "8:00",
+        "9:00",
         "10:00",
         "11:00",
         "12:00",
@@ -156,6 +164,12 @@ class InsatsDetailScreen extends Component {
         "15:00",
         "16:00",
         "17:00",
+        "18:00",
+        "19:00",
+        "20:00",
+        "21:00",
+        "22:00",
+        "23:00",
       ],
     ];
     const { date, modalVisible } = this.state;
@@ -181,18 +195,21 @@ class InsatsDetailScreen extends Component {
             onChangeText={(val) => this.inputValueUpdate(val, "helperName")}
           />
         </View>
-        <View 
+        <View
           style={{
             justifyContent: "flex-end",
             marginBottom: 30,
             marginLeft: 80,
             marginRight: 80,
             //backgroundColor:"white",
-            type:"outline",
-
+            type: "outline",
           }}
         >
-          <Button title="Datum" backgroundColor="white" onPress={() => this.setModalVisible(true)} />
+          <Button
+            title="Datum"
+            backgroundColor="white"
+            onPress={() => this.setModalVisible(true)}
+          />
         </View>
         <View style={styles.timeDropdown}>
           <View style={styles.timeFrom}>
@@ -339,7 +356,7 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
     fontSize: 20,
-  }
+  },
 });
 
 export default InsatsDetailScreen;

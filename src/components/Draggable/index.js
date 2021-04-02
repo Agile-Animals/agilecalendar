@@ -81,13 +81,15 @@ export default class Draggable extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        this.isDropAreaY1(gesture);
-        this.isDropAreaY2(gesture);
-        this.isDropAreaY3(gesture);
-        this.isDropAreaY4(gesture);
-        this.isDropAreaY5(gesture);
-        this.isDropAreaY6(gesture);
-        this.isDropAreaY7(gesture);
+        if (this.isDropAreaY1(gesture)) {
+        } else if (this.isDropAreaY2(gesture)) {
+        } else if (this.isDropAreaY3(gesture)) {
+        } else if (this.isDropAreaY4(gesture)) {
+        } else if (this.isDropAreaY5(gesture)) {
+        } else if (this.isDropAreaY6(gesture)) {
+        } else if (this.isDropAreaY7(gesture)) {
+        } else if (this.isDropAreaY2(gesture)) {
+        }
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
