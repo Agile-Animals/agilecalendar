@@ -26,7 +26,53 @@ export default class Draggable extends Component {
       freeText: "",
       weekStart: props.weekStart,
       insatser: props.insatser,
+      scrollOfsetY: props.scrollOfsetY,
+      gestY: [
+        { min: 180, max: 280 },
+        { min: 280, max: 330 },
+        { min: 330, max: 370 },
+        { min: 370, max: 410 },
+        { min: 410, max: 455 },
+        { min: 455, max: 510 },
+        { min: 510, max: 555 },
+        { min: 555, max: 600 },
+        { min: 600, max: 645 },
+        { min: 645, max: 690 },
+        { min: 690, max: 730 },
+        { min: 730, max: 776 },
+        { min: 776, max: 825 },
+        { min: 825, max: 875 },
+        { min: 875, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+        { min: 1200, max: 1200 },
+      ],
     };
+
+    this.aday2 = moment(this.state.weekStart)
+      .add(1, "day")
+      .format("YYYY-MM-DD");
+    this.aday3 = moment(this.state.weekStart)
+      .add(2, "day")
+      .format("YYYY-MM-DD");
+    this.aday4 = moment(this.state.weekStart)
+      .add(3, "day")
+      .format("YYYY-MM-DD");
+    this.aday5 = moment(this.state.weekStart)
+      .add(4, "day")
+      .format("YYYY-MM-DD");
+    this.aday6 = moment(this.state.weekStart)
+      .add(5, "day")
+      .format("YYYY-MM-DD");
+    this.aday7 = moment(this.state.weekStart)
+      .add(6, "day")
+      .format("YYYY-MM-DD");
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
@@ -35,53 +81,13 @@ export default class Draggable extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        var aday2 = moment(this.state.weekStart)
-          .add(1, "day")
-          .format("YYYY-MM-DD");
-        var aday3 = moment(this.state.weekStart)
-          .add(2, "day")
-          .format("YYYY-MM-DD");
-        var aday4 = moment(this.state.weekStart)
-          .add(3, "day")
-          .format("YYYY-MM-DD");
-        var aday5 = moment(this.state.weekStart)
-          .add(4, "day")
-          .format("YYYY-MM-DD");
-        var aday6 = moment(this.state.weekStart)
-          .add(5, "day")
-          .format("YYYY-MM-DD");
-        var aday7 = moment(this.state.weekStart)
-          .add(6, "day")
-          .format("YYYY-MM-DD");
-        if (this.isDropArea1(gesture)) {
-          this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.weekStart, "date");
-          this.storeInsats();
-        } else if (this.isDropArea2(gesture)) {
-          this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(aday2, "date");
-          this.storeInsats();
-        } else if (this.isDropArea3(gesture)) {
-          this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(aday3, "date");
-          this.storeInsats();
-        } else if (this.isDropArea4(gesture)) {
-          this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(aday4, "date");
-          this.storeInsats();
-        } else if (this.isDropArea5(gesture)) {
-          this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(aday5, "date");
-          this.storeInsats();
-        } else if (this.isDropArea6(gesture)) {
-          this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(aday6, "date");
-          this.storeInsats();
-        } else if (this.isDropArea7(gesture)) {
-          this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(aday7, "date");
-          this.storeInsats();
-        }
+        this.isDropAreaY1(gesture);
+        this.isDropAreaY2(gesture);
+        this.isDropAreaY3(gesture);
+        this.isDropAreaY4(gesture);
+        this.isDropAreaY5(gesture);
+        this.isDropAreaY6(gesture);
+        this.isDropAreaY7(gesture);
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
@@ -94,6 +100,7 @@ export default class Draggable extends Component {
   shouldComponentUpdate(nextProps) {
     if (nextProps.weekStart != this.props.weekStart) return true;
     if (nextProps.insatser != this.props.insatser) return true;
+    if (nextProps.scrollOfsetY != this.props.scrollOfsetY) return true;
     return true;
   }
 
@@ -105,63 +112,153 @@ export default class Draggable extends Component {
     if (this.props.insatser !== prevProps.insatser) {
       this.setState({ insatser: this.props.insatser });
     }
+    if (this.props.scrollOfsetY !== prevProps.scrollOfsetY) {
+      this.setState({ scrollOfsetY: this.props.scrollOfsetY });
+    }
   }
 
-  isDropArea1(gesture) {
-    return (
-      gesture.moveY < 1200 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 280 &&
-      gesture.moveX > 140
-    );
+  isDropAreaY1(gesture) {
+    for (let i = 0; i < 24; ++i) {
+      if (
+        this.isDropArea1x(gesture) &&
+        gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
+        gesture.moveY + this.state.scrollOfsetY < this.state.gestY[i].max
+      ) {
+        this.inputValueUpdate(this.state.message, "insatsType");
+        this.inputValueUpdate(this.state.weekStart, "date");
+        this.inputValueUpdate(i + ":00", "fromTime");
+        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        this.storeInsats();
+        i = 25;
+        console.log(gesture.moveY);
+        console.log(gesture.moveY + this.state.scrollOfsetY);
+      }
+    }
   }
-  isDropArea2(gesture) {
-    return (
-      gesture.moveY < 630 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 420 &&
-      gesture.moveX > 280
-    );
+
+  isDropAreaY2(gesture) {
+    for (let i = 0; i < 24; ++i) {
+      if (
+        this.isDropArea2x(gesture) &&
+        gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
+        gesture.moveY + this.state.scrollOfsetY < this.state.gestY[i].max
+      ) {
+        this.inputValueUpdate(this.state.message, "insatsType");
+        this.inputValueUpdate(this.aday2, "date");
+        this.inputValueUpdate(i + ":00", "fromTime");
+        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        this.storeInsats();
+        i = 25;
+      }
+    }
   }
-  isDropArea3(gesture) {
-    return (
-      gesture.moveY < 630 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 560 &&
-      gesture.moveX > 420
-    );
+
+  isDropAreaY3(gesture) {
+    for (let i = 0; i < 24; ++i) {
+      if (
+        this.isDropArea3x(gesture) &&
+        gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
+        gesture.moveY + this.state.scrollOfsetY < this.state.gestY[i].max
+      ) {
+        this.inputValueUpdate(this.state.message, "insatsType");
+        this.inputValueUpdate(this.aday3, "date");
+        this.inputValueUpdate(i + ":00", "fromTime");
+        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        this.storeInsats();
+        i = 25;
+      }
+    }
   }
-  isDropArea4(gesture) {
-    return (
-      gesture.moveY < 630 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 700 &&
-      gesture.moveX > 560
-    );
+
+  isDropAreaY4(gesture) {
+    for (let i = 0; i < 24; ++i) {
+      if (
+        this.isDropArea4x(gesture) &&
+        gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
+        gesture.moveY + this.state.scrollOfsetY < this.state.gestY[i].max
+      ) {
+        this.inputValueUpdate(this.state.message, "insatsType");
+        this.inputValueUpdate(this.aday4, "date");
+        this.inputValueUpdate(i + ":00", "fromTime");
+        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        this.storeInsats();
+      }
+    }
   }
-  isDropArea5(gesture) {
-    return (
-      gesture.moveY < 630 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 840 &&
-      gesture.moveX > 700
-    );
+
+  isDropAreaY5(gesture) {
+    for (let i = 0; i < 24; ++i) {
+      if (
+        this.isDropArea5x(gesture) &&
+        gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
+        gesture.moveY + this.state.scrollOfsetY < this.state.gestY[i].max
+      ) {
+        this.inputValueUpdate(this.state.message, "insatsType");
+        this.inputValueUpdate(this.aday5, "date");
+        this.inputValueUpdate(i + ":00", "fromTime");
+        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        this.storeInsats();
+        i = 25;
+      }
+    }
   }
-  isDropArea6(gesture) {
-    return (
-      gesture.moveY < 630 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 980 &&
-      gesture.moveX > 840
-    );
+
+  isDropAreaY6(gesture) {
+    for (let i = 0; i < 24; ++i) {
+      if (
+        this.isDropArea6x(gesture) &&
+        gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
+        gesture.moveY + this.state.scrollOfsetY < this.state.gestY[i].max
+      ) {
+        this.inputValueUpdate(this.state.message, "insatsType");
+        this.inputValueUpdate(this.aday6, "date");
+        this.inputValueUpdate(i + ":00", "fromTime");
+        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        this.storeInsats();
+        i = 25;
+      }
+    }
   }
-  isDropArea7(gesture) {
-    return (
-      gesture.moveY < 630 &&
-      gesture.moveY > 180 &&
-      gesture.moveX < 1120 &&
-      gesture.moveX > 980
-    );
+
+  isDropAreaY7(gesture) {
+    for (let i = 0; i < 24; ++i) {
+      if (
+        this.isDropArea7x(gesture) &&
+        gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
+        gesture.moveY + this.state.scrollOfsetY < this.state.gestY[i].max
+      ) {
+        this.inputValueUpdate(this.state.message, "insatsType");
+        this.inputValueUpdate(this.aday7, "date");
+        this.inputValueUpdate(i + ":00", "fromTime");
+        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        this.storeInsats();
+        i = 25;
+      }
+    }
+  }
+
+  isDropArea1x(gesture) {
+    return gesture.moveX > 140 && gesture.moveX < 280;
+  }
+
+  isDropArea2x(gesture) {
+    return gesture.moveX < 420 && gesture.moveX > 280;
+  }
+
+  isDropArea3x(gesture) {
+    return gesture.moveX < 560 && gesture.moveX > 420;
+  }
+  isDropArea4x(gesture) {
+    return gesture.moveX < 700 && gesture.moveX > 560;
+  }
+  isDropArea5x(gesture) {
+    return gesture.moveX < 840 && gesture.moveX > 700;
+  }
+  isDropArea6x(gesture) {
+    return gesture.moveX < 980 && gesture.moveX > 840;
+  }
+  isDropArea7x(gesture) {
+    return gesture.moveX < 1120 && gesture.moveX > 980;
   }
 
   inputValueUpdate = (val, prop) => {
@@ -177,8 +274,8 @@ export default class Draggable extends Component {
         helperName: "test",
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
-        fromTime: "08:00",
-        toTime: "09:00",
+        fromTime: this.state.fromTime,
+        toTime: this.state.toTime,
         date: this.state.date,
         freeText: "",
       });
@@ -191,7 +288,9 @@ export default class Draggable extends Component {
             this.state.toTime <= this.state.insatser[i].toTime
           ) {
             Alert.alert(
-              "Du har bokat:\n" + this.state.insatser[i].insatsType + " då."
+              "Du har redan bokat:\n" +
+                this.state.insatser[i].insatsType +
+                " då."
             );
             duplet = 1;
             i = this.state.insatser.length + 2;
@@ -204,8 +303,8 @@ export default class Draggable extends Component {
         helperName: "test",
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
-        fromTime: "08:00",
-        toTime: "09:00",
+        fromTime: this.state.fromTime,
+        toTime: this.state.toTime,
         date: this.state.date,
         freeText: "",
       });
