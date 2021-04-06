@@ -36,6 +36,15 @@ export default class Insats extends Component {
             insatskey: this.state.id,
           });
         }
+        if (
+          gesture.x0 + gesture.dx >= 1120 &&
+          gesture.x0 + gesture.dx <= 1280 &&
+          gesture.y0 + gesture.dy >= 220 &&
+          gesture.y0 + gesture.dy <= 1200
+        ) {
+          this.deleteInsats();
+        }
+        console.log(gesture);
 
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
@@ -43,6 +52,16 @@ export default class Insats extends Component {
           useNativeDriver: false,
         }).start();
       },
+    });
+  }
+
+  deleteInsats() {
+    const dbRef = firebase
+      .firestore()
+      .collection("insatser")
+      .doc(this.state.id);
+    dbRef.delete().then((res) => {
+      console.log("Item removed from database");
     });
   }
 
@@ -72,7 +91,7 @@ let styles = StyleSheet.create({
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     shadowRadius: 2,
   },
   edit: {},
