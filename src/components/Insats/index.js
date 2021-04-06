@@ -21,6 +21,7 @@ export default class Insats extends Component {
       freeText: "",
       id: props.id,
       navigation: props.navigation,
+      layouts: props.layouts,
     };
 
     this.panResponder = PanResponder.create({
@@ -44,7 +45,23 @@ export default class Insats extends Component {
         ) {
           this.deleteInsats();
         }
-        console.log(gesture);
+        for (let i = 0; i < this.state.layouts.length; ++i) {
+          if (
+            gesture.x0 + gesture.dx >= this.state.layouts[i].x &&
+            gesture.x0 + gesture.dx <=
+              this.state.layouts[i].x + this.state.layouts[i].width &&
+            gesture.y0 + gesture.dy >= this.state.layouts[i].y + 220 &&
+            gesture.y0 + gesture.dy <=
+              this.state.layouts[i].y + this.state.layouts[i].height + 220
+          ) {
+            if (this.state.id != this.state.layouts[i].key) {
+              console.log("\ndragged insats key:");
+              console.log(this.state.id);
+              console.log("dropped on insats key:");
+              console.log(this.state.layouts[i].key);
+            }
+          }
+        }
 
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
@@ -55,7 +72,24 @@ export default class Insats extends Component {
     });
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.layouts != this.props.layouts) return true;
+    return true;
+  }
+
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.layouts !== prevProps.layouts) {
+      this.setState({ layouts: this.props.layouts });
+    }
+  }
+
   deleteInsats() {
+    for (let i = 0; i < this.state.layouts.length; ++i) {
+      if (this.state.layouts[i].key == this.state.id) {
+        this.state.layouts.splice(i, 1);
+      }
+    }
     const dbRef = firebase
       .firestore()
       .collection("insatser")

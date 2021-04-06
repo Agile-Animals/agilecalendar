@@ -82,10 +82,10 @@ export default class HomeScreen extends Component {
         "Fritext C",
       ],
       today: moment().format("YYYY-MM-DD"),
-      currentWeek: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       scrollOfsetY: "",
+      layouts: [{}],
     };
   }
 
@@ -176,9 +176,21 @@ export default class HomeScreen extends Component {
         .add(newWeek, "week")
         .format("YYYY-MM-DD"),
     });
+    this.state.layouts = [];
   }
 
-  renderDays(time, day, index) {
+  getLayout(layout, dayIndex, key) {
+    // this.state.layouts.push({ layout });
+    this.state.layouts.push({
+      height: layout.height,
+      width: layout.width,
+      x: layout.x + 140 * dayIndex,
+      y: layout.y,
+      key: key,
+    });
+  }
+
+  renderDays(time, day, index, dayIndex) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (
@@ -186,11 +198,21 @@ export default class HomeScreen extends Component {
           this.state.insatser[i].date == day
         ) {
           return (
-            <View key={this.state.insatser[i].key}>
+            <View
+              onLayout={(event) => {
+                this.getLayout(
+                  event.nativeEvent.layout,
+                  dayIndex,
+                  this.state.insatser[i].key
+                );
+              }}
+              key={this.state.insatser[i].key}
+            >
               <Insats
                 message={this.state.insatser[i].insatsType}
                 id={this.state.insatser[i].key}
                 navigation={this.props.navigation}
+                layouts={this.state.layouts}
               />
             </View>
           );
@@ -211,7 +233,14 @@ export default class HomeScreen extends Component {
   };
 
   render() {
-    const { insatser, dragging, days, insatsTypes, weekStart } = this.state;
+    const {
+      insatser,
+      dragging,
+      days,
+      insatsTypes,
+      weekStart,
+      layouts,
+    } = this.state;
 
     var today = moment(this.state.weekStart).format("YYYY-MM-DD");
     var aday2 = moment(this.state.weekStart).add(1, "day").format("YYYY-MM-DD");
@@ -329,39 +358,39 @@ export default class HomeScreen extends Component {
 
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, today, index);
+                return this.renderDays(item, today, index, 1);
               })}
             </View>
 
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday2, index);
+                return this.renderDays(item, aday2, index, 2);
               })}
             </View>
 
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday3, index);
+                return this.renderDays(item, aday3, index, 3);
               })}
             </View>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday4, index);
+                return this.renderDays(item, aday4, index, 4);
               })}
             </View>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday5, index);
+                return this.renderDays(item, aday5, index, 5);
               })}
             </View>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday6, index);
+                return this.renderDays(item, aday6, index, 6);
               })}
             </View>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday7, index);
+                return this.renderDays(item, aday7, index, 7);
               })}
             </View>
           </View>

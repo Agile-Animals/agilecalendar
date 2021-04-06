@@ -123,18 +123,12 @@ export default class Draggable extends Component {
           .add(6, "day")
           .format("YYYY-MM-DD");
         if (this.isDropAreaY1(gesture)) {
-        }
-        if (this.isDropAreaY2(gesture)) {
-        }
-        if (this.isDropAreaY3(gesture)) {
-        }
-        if (this.isDropAreaY4(gesture)) {
-        }
-        if (this.isDropAreaY5(gesture)) {
-        }
-        if (this.isDropAreaY6(gesture)) {
-        }
-        if (this.isDropAreaY7(gesture)) {
+        } else if (this.isDropAreaY2(gesture)) {
+        } else if (this.isDropAreaY3(gesture)) {
+        } else if (this.isDropAreaY4(gesture)) {
+        } else if (this.isDropAreaY5(gesture)) {
+        } else if (this.isDropAreaY6(gesture)) {
+        } else if (this.isDropAreaY7(gesture)) {
         }
         {
           Animated.sequence([
