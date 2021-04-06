@@ -44,16 +44,16 @@ export default class HomeScreen extends Component {
       dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       days: ["", "", "", "", "", "", ""],
       times: [
-        "0:00",
-        "1:00",
-        "2:00",
-        "3:00",
-        "4:00",
-        "5:00",
-        "6:00",
-        "7:00",
-        "8:00",
-        "9:00",
+        "00:00",
+        "01:00",
+        "02:00",
+        "03:00",
+        "04:00",
+        "05:00",
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
         "10:00",
         "11:00",
         "12:00",
@@ -204,6 +204,12 @@ export default class HomeScreen extends Component {
     );
   }
 
+  handleScroll = (event) => {
+    this.setState({
+      scrollOfsetY: event.nativeEvent.contentOffset.y,
+    });
+  };
+
   render() {
     const { insatser, dragging, days, insatsTypes, weekStart } = this.state;
 
@@ -309,7 +315,7 @@ export default class HomeScreen extends Component {
           })}
         </View>
 
-        <ScrollView scrollEnabled={!dragging}>
+        <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {

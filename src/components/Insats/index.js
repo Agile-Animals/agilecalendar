@@ -31,6 +31,12 @@ export default class Insats extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
+        if (gesture.dx == 0 && gesture.dy == 0) {
+          this.state.navigation.navigate("InsatsDetailScreen", {
+            insatskey: this.state.id,
+          });
+        }
+
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
@@ -39,27 +45,6 @@ export default class Insats extends Component {
       },
     });
   }
-
-  // isDropArea1(gesture) {
-  //   return (
-  //     gesture.moveY < 1200 &&
-  //     gesture.moveY > 180 &&
-  //     gesture.moveX < 280 &&
-  //     gesture.moveX > 140
-  //   );
-  // }
-
-  // storeInsats() {
-  //   this.dbRef.add({
-  //     helperName: "test",
-  //     insatsType: this.state.insatsType,
-  //     boende: firebase.auth().currentUser.uid,
-  //     fromTime: "08:00",
-  //     toTime: "09:00",
-  //     date: this.state.date,
-  //     freeText: "",
-  //   });
-  // }
 
   render() {
     const { message, id, indx } = this.state;
@@ -72,14 +57,6 @@ export default class Insats extends Component {
         style={[panStyle, styles.instatsList]}
       >
         <Text key={this.state.id}>{this.state.message}</Text>
-        <Button
-          style={styles.edit}
-          onPress={() => {
-            this.state.navigation.navigate("InsatsDetailScreen", {
-              insatskey: this.state.id,
-            });
-          }}
-        />
       </Animated.View>
     );
   }

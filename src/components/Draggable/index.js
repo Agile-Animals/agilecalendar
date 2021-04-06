@@ -20,8 +20,8 @@ export default class Draggable extends Component {
       helperName: "test",
       insatsType: "Fritext",
       boende: firebase.auth().currentUser.uid,
-      fromTime: "08:00",
-      toTime: "09:00",
+      fromTime: "",
+      toTime: "",
       date: new Date().toJSON().substring(0, 10),
       freeText: "",
       weekStart: props.weekStart,
@@ -94,29 +94,6 @@ export default class Draggable extends Component {
           min: 220 + 43.33333206176758 * 23,
           max: 220 + 43.33333206176758 * 24,
         },
-        // { min: 264, max: 330 },
-        // { min: 330, max: 370 },
-        // { min: 370, max: 410 },
-        // { min: 410, max: 455 },
-        // { min: 455, max: 510 },
-        // { min: 510, max: 555 },
-        // { min: 555, max: 600 },
-        // { min: 600, max: 645 },
-        // { min: 645, max: 690 },
-        // { min: 690, max: 730 },
-        // { min: 730, max: 776 },
-        // { min: 776, max: 825 },
-        // { min: 825, max: 875 },
-        // { min: 875, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
-        // { min: 1200, max: 1200 },
       ],
     };
 
@@ -145,15 +122,21 @@ export default class Draggable extends Component {
         this.aday7 = moment(this.state.weekStart)
           .add(6, "day")
           .format("YYYY-MM-DD");
-
         if (this.isDropAreaY1(gesture)) {
-        } else if (this.isDropAreaY2(gesture)) {
-        } else if (this.isDropAreaY3(gesture)) {
-        } else if (this.isDropAreaY4(gesture)) {
-        } else if (this.isDropAreaY5(gesture)) {
-        } else if (this.isDropAreaY6(gesture)) {
-        } else if (this.isDropAreaY7(gesture)) {
-        } else {
+        }
+        if (this.isDropAreaY2(gesture)) {
+        }
+        if (this.isDropAreaY3(gesture)) {
+        }
+        if (this.isDropAreaY4(gesture)) {
+        }
+        if (this.isDropAreaY5(gesture)) {
+        }
+        if (this.isDropAreaY6(gesture)) {
+        }
+        if (this.isDropAreaY7(gesture)) {
+        }
+        {
           Animated.sequence([
             Animated.delay(300),
             Animated.spring(this.state.pan, {
@@ -188,6 +171,8 @@ export default class Draggable extends Component {
   }
 
   isDropAreaY1(gesture) {
+    let tmpFrom = "",
+      tmpTo = "";
     for (let i = 0; i < 24; ++i) {
       if (
         this.isDropArea1x(gesture) &&
@@ -196,8 +181,12 @@ export default class Draggable extends Component {
       ) {
         this.inputValueUpdate(this.state.message, "insatsType");
         this.inputValueUpdate(this.state.weekStart, "date");
-        this.inputValueUpdate(i + ":00", "fromTime");
-        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        if (i < 10) {
+          tmpFrom = "0";
+          tmpTo = "0";
+        }
+        this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
+        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -205,6 +194,8 @@ export default class Draggable extends Component {
   }
 
   isDropAreaY2(gesture) {
+    let tmpFrom = "",
+      tmpTo = "";
     for (let i = 0; i < 24; ++i) {
       if (
         this.isDropArea2x(gesture) &&
@@ -213,8 +204,12 @@ export default class Draggable extends Component {
       ) {
         this.inputValueUpdate(this.state.message, "insatsType");
         this.inputValueUpdate(this.aday2, "date");
-        this.inputValueUpdate(i + ":00", "fromTime");
-        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        if (i < 10) {
+          tmpFrom = "0";
+          tmpTo = "0";
+        }
+        this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
+        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -222,6 +217,8 @@ export default class Draggable extends Component {
   }
 
   isDropAreaY3(gesture) {
+    let tmpFrom = "",
+      tmpTo = "";
     for (let i = 0; i < 24; ++i) {
       if (
         this.isDropArea3x(gesture) &&
@@ -230,8 +227,12 @@ export default class Draggable extends Component {
       ) {
         this.inputValueUpdate(this.state.message, "insatsType");
         this.inputValueUpdate(this.aday3, "date");
-        this.inputValueUpdate(i + ":00", "fromTime");
-        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        if (i < 10) {
+          tmpFrom = "0";
+          tmpTo = "0";
+        }
+        this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
+        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -239,6 +240,8 @@ export default class Draggable extends Component {
   }
 
   isDropAreaY4(gesture) {
+    let tmpFrom = "",
+      tmpTo = "";
     for (let i = 0; i < 24; ++i) {
       if (
         this.isDropArea4x(gesture) &&
@@ -247,8 +250,12 @@ export default class Draggable extends Component {
       ) {
         this.inputValueUpdate(this.state.message, "insatsType");
         this.inputValueUpdate(this.aday4, "date");
-        this.inputValueUpdate(i + ":00", "fromTime");
-        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        if (i < 10) {
+          tmpFrom = "0";
+          tmpTo = "0";
+        }
+        this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
+        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -256,6 +263,8 @@ export default class Draggable extends Component {
   }
 
   isDropAreaY5(gesture) {
+    let tmpFrom = "",
+      tmpTo = "";
     for (let i = 0; i < 24; ++i) {
       if (
         this.isDropArea5x(gesture) &&
@@ -264,8 +273,12 @@ export default class Draggable extends Component {
       ) {
         this.inputValueUpdate(this.state.message, "insatsType");
         this.inputValueUpdate(this.aday5, "date");
-        this.inputValueUpdate(i + ":00", "fromTime");
-        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        if (i < 10) {
+          tmpFrom = "0";
+          tmpTo = "0";
+        }
+        this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
+        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -273,6 +286,8 @@ export default class Draggable extends Component {
   }
 
   isDropAreaY6(gesture) {
+    let tmpFrom = "",
+      tmpTo = "";
     for (let i = 0; i < 24; ++i) {
       if (
         this.isDropArea6x(gesture) &&
@@ -281,8 +296,12 @@ export default class Draggable extends Component {
       ) {
         this.inputValueUpdate(this.state.message, "insatsType");
         this.inputValueUpdate(this.aday6, "date");
-        this.inputValueUpdate(i + ":00", "fromTime");
-        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        if (i < 10) {
+          tmpFrom = "0";
+          tmpTo = "0";
+        }
+        this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
+        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -290,6 +309,8 @@ export default class Draggable extends Component {
   }
 
   isDropAreaY7(gesture) {
+    let tmpFrom = "",
+      tmpTo = "";
     for (let i = 0; i < 24; ++i) {
       if (
         this.isDropArea7x(gesture) &&
@@ -298,8 +319,12 @@ export default class Draggable extends Component {
       ) {
         this.inputValueUpdate(this.state.message, "insatsType");
         this.inputValueUpdate(this.aday7, "date");
-        this.inputValueUpdate(i + ":00", "fromTime");
-        this.inputValueUpdate(i + 1 + ":00", "toTime");
+        if (i < 10) {
+          tmpFrom = "0";
+          tmpTo = "0";
+        }
+        this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
+        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
