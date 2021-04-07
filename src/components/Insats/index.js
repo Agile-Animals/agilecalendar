@@ -68,8 +68,6 @@ export default class Insats extends Component {
             }
           }
         }
-        console.log("\nCurrent layout:\n");
-        console.log(this.state.layouts);
 
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
