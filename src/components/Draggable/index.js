@@ -123,12 +123,18 @@ export default class Draggable extends Component {
           .add(6, "day")
           .format("YYYY-MM-DD");
         if (this.isDropAreaY1(gesture)) {
-        } else if (this.isDropAreaY2(gesture)) {
-        } else if (this.isDropAreaY3(gesture)) {
-        } else if (this.isDropAreaY4(gesture)) {
-        } else if (this.isDropAreaY5(gesture)) {
-        } else if (this.isDropAreaY6(gesture)) {
-        } else if (this.isDropAreaY7(gesture)) {
+        }
+        if (this.isDropAreaY2(gesture)) {
+        }
+        if (this.isDropAreaY3(gesture)) {
+        }
+        if (this.isDropAreaY4(gesture)) {
+        }
+        if (this.isDropAreaY5(gesture)) {
+        }
+        if (this.isDropAreaY6(gesture)) {
+        }
+        if (this.isDropAreaY7(gesture)) {
         }
         {
           Animated.sequence([
@@ -167,7 +173,9 @@ export default class Draggable extends Component {
   isDropAreaY1(gesture) {
     let tmpFrom = "",
       tmpTo = "";
+    let tmpInt = 0;
     for (let i = 0; i < 24; ++i) {
+      tmpInt = i + 1;
       if (
         this.isDropArea1x(gesture) &&
         gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
@@ -178,9 +186,12 @@ export default class Draggable extends Component {
         if (i < 10) {
           tmpFrom = "0";
           tmpTo = "0";
+          if (i == 9) {
+            tmpTo = "";
+          }
         }
         this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
-        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
+        this.inputValueUpdate(tmpTo + tmpInt + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -190,7 +201,9 @@ export default class Draggable extends Component {
   isDropAreaY2(gesture) {
     let tmpFrom = "",
       tmpTo = "";
+    let tmpInt = 0;
     for (let i = 0; i < 24; ++i) {
+      tmpInt = i + 1;
       if (
         this.isDropArea2x(gesture) &&
         gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
@@ -201,9 +214,12 @@ export default class Draggable extends Component {
         if (i < 10) {
           tmpFrom = "0";
           tmpTo = "0";
+          if (i == 9) {
+            tmpTo = "";
+          }
         }
         this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
-        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
+        this.inputValueUpdate(tmpTo + tmpInt + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -213,7 +229,9 @@ export default class Draggable extends Component {
   isDropAreaY3(gesture) {
     let tmpFrom = "",
       tmpTo = "";
+    let tmpInt = 0;
     for (let i = 0; i < 24; ++i) {
+      tmpInt = i + 1;
       if (
         this.isDropArea3x(gesture) &&
         gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
@@ -224,9 +242,12 @@ export default class Draggable extends Component {
         if (i < 10) {
           tmpFrom = "0";
           tmpTo = "0";
+          if (i == 9) {
+            tmpTo = "";
+          }
         }
         this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
-        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
+        this.inputValueUpdate(tmpTo + tmpInt + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -236,7 +257,9 @@ export default class Draggable extends Component {
   isDropAreaY4(gesture) {
     let tmpFrom = "",
       tmpTo = "";
+    let tmpInt = 0;
     for (let i = 0; i < 24; ++i) {
+      tmpInt = i + 1;
       if (
         this.isDropArea4x(gesture) &&
         gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
@@ -247,9 +270,12 @@ export default class Draggable extends Component {
         if (i < 10) {
           tmpFrom = "0";
           tmpTo = "0";
+          if (i == 9) {
+            tmpTo = "";
+          }
         }
         this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
-        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
+        this.inputValueUpdate(tmpTo + tmpInt + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -259,7 +285,9 @@ export default class Draggable extends Component {
   isDropAreaY5(gesture) {
     let tmpFrom = "",
       tmpTo = "";
+    let tmpInt = 0;
     for (let i = 0; i < 24; ++i) {
+      tmpInt = i + 1;
       if (
         this.isDropArea5x(gesture) &&
         gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
@@ -270,9 +298,12 @@ export default class Draggable extends Component {
         if (i < 10) {
           tmpFrom = "0";
           tmpTo = "0";
+          if (i == 9) {
+            tmpTo = "";
+          }
         }
         this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
-        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
+        this.inputValueUpdate(tmpTo + tmpInt + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -282,7 +313,9 @@ export default class Draggable extends Component {
   isDropAreaY6(gesture) {
     let tmpFrom = "",
       tmpTo = "";
+    let tmpInt = 0;
     for (let i = 0; i < 24; ++i) {
+      tmpInt = i + 1;
       if (
         this.isDropArea6x(gesture) &&
         gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
@@ -293,9 +326,12 @@ export default class Draggable extends Component {
         if (i < 10) {
           tmpFrom = "0";
           tmpTo = "0";
+          if (i == 9) {
+            tmpTo = "";
+          }
         }
         this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
-        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
+        this.inputValueUpdate(tmpTo + tmpInt + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -305,7 +341,9 @@ export default class Draggable extends Component {
   isDropAreaY7(gesture) {
     let tmpFrom = "",
       tmpTo = "";
+    let tmpInt = 0;
     for (let i = 0; i < 24; ++i) {
+      tmpInt = i + 1;
       if (
         this.isDropArea7x(gesture) &&
         gesture.moveY + this.state.scrollOfsetY > this.state.gestY[i].min &&
@@ -316,9 +354,12 @@ export default class Draggable extends Component {
         if (i < 10) {
           tmpFrom = "0";
           tmpTo = "0";
+          if (i == 9) {
+            tmpTo = "";
+          }
         }
         this.inputValueUpdate(tmpFrom + i + ":00", "fromTime");
-        this.inputValueUpdate(tmpTo + i + 1 + ":00", "toTime");
+        this.inputValueUpdate(tmpTo + tmpInt + ":00", "toTime");
         this.storeInsats();
         i = 25;
       }
@@ -328,11 +369,9 @@ export default class Draggable extends Component {
   isDropArea1x(gesture) {
     return gesture.moveX > 140 && gesture.moveX < 280;
   }
-
   isDropArea2x(gesture) {
     return gesture.moveX < 420 && gesture.moveX > 280;
   }
-
   isDropArea3x(gesture) {
     return gesture.moveX < 560 && gesture.moveX > 420;
   }

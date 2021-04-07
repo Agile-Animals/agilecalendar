@@ -85,7 +85,7 @@ export default class HomeScreen extends Component {
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       scrollOfsetY: "",
-      layouts: [{}],
+      layouts: [],
     };
   }
 
@@ -179,14 +179,31 @@ export default class HomeScreen extends Component {
     this.state.layouts = [];
   }
 
-  getLayout(layout, dayIndex, key) {
-    // this.state.layouts.push({ layout });
+  getLayout(
+    layout,
+    dayIndex,
+    key,
+    boende,
+    fromTime,
+    toTime,
+    date,
+    helperName,
+    insatsType,
+    freeText
+  ) {
     this.state.layouts.push({
       height: layout.height,
       width: layout.width,
       x: layout.x + 140 * dayIndex,
       y: layout.y,
       key: key,
+      boende: boende,
+      fromTime: fromTime,
+      toTime: toTime,
+      date: date,
+      helperName: helperName,
+      insatsType: insatsType,
+      freeText: freeText,
     });
   }
 
@@ -203,15 +220,23 @@ export default class HomeScreen extends Component {
                 this.getLayout(
                   event.nativeEvent.layout,
                   dayIndex,
-                  this.state.insatser[i].key
+                  this.state.insatser[i].key,
+                  this.state.insatser[i].boende,
+                  this.state.insatser[i].fromTime,
+                  this.state.insatser[i].toTime,
+                  this.state.insatser[i].date,
+                  this.state.insatser[i].helperName,
+                  this.state.insatser[i].insatsType,
+                  this.state.insatser[i].freeText
                 );
               }}
               key={this.state.insatser[i].key}
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
-                id={this.state.insatser[i].key}
+                insats={this.state.insatser[i]}
                 navigation={this.props.navigation}
+                onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
               />
             </View>
@@ -231,6 +256,26 @@ export default class HomeScreen extends Component {
       scrollOfsetY: event.nativeEvent.contentOffset.y,
     });
   };
+
+  onSwap(key1, key2) {
+    let keyToSplice1 = 0,
+      keyToSplice2 = 0;
+    for (let i = 0; i < this.state.layouts.length; i++) {
+      if (key1 == this.state.layouts[i].key) {
+        keyToSplice1 = i;
+      }
+      if (key2 == this.state.layouts[i].key) {
+        keyToSplice2 = i;
+      }
+    }
+    if (keyToSplice1 < keyToSplice2) {
+      this.state.layouts.splice(keyToSplice2, 1);
+      this.state.layouts.splice(keyToSplice1, 1);
+    } else {
+      this.state.layouts.splice(keyToSplice1, 1);
+      this.state.layouts.splice(keyToSplice2, 1);
+    }
+  }
 
   render() {
     const {
