@@ -15,6 +15,7 @@ export default class Insats extends Component {
       insats: props.insats,
       navigation: props.navigation,
       layouts: props.layouts,
+      scrollOfsetY: props.scrollOfsetY,
     };
 
     this.panResponder = PanResponder.create({
@@ -29,45 +30,63 @@ export default class Insats extends Component {
           this.state.navigation.navigate("InsatsDetailScreen", {
             insatskey: this.state.insats.key,
           });
-        }
-        if (
+        } else if (
           gesture.x0 + gesture.dx >= 1120 &&
           gesture.x0 + gesture.dx <= 1280 &&
           gesture.y0 + gesture.dy >= 220 &&
           gesture.y0 + gesture.dy <= 1200
         ) {
           this.deleteInsats();
-        }
-        for (let i = 0; i < this.state.layouts.length; ++i) {
-          if (
-            gesture.x0 + gesture.dx >= this.state.layouts[i].x &&
-            gesture.x0 + gesture.dx <=
-              this.state.layouts[i].x + this.state.layouts[i].width &&
-            gesture.y0 + gesture.dy >= this.state.layouts[i].y + 220 &&
-            gesture.y0 + gesture.dy <=
+        } else {
+          for (let i = 0; i < this.state.layouts.length; ++i) {
+            console.log("Check the values carefully...\n");
+            console.log(gesture.x0 + gesture.dx + " >= ");
+            console.log(this.state.layouts[i].x);
+            console.log(gesture.x0 + gesture.dx + "<=");
+            console.log(this.state.layouts[i].x + this.state.layouts[i].width);
+            console.log(gesture.y0 + gesture.dy + ">=");
+            console.log(this.state.layouts[i].y + 220);
+            console.log(gesture.y0 + gesture.dy + "<=");
+            console.log(
               this.state.layouts[i].y + this.state.layouts[i].height + 220
-          ) {
-            if (this.state.insats.key != this.state.layouts[i].key) {
-              let tmpFrom = this.state.insats.fromTime;
-              let tmpTo = this.state.insats.toTime;
-              let tmpDate = this.state.insats.date;
-              this.updateInsats(
-                this.state.insats,
-                this.state.layouts[i].fromTime,
-                this.state.layouts[i].toTime,
-                this.state.layouts[i].date
-              );
-              this.updateInsats(this.state.layouts[i], tmpFrom, tmpTo, tmpDate);
-              this.props.onSwap(
-                this.state.insats.key,
-                this.state.layouts[i].key
-              );
-              i = this.state.layouts.length + 2;
-            } else {
-              i = this.state.layouts.length + 2;
+            );
+            if (
+              gesture.x0 + gesture.dx >= this.state.layouts[i].x &&
+              gesture.x0 + gesture.dx <=
+                this.state.layouts[i].x + this.state.layouts[i].width &&
+              gesture.y0 + gesture.dy + this.state.scrollOfsetY >=
+                this.state.layouts[i].y + 220 &&
+              gesture.y0 + gesture.dy + this.state.scrollOfsetY <=
+                this.state.layouts[i].y + this.state.layouts[i].height + 220
+            ) {
+              if (this.state.insats.key != this.state.layouts[i].key) {
+                let tmpFrom = this.state.insats.fromTime;
+                let tmpTo = this.state.insats.toTime;
+                let tmpDate = this.state.insats.date;
+                this.updateInsats(
+                  this.state.insats,
+                  this.state.layouts[i].fromTime,
+                  this.state.layouts[i].toTime,
+                  this.state.layouts[i].date
+                );
+                this.updateInsats(
+                  this.state.layouts[i],
+                  tmpFrom,
+                  tmpTo,
+                  tmpDate
+                );
+                this.props.onSwap(
+                  this.state.insats.key,
+                  this.state.layouts[i].key
+                );
+                i = this.state.layouts.length + 2;
+              } else {
+                i = this.state.layouts.length + 2;
+              }
             }
           }
         }
+
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
