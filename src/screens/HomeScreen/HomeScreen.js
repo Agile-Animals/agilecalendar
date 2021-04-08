@@ -223,6 +223,7 @@ export default class HomeScreen extends Component {
         ) {
           return (
             <View
+              style={{color: "red"}}
               onLayout={(event) => {
                 this.getLayout(
                   event.nativeEvent.layout,
@@ -306,7 +307,7 @@ export default class HomeScreen extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
+          <ActivityIndicator size="large" color="red"  />
         </View>
       );
     }
@@ -338,7 +339,7 @@ export default class HomeScreen extends Component {
             })}
           </ImageBackground>
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title={
                   "Vecka " +
@@ -357,7 +358,7 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title={
                   "Vecka " +
@@ -370,7 +371,7 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title="Logga Ut"
                 onPress={() => this.logOut()}
@@ -393,7 +394,7 @@ export default class HomeScreen extends Component {
 
         <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140 , backgroundColor: "red"}}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={index}>
@@ -403,19 +404,19 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, color:"green" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, today, index, 1);
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, color:"green" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday2, index, 2);
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, color:"red" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday3, index, 3);
               })}
@@ -439,13 +440,13 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={ styles.test }>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday7, index, 7);
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, color:"green" }}>
               <Text
                 onLayout={(event) => {
                   this.getLayoutHeight(event.nativeEvent.layout);
@@ -467,6 +468,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: "rgba(49, 118, 197, 1.0)",
+    
   },
   header: {
     alignItems: "center",
@@ -474,7 +476,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   listContainer: {
-    backgroundColor: "black",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
     width: "100%",
     flex: 1,
     flexDirection: "row",
@@ -482,7 +484,7 @@ const styles = StyleSheet.create({
   },
   item: {
     height: 43.5,
-    backgroundColor: "#ccc",
+    backgroundColor: "red",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -490,7 +492,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "black",
+    borderColor: "rgba(49, 118, 197, 1.0)",
     borderWidth: 2,
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
@@ -500,7 +502,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "black",
+    borderColor: "rgba(49, 118, 197, 1.0)",
     borderWidth: 2,
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
@@ -532,5 +534,12 @@ const styles = StyleSheet.create({
   headItems: {
     width: 140,
     alignSelf: "center",
+    
   },
+
+  test: {
+    width: 140,
+    color: "red",
+    
+  }
 });

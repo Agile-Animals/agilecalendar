@@ -405,7 +405,7 @@ export default class Draggable extends Component {
   }
 
   render() {
-    return <View>{this.renderDraggable()}</View>;
+    return <View style={styles.test}>{this.renderDraggable()}</View>;
   }
 
   renderDraggable() {
@@ -435,5 +435,13 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "center",
     alignContent: "center",
+    borderStartColor: "red",
+    backgroundColor: "#ff8c00",
+  },
+  test: {
+    backgroundColor: "#ff8c00",
+    
+   
+
   },
 });
