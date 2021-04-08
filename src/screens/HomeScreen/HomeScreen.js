@@ -209,7 +209,9 @@ export default class HomeScreen extends Component {
   }
 
   getLayoutHeight(layout) {
-    this.state.insatsHeight = layout.height;
+    this.setState({
+      insatsHeight: layout.height,
+    });
   }
 
   renderDays(time, day, index, dayIndex) {
@@ -290,6 +292,7 @@ export default class HomeScreen extends Component {
       insatsTypes,
       weekStart,
       layouts,
+      insatsHeight,
     } = this.state;
 
     var today = moment(this.state.weekStart).format("YYYY-MM-DD");
@@ -393,13 +396,7 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return (
-                  <Text
-                    onLayout={(event) => {
-                      this.getLayoutHeight(event.nativeEvent.layout);
-                    }}
-                    style={styles.instatsList}
-                    key={index}
-                  >
+                  <Text style={styles.instatsList} key={index}>
                     {item}
                   </Text>
                 );
@@ -446,6 +443,17 @@ export default class HomeScreen extends Component {
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday7, index, 7);
               })}
+            </View>
+
+            <View style={{ width: 140 }}>
+              <Text
+                onLayout={(event) => {
+                  this.getLayoutHeight(event.nativeEvent.layout);
+                }}
+                style={styles.instatsList}
+              >
+                Soptunna
+              </Text>
             </View>
           </View>
         </ScrollView>
