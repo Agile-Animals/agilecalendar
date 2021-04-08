@@ -27,72 +27,103 @@ export default class Draggable extends Component {
       weekStart: props.weekStart,
       insatser: props.insatser,
       scrollOfsetY: props.scrollOfsetY,
+      insatsHeight: props.insatsHeight,
       gestY: [
-        { min: 220 + 43.33333206176758 * 0, max: 220 + 43.33333206176758 * 1 },
-        { min: 220 + 43.33333206176758 * 1, max: 220 + 43.33333206176758 * 2 },
-        { min: 220 + 43.33333206176758 * 2, max: 220 + 43.33333206176758 * 3 },
-        { min: 220 + 43.33333206176758 * 3, max: 220 + 43.33333206176758 * 4 },
-        { min: 220 + 43.33333206176758 * 4, max: 220 + 43.33333206176758 * 5 },
-        { min: 220 + 43.33333206176758 * 5, max: 220 + 43.33333206176758 * 6 },
-        { min: 220 + 43.33333206176758 * 6, max: 220 + 43.33333206176758 * 7 },
-        { min: 220 + 43.33333206176758 * 7, max: 220 + 43.33333206176758 * 8 },
-        { min: 220 + 43.33333206176758 * 8, max: 220 + 43.33333206176758 * 9 },
-        { min: 220 + 43.33333206176758 * 9, max: 220 + 43.33333206176758 * 10 },
         {
-          min: 220 + 43.33333206176758 * 10,
-          max: 220 + 43.33333206176758 * 11,
+          min: 220 + props.insatsHeight * 0,
+          max: 220 + props.insatsHeight * 1,
         },
         {
-          min: 220 + 43.33333206176758 * 11,
-          max: 220 + 43.33333206176758 * 12,
+          min: 220 + props.insatsHeight * 1,
+          max: 220 + props.insatsHeight * 2,
         },
         {
-          min: 220 + 43.33333206176758 * 12,
-          max: 220 + 43.33333206176758 * 13,
+          min: 220 + props.insatsHeight * 2,
+          max: 220 + props.insatsHeight * 3,
         },
         {
-          min: 220 + 43.33333206176758 * 13,
-          max: 220 + 43.33333206176758 * 14,
+          min: 220 + props.insatsHeight * 3,
+          max: 220 + props.insatsHeight * 4,
         },
         {
-          min: 220 + 43.33333206176758 * 14,
-          max: 220 + 43.33333206176758 * 15,
+          min: 220 + props.insatsHeight * 4,
+          max: 220 + props.insatsHeight * 5,
         },
         {
-          min: 220 + 43.33333206176758 * 15,
-          max: 220 + 43.33333206176758 * 16,
+          min: 220 + props.insatsHeight * 5,
+          max: 220 + props.insatsHeight * 6,
         },
         {
-          min: 220 + 43.33333206176758 * 16,
-          max: 220 + 43.33333206176758 * 17,
+          min: 220 + props.insatsHeight * 6,
+          max: 220 + props.insatsHeight * 7,
         },
         {
-          min: 220 + 43.33333206176758 * 17,
-          max: 220 + 43.33333206176758 * 18,
+          min: 220 + props.insatsHeight * 7,
+          max: 220 + props.insatsHeight * 8,
         },
         {
-          min: 220 + 43.33333206176758 * 18,
-          max: 220 + 43.33333206176758 * 19,
+          min: 220 + props.insatsHeight * 8,
+          max: 220 + props.insatsHeight * 9,
         },
         {
-          min: 220 + 43.33333206176758 * 19,
-          max: 220 + 43.33333206176758 * 20,
+          min: 220 + props.insatsHeight * 9,
+          max: 220 + props.insatsHeight * 10,
         },
         {
-          min: 220 + 43.33333206176758 * 20,
-          max: 220 + 43.33333206176758 * 21,
+          min: 220 + props.insatsHeight * 10,
+          max: 220 + props.insatsHeight * 11,
         },
         {
-          min: 220 + 43.33333206176758 * 21,
-          max: 220 + 43.33333206176758 * 22,
+          min: 220 + props.insatsHeight * 11,
+          max: 220 + props.insatsHeight * 12,
         },
         {
-          min: 220 + 43.33333206176758 * 22,
-          max: 220 + 43.33333206176758 * 23,
+          min: 220 + props.insatsHeight * 12,
+          max: 220 + props.insatsHeight * 13,
         },
         {
-          min: 220 + 43.33333206176758 * 23,
-          max: 220 + 43.33333206176758 * 24,
+          min: 220 + props.insatsHeight * 13,
+          max: 220 + props.insatsHeight * 14,
+        },
+        {
+          min: 220 + props.insatsHeight * 14,
+          max: 220 + props.insatsHeight * 15,
+        },
+        {
+          min: 220 + props.insatsHeight * 15,
+          max: 220 + props.insatsHeight * 16,
+        },
+        {
+          min: 220 + props.insatsHeight * 16,
+          max: 220 + props.insatsHeight * 17,
+        },
+        {
+          min: 220 + props.insatsHeight * 17,
+          max: 220 + props.insatsHeight * 18,
+        },
+        {
+          min: 220 + props.insatsHeight * 18,
+          max: 220 + props.insatsHeight * 19,
+        },
+        {
+          min: 220 + props.insatsHeight * 19,
+          max: 220 + props.insatsHeight * 20,
+        },
+        {
+          min: 220 + props.insatsHeight * 20,
+          max: 220 + props.insatsHeight * 21,
+        },
+        {
+          min: 220 + props.insatsHeight * 21,
+          max: 220 + props.insatsHeight * 22,
+        },
+        {
+          min: 220 + props.insatsHeight * 22,
+          max: 220 + props.insatsHeight * 23,
+        },
+        {
+          min: 220 + props.insatsHeight * 23,
+          max: 220 + props.insatsHeight * 24,
         },
       ],
     };
@@ -122,11 +153,6 @@ export default class Draggable extends Component {
         this.aday7 = moment(this.state.weekStart)
           .add(6, "day")
           .format("YYYY-MM-DD");
-        Alert.alert(
-          JSON.stringify(gesture.moveY) +
-            " " +
-            JSON.stringify(this.state.scrollOfsetY)
-        );
         if (this.isDropAreaY1(gesture)) {
         }
         if (this.isDropAreaY2(gesture)) {
@@ -159,6 +185,7 @@ export default class Draggable extends Component {
     if (nextProps.weekStart != this.props.weekStart) return true;
     if (nextProps.insatser != this.props.insatser) return true;
     if (nextProps.scrollOfsetY != this.props.scrollOfsetY) return true;
+    if (nextProps.insatsHeight != this.props.insatsHeight) return true;
     return true;
   }
 
@@ -172,6 +199,9 @@ export default class Draggable extends Component {
     }
     if (this.props.scrollOfsetY !== prevProps.scrollOfsetY) {
       this.setState({ scrollOfsetY: this.props.scrollOfsetY });
+    }
+    if (this.props.insatsHeight !== prevProps.insatsHeight) {
+      this.setState({ insatsHeight: this.props.insatsHeight });
     }
   }
 

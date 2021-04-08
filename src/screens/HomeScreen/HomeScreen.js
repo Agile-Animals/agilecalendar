@@ -86,6 +86,7 @@ export default class HomeScreen extends Component {
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       scrollOfsetY: "",
       layouts: [],
+      insatsHeight: 0,
     };
   }
 
@@ -207,6 +208,10 @@ export default class HomeScreen extends Component {
     });
   }
 
+  getLayoutHeight(layout) {
+    this.state.insatsHeight = layout.height;
+  }
+
   renderDays(time, day, index, dayIndex) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -323,6 +328,7 @@ export default class HomeScreen extends Component {
                     weekStart={this.state.weekStart}
                     insatser={this.state.insatser}
                     scrollOfsetY={this.state.scrollOfsetY}
+                    insatsHeight={this.state.insatsHeight}
                   />
                 </View>
               ) : null;
@@ -387,7 +393,13 @@ export default class HomeScreen extends Component {
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return (
-                  <Text style={styles.instatsList} key={index}>
+                  <Text
+                    onLayout={(event) => {
+                      this.getLayoutHeight(event.nativeEvent.layout);
+                    }}
+                    style={styles.instatsList}
+                    key={index}
+                  >
                     {item}
                   </Text>
                 );
