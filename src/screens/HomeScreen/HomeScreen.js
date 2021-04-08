@@ -305,12 +305,6 @@ export default class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text category="h2" style={{ fontSize: 20 }}>
-            Vecka {moment(this.state.weekStart).format("WW")}
-          </Text>
-        </View>
-
         <View
           style={{
             flexDirection: "row",
@@ -346,15 +340,13 @@ export default class HomeScreen extends Component {
               />
             </View>
           </View>
-          <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
-              <Button
-                title="Logga Ut"
-                onPress={() => this.logOut()}
-                type="outline"
-              />
-            </View>
+
+          <View style={styles.header}>
+            <Text category="h2" style={{ fontSize: 20 }}>
+              Vecka {moment(this.state.weekStart).format("WW")}
+            </Text>
           </View>
+
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "black" }}>
               <Button
@@ -367,11 +359,12 @@ export default class HomeScreen extends Component {
               />
             </View>
           </View>
+
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "black" }}>
               <Button
-                title="DagVy"
-                onPress={() => this.props.navigation.navigate("DayScreen")}
+                title="Logga Ut"
+                onPress={() => this.logOut()}
                 type="outline"
               />
             </View>
@@ -418,21 +411,25 @@ export default class HomeScreen extends Component {
                 return this.renderDays(item, aday3, index, 3);
               })}
             </View>
+
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday4, index, 4);
               })}
             </View>
+
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday5, index, 5);
               })}
             </View>
+
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday6, index, 6);
               })}
             </View>
+
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday7, index, 7);
@@ -491,13 +488,14 @@ const styles = StyleSheet.create({
     zIndex: -2,
   },
   moln: {
+    marginTop: 43.33,
     flexDirection: "row",
     resizeMode: "cover",
     justifyContent: "center",
     alignItems: "center",
     flexWrap: "wrap",
-    height: 100,
-    width: 220,
+    height: 130,
+    width: 320,
     zIndex: 10,
   },
   button: {

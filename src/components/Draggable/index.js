@@ -122,6 +122,11 @@ export default class Draggable extends Component {
         this.aday7 = moment(this.state.weekStart)
           .add(6, "day")
           .format("YYYY-MM-DD");
+        Alert.alert(
+          JSON.stringify(gesture.moveY) +
+            " " +
+            JSON.stringify(this.state.scrollOfsetY)
+        );
         if (this.isDropAreaY1(gesture)) {
         }
         if (this.isDropAreaY2(gesture)) {
@@ -462,9 +467,12 @@ export default class Draggable extends Component {
 
 let styles = StyleSheet.create({
   circle: {
+    height: 30,
     borderRadius: 12,
     marginTop: 1,
     marginBottom: 1,
     borderWidth: 1,
+    justifyContent: "center",
+    alignContent: "center",
   },
 });

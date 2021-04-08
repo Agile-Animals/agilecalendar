@@ -68,7 +68,6 @@ export default class Insats extends Component {
             }
           }
         }
-
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
