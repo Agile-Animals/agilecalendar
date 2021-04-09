@@ -101,9 +101,15 @@ export default class HomeScreen extends Component {
     this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
   }
 
+<<<<<<< HEAD
   componentWillUnmount() {
     this.hi();
   }
+=======
+  // componentWillUnmount() {
+  //   this.unsubscribe();
+  // }
+>>>>>>> 3914643a410f56a0797f82c3b09e1878731e25bd
 
   getCollection = (querySnapshot) => {
     const insatser = [];
@@ -230,7 +236,7 @@ export default class HomeScreen extends Component {
         ) {
           return (
             <View
-              style={{color: "red"}}
+              style={{ color: "red" }}
               onLayout={(event) => {
                 this.getLayout(
                   event.nativeEvent.layout,
@@ -244,10 +250,9 @@ export default class HomeScreen extends Component {
                   this.state.insatser[i].insatsType,
                   this.state.insatser[i].freeText
                 );
-                
               }}
               key={this.state.insatser[i].key}
-              style={{color: "red"}}
+              style={{ color: "red" }}
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
@@ -256,7 +261,7 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
-                style={{color: "red"}}
+                style={{ color: "red" }}
               />
             </View>
           );
@@ -318,7 +323,7 @@ export default class HomeScreen extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="red"  />
+          <ActivityIndicator size="large" color="red" />
         </View>
       );
     }
@@ -416,7 +421,7 @@ export default class HomeScreen extends Component {
 
         <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            <View style={{ width: 140 , backgroundColor: "#ff8c00"}}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={index}>
@@ -450,7 +455,7 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00"}}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday5, index, 5);
               })}
@@ -468,7 +473,7 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140}}>
+            <View style={{ width: 140 }}>
               <Text
                 onLayout={(event) => {
                   this.getLayoutHeight(event.nativeEvent.layout);
@@ -490,7 +495,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: "rgba(49, 118, 197, 1.0)",
-    
   },
   header: {
     alignItems: "center",
@@ -510,7 +514,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    color:"red",
+    color: "red",
   },
   instatsList: {
     paddingTop: 10,
@@ -564,14 +568,12 @@ const styles = StyleSheet.create({
     width: 140,
     alignSelf: "center",
     //backgroundColor: "white",
-    
   },
 
   test: {
     width: 140,
     color: "red",
     backgroundColor: "rgba(49, 118, 197, 1.0)",
-    
   },
   preloader: {
     backgroundColor: "red",
