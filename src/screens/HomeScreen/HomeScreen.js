@@ -101,9 +101,9 @@ export default class HomeScreen extends Component {
     this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
   }
 
-  // componentWillUnmount() {
-  //   this.unsubscribe();
-  // }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
   getCollection = (querySnapshot) => {
     const insatser = [];
