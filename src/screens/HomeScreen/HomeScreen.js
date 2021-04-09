@@ -70,16 +70,23 @@ export default class HomeScreen extends Component {
         "23:00",
       ],
       insatsTypes: [
-        "Städa",
-        "Tvätta",
+        "Städning",
+        "Tvätt",
         "Matlagning",
-        "Handla",
-        "Personalbesök",
+        "Inköp",
+        "Ekonomi",
         "Aktivitet",
-        "Dusch",
-        "Fritext A",
-        "Fritext B",
-        "Fritext C",
+        "Dusch/bad",
+        "Toalettbesök",
+        "Uppsnyggning",
+        "Matsituation",
+        "Vila och sömn",
+        "På-o avklädning",
+        "Tillsyn",
+        "Förflyttning",
+        "Ass vid arbete",
+        "Besök hos annan vårdgivare",
+        "Bemötande",
       ],
       today: moment().format("YYYY-MM-DD"),
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
@@ -237,8 +244,10 @@ export default class HomeScreen extends Component {
                   this.state.insatser[i].insatsType,
                   this.state.insatser[i].freeText
                 );
+                
               }}
               key={this.state.insatser[i].key}
+              style={{color: "red"}}
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
@@ -247,6 +256,7 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
+                style={{color: "red"}}
               />
             </View>
           );
@@ -374,8 +384,19 @@ export default class HomeScreen extends Component {
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
+                // title="DagVy"
+                // onPress={() => this.props.navigation.navigate("DayScreen")}
                 title="Logga Ut"
                 onPress={() => this.logOut()}
+                type="outline"
+              />
+            </View>
+          </View>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
+              <Button
+                title="DagVy"
+                onPress={() => this.props.navigation.navigate("DayScreen")}
                 type="outline"
               />
             </View>
@@ -395,7 +416,7 @@ export default class HomeScreen extends Component {
 
         <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            <View style={{ width: 140 , backgroundColor: "red"}}>
+            <View style={{ width: 140 , backgroundColor: "#ff8c00"}}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={index}>
@@ -405,49 +426,49 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, color:"green" }}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, today, index, 1);
               })}
             </View>
 
-            <View style={{ width: 140, color:"green" }}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday2, index, 2);
               })}
             </View>
 
-            <View style={{ width: 140, color:"red" }}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday3, index, 3);
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday4, index, 4);
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00"}}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday5, index, 5);
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday6, index, 6);
               })}
             </View>
 
-            <View style={ styles.test }>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday7, index, 7);
               })}
             </View>
 
-            <View style={{ width: 140, color:"green" }}>
+            <View style={{ width: 140}}>
               <Text
                 onLayout={(event) => {
                   this.getLayoutHeight(event.nativeEvent.layout);
@@ -473,8 +494,8 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    padding: 20,
-    paddingTop: 30,
+    padding: 3,
+    paddingTop: 50,
   },
   listContainer: {
     backgroundColor: "rgba(49, 118, 197, 1.0)",
@@ -482,12 +503,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
+    color: "red",
   },
   item: {
     height: 43.5,
-    backgroundColor: "red",
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
+    color:"red",
   },
   instatsList: {
     paddingTop: 10,
@@ -498,6 +521,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
     shadowRadius: 2,
+    // color: "red",
   },
   instatsListEmpty: {
     paddingTop: 10,
@@ -509,6 +533,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
+    color: "red",
   },
   moln: {
     marginTop: 43.33,
@@ -518,29 +543,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
     height: 130,
-    width: 320,
-    zIndex: 10,
+    width: 480,
+    zIndex: 20,
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   button: {
-    height: 50,
+    height: 40,
     width: 140,
     alignSelf: "flex-end",
+    fontSize: 5,
   },
   head: {
     height: 40,
     backgroundColor: "#f1f8ff",
     flexDirection: "row",
     marginTop: 5,
+    //backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   headItems: {
     width: 140,
     alignSelf: "center",
+    //backgroundColor: "white",
     
   },
 
   test: {
     width: 140,
     color: "red",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
     
-  }
+  },
+  preloader: {
+    backgroundColor: "red",
+  },
 });
