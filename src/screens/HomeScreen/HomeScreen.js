@@ -102,7 +102,7 @@ export default class HomeScreen extends Component {
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    this.hi();
   }
 
   getCollection = (querySnapshot) => {
