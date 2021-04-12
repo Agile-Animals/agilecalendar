@@ -49,43 +49,45 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Text style={styles.text}>Agile Calendar</Text>
+    <ScrollView>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
+          <Text style={styles.text}>Agile Calendar</Text>
 
-        <ScrollView onBlur={Keyboard.dismiss}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter your email"
-            placeholderTextColor="white"
-            value={email}
-            onChangeText={(email) => setEmail(email)}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+          <ScrollView onBlur={Keyboard.dismiss}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your email"
+              placeholderTextColor="white"
+              value={email}
+              onChangeText={(email) => setEmail(email)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-          <TextInput
-            style={styles.textInput}
-            placeholder="Enter your password"
-            placeholderTextColor="white"
-            value={password}
-            onChangeText={(password) => setPassword(password)}
-            secureTextEntry={true}
-          />
-          <TouchableOpacity style={styles.button} onPress={onSubmit}>
-            <Text style={styles.buttonText}>Logga in</Text>
-          </TouchableOpacity>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your password"
+              placeholderTextColor="white"
+              value={password}
+              onChangeText={(password) => setPassword(password)}
+              secureTextEntry={true}
+            />
+            <TouchableOpacity style={styles.button} onPress={onSubmit}>
+              <Text style={styles.buttonText}>Logga in</Text>
+            </TouchableOpacity>
 
-          <Text style={styles.inlineText}>Create account</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate("Sign Up")}
-          >
-            <Text style={styles.buttonText}>Skapa konto</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+            <Text style={styles.inlineText}>Create account</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("Sign Up")}
+            >
+              <Text style={styles.buttonText}>Skapa konto</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -126,7 +128,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
     textAlign: "center",
-    marginTop: "50%",
   },
   textInput: {
     width: 300,

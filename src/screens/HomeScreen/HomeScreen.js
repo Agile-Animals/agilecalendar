@@ -1,18 +1,5 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  ActivityIndicator,
-  Alert,
-  View,
-  Animated,
-  Pressable,
-  ImageBackground,
-  useWindowDimensions,
-  ScrollView,
-  PanResponder,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, ActivityIndicator, Alert, View, Animated, Pressable, ImageBackground, useWindowDimensions, ScrollView, PanResponder, TouchableOpacity,} from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
@@ -21,13 +8,14 @@ import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
 
+
 export default class HomeScreen extends Component {
   constructor(props) {
+    // this.firestoreRef = firebase
+    //   .firestore()
+    //   .collection("insatser")
+    //   .where("boende", "==", firebase.auth().currentUser.uid);
     super(props);
-    this.firestoreRef = firebase
-      .firestore()
-      .collection("insatser")
-      .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
       isLoading: true,
       insatser: [],
@@ -41,101 +29,108 @@ export default class HomeScreen extends Component {
         "Lördag",
         "Söndag",
       ],
-
       dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       days: ["", "", "", "", "", "", ""],
       times: [
-        { time: "00:00", id: "0" },
-        { time: "01:00", id: "1" },
-        { time: "02:00", id: "2" },
-        { time: "03:00", id: "3" },
-        { time: "04:00", id: "4" },
-        { time: "05:00", id: "5" },
-        { time: "06:00", id: "6" },
-        { time: "07:00", id: "7" },
-        { time: "08:00", id: "8" },
-        { time: "09:00", id: "9" },
-        { time: "10:00", id: "10" },
-        { time: "11:00", id: "11" },
-        { time: "12:00", id: "12" },
-        { time: "13:00", id: "13" },
-        { time: "14:00", id: "14" },
-        { time: "15:00", id: "15" },
-        { time: "16:00", id: "16" },
-        { time: "17:00", id: "17" },
-        { time: "18:00", id: "18" },
-        { time: "19:00", id: "19" },
-        { time: "20:00", id: "20" },
-        { time: "21:00", id: "21" },
-        { time: "22:00", id: "22" },
-        { time: "23:00", id: "23" },
+        "00:00",
+        "01:00",
+        "02:00",
+        "03:00",
+        "04:00",
+        "05:00",
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+        "18:00",
+        "19:00",
+        "20:00",
+        "21:00",
+        "22:00",
+        "23:00",
       ],
       insatsTypes: [
-        "Städa",
-        "Tvätta",
+        "Städning",
+        "Tvätt",
         "Matlagning",
-        "Handla",
-        "Personalbesök",
+        "Inköp",
+        "Ekonomi",
         "Aktivitet",
-        "Dusch",
-        "Fritext A",
-        "Fritext B",
-        "Fritext C",
+        "Dusch/bad",
+        "Toalettbesök",
+        "Uppsnyggning",
+        "Matsituation",
+        "Vila och sömn",
+        "På-o avklädning",
+        "Tillsyn",
+        "Förflyttning",
+        "Arbetsassistans",
+        "Besök hos vårdgivare",
+        "Bemötande",
       ],
       today: moment().format("YYYY-MM-DD"),
-
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       scrollOfsetY: "",
+      layouts: [],
+      insatsHeight: 0,
     };
   }
 
-  componentDidMount() {
-    this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
-  }
+  // componentDidMount() {
+  //   this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
+  // }
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
+  // componentWillUnmount() {
+  //   this.unsubscribe();
+  // }
 
-  getCollection = (querySnapshot) => {
-    const insatser = [];
-    querySnapshot.forEach((res) => {
-      const {
-        boende,
-        fromTime,
-        toTime,
-        date,
-        helperName,
-        insatsType,
-        freeText,
-      } = res.data();
-      insatser.push({
-        key: res.id,
-        boende,
-        fromTime,
-        toTime,
-        date,
-        helperName,
-        insatsType,
-        freeText,
-      });
-    });
-    this.setState({
-      insatser,
-      isLoading: false,
-    });
-  };
+  // getCollection = (querySnapshot) => {
+  //   const insatser = [];
+  //   querySnapshot.forEach((res) => {
+  //     const {
+  //       boende,
+  //       fromTime,
+  //       toTime,
+  //       date,
+  //       helperName,
+  //       insatsType,
+  //       freeText,
+  //     } = res.data();
+  //     insatser.push({
+  //       key: res.id,
+  //       boende,
+  //       fromTime,
+  //       toTime,
+  //       date,
+  //       helperName,
+  //       insatsType,
+  //       freeText,
+  //     });
+  //   });
+  //   this.setState({
+  //     insatser,
+  //     isLoading: false,
+  //   });
+  // };
 
-  logOut() {
-    loggingOut();
-    this.props.navigation.replace("Login");
-  }
+  // logOut() {
+  //   loggingOut();
+  //   this.props.navigation.replace("Login");
+  // }
 
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
-        var week = moment(this.state.today).startOf("isoWeek");
+        var week = moment(this.state.weekStart).startOf("isoWeek");
         for (let a = 0; a < 7; ++a) {
           let dayIndex = (i + a) % 7;
           if (
@@ -150,7 +145,6 @@ export default class HomeScreen extends Component {
             " " +
             moment(this.state.weekStart).add(dayIndex, "day").format("MM-DD");
         }
-        i = 9;
       }
     }
   }
@@ -178,6 +172,90 @@ export default class HomeScreen extends Component {
         .add(newWeek, "week")
         .format("YYYY-MM-DD"),
     });
+    this.state.layouts = [];
+  }
+
+  getLayout(
+    layout,
+    dayIndex,
+    key,
+    boende,
+    fromTime,
+    toTime,
+    date,
+    helperName,
+    insatsType,
+    freeText
+  ) {
+    this.state.layouts.push({
+      height: layout.height,
+      width: layout.width,
+      x: layout.x + 140 * dayIndex,
+      y: layout.y,
+      key: key,
+      boende: boende,
+      fromTime: fromTime,
+      toTime: toTime,
+      date: date,
+      helperName: helperName,
+      insatsType: insatsType,
+      freeText: freeText,
+    });
+  }
+
+  getLayoutHeight(layout) {
+    this.setState({
+      insatsHeight: layout.height,
+    });
+  }
+
+  renderDays(time, day, index, dayIndex) {
+    for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < this.state.insatser.length; ++i) {
+        if (
+          this.state.insatser[i].fromTime == time &&
+          this.state.insatser[i].date == day
+        ) {
+          return (
+            <View
+              style={{ color: "red" }}
+              onLayout={(event) => {
+                this.getLayout(
+                  event.nativeEvent.layout,
+                  dayIndex,
+                  this.state.insatser[i].key,
+                  this.state.insatser[i].boende,
+                  this.state.insatser[i].fromTime,
+                  this.state.insatser[i].toTime,
+                  this.state.insatser[i].date,
+                  this.state.insatser[i].helperName,
+                  this.state.insatser[i].insatsType,
+                  this.state.insatser[i].freeText
+                );
+              }}
+              key={this.state.insatser[i].key}
+              style={{ color: "red" }}
+              testID = "leyTest"
+            >
+              <Insats
+                message={this.state.insatser[i].insatsType}
+                insats={this.state.insatser[i]}
+                navigation={this.props.navigation}
+                onSwap={this.onSwap.bind(this)}
+                layouts={this.state.layouts}
+                scrollOfsetY={this.state.scrollOfsetY}
+                style={{ color: "red" }}
+              />
+            </View>
+          );
+        }
+      }
+    }
+    return (
+      <View style={styles.instatsListEmpty} key={index}>
+        <Text></Text>
+      </View>
+    );
   }
 
   handleScroll = (event) => {
@@ -186,15 +264,37 @@ export default class HomeScreen extends Component {
     });
   };
 
-  onLayout = (e) => {
-    // console.log(e.nativeEvent.layout.width);
-    // console.log(e.nativeEvent.layout.height);
-    // console.log(e.nativeEvent.layout.x);
-    // console.log(e.nativeEvent.layout.y);
-  };
+  onSwap(key1, key2) {
+    let keyToSplice1 = 0,
+      keyToSplice2 = 0;
+    for (let i = 0; i < this.state.layouts.length; i++) {
+      if (key1 == this.state.layouts[i].key) {
+        keyToSplice1 = i;
+      }
+      if (key2 == this.state.layouts[i].key) {
+        keyToSplice2 = i;
+      }
+    }
+    if (keyToSplice1 < keyToSplice2) {
+      this.state.layouts.splice(keyToSplice2, 1);
+      this.state.layouts.splice(keyToSplice1, 1);
+    } else {
+      this.state.layouts.splice(keyToSplice1, 1);
+      this.state.layouts.splice(keyToSplice2, 1);
+    }
+  }
 
   render() {
-    const { insatser, dragging, days, insatsTypes, weekStart } = this.state;
+    const {
+      insatser,
+      dragging,
+      days,
+      insatsTypes,
+      weekStart,
+      layouts,
+      insatsHeight,
+    } = this.state;
+
     var today = moment(this.state.weekStart).format("YYYY-MM-DD");
     var aday2 = moment(this.state.weekStart).add(1, "day").format("YYYY-MM-DD");
     var aday3 = moment(this.state.weekStart).add(2, "day").format("YYYY-MM-DD");
@@ -206,26 +306,20 @@ export default class HomeScreen extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
+          <ActivityIndicator size="large" color="red" />
         </View>
       );
     }
 
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text category="h2" style={{ fontSize: 20 }}>
-            Vecka {moment(this.state.weekStart).format("WW")}
-          </Text>
-        </View>
-
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
           }}
         >
-          <ImageBackground
+          <ImageBackground data-testid = "insats"
             source={require("../../../assets/moln.png")}
             style={styles.moln}
           >
@@ -234,15 +328,17 @@ export default class HomeScreen extends Component {
                 <View key={index}>
                   <Draggable
                     message={item}
-                    scrollOfsetY={this.state.scrollOfsetY}
                     weekStart={this.state.weekStart}
+                    insatser={this.state.insatser}
+                    scrollOfsetY={this.state.scrollOfsetY}
+                    insatsHeight={this.state.insatsHeight}
                   />
                 </View>
               ) : null;
             })}
           </ImageBackground>
-          <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
+          <View  style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title={
                   "Vecka " +
@@ -253,17 +349,15 @@ export default class HomeScreen extends Component {
               />
             </View>
           </View>
-          <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
-              <Button
-                title="Logga Ut"
-                onPress={() => this.logOut()}
-                type="outline"
-              />
-            </View>
+
+          <View style={styles.header}>
+            <Text category="h2" style={{ fontSize: 20 }}>
+              Vecka {moment(this.state.weekStart).format("WW")}
+            </Text>
           </View>
+
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title={
                   "Vecka " +
@@ -274,8 +368,20 @@ export default class HomeScreen extends Component {
               />
             </View>
           </View>
+
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
+              <Button
+                // title="DagVy"
+                // onPress={() => this.props.navigation.navigate("DayScreen")}
+                title="Logga Ut"
+                onPress={() => this.logOut()}
+                type="outline"
+              />
+            </View>
+          </View>
+          <View style={styles.button}>
+            <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title="DagVy"
                 onPress={() => this.props.navigation.navigate("DayScreen")}
@@ -298,116 +404,67 @@ export default class HomeScreen extends Component {
 
         <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
                 return (
-                  <Text
-                    style={styles.instatsList}
-                    key={item.id}
-                    onLayout={this.onLayout}
-                  >
-                    {item.time}
+                  <Text style={styles.instatsList} key={index}>
+                    {item}
                   </Text>
                 );
               })}
             </View>
 
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date == today ? (
-                  <View style={{ backgroundColor: "red" }} key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}  data-testid = "inputs1">
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, today, index, 1);
+              })}
+            </View>
+
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, aday2, index, 2);
+              })}
+            </View>
+
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, aday3, index, 3);
+              })}
+            </View>
+
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, aday4, index, 4);
+              })}
+            </View>
+
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, aday5, index, 5);
+              })}
+            </View>
+
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, aday6, index, 6);
+              })}
+            </View>
+
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+              {this.state.times.map((item, index) => {
+                return this.renderDays(item, aday7, index, 7);
               })}
             </View>
 
             <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday2 ? (
-                  <View key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
-              })}
-            </View>
-
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday3 ? (
-                  <View key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
-              })}
-            </View>
-
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday4 ? (
-                  <View key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
-              })}
-            </View>
-
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday5 ? (
-                  <View key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
-              })}
-            </View>
-
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday6 ? (
-                  <View key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
-              })}
-            </View>
-
-            <View style={{ width: 140 }}>
-              {this.state.insatser.map((item, index) => {
-                return item.date === aday7 ? (
-                  <View key={item.key}>
-                    <Insats
-                      message={item.insatsType}
-                      id={item.key}
-                      navigation={this.props.navigation}
-                    />
-                  </View>
-                ) : null;
-              })}
+              <Text
+                onLayout={(event) => {
+                  this.getLayoutHeight(event.nativeEvent.layout);
+                }}
+                style={styles.instatsList}
+              >
+                Soptunna
+              </Text>
             </View>
           </View>
         </ScrollView>
@@ -424,8 +481,8 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    padding: 20,
-    paddingTop: 30,
+    padding: 3,
+    paddingTop: 50,
   },
   listContainer: {
     backgroundColor: "rgba(49, 118, 197, 1.0)",
@@ -433,48 +490,75 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
-    borderColor: "black",
-    shadowColor: "red",
+    color: "red",
   },
   item: {
     height: 43.5,
-    backgroundColor: "#ccc",
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
+    color: "red",
   },
   instatsList: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "black",
+    borderColor: "rgba(49, 118, 197, 1.0)",
     borderWidth: 2,
     backgroundColor: "#ccc",
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.2,
     shadowRadius: 2,
+    // color: "red",
+  },
+  instatsListEmpty: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "rgba(49, 118, 197, 1.0)",
+    borderWidth: 2,
+    backgroundColor: "#ccc",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+    color: "red",
   },
   moln: {
+    marginTop: 43.33,
     flexDirection: "row",
     resizeMode: "cover",
     justifyContent: "center",
     alignItems: "center",
     flexWrap: "wrap",
-    height: 100,
-    width: 220,
-    zIndex: 10,
+    height: 130,
+    width: 480,
+    zIndex: 20,
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   button: {
-    height: 50,
+    height: 40,
     width: 140,
     alignSelf: "flex-end",
+    fontSize: 5,
   },
   head: {
     height: 40,
     backgroundColor: "#f1f8ff",
     flexDirection: "row",
     marginTop: 5,
+    //backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   headItems: {
     width: 140,
     alignSelf: "center",
+    //backgroundColor: "white",
+  },
+
+  test: {
+    width: 140,
+    color: "red",
+    backgroundColor: "rgba(49, 118, 197, 1.0)",
+  },
+  preloader: {
+    backgroundColor: "red",
   },
 });
