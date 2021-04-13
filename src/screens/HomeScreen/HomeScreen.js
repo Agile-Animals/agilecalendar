@@ -383,14 +383,13 @@ export default class HomeScreen extends Component {
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
-                // title="DagVy"
-                // onPress={() => this.props.navigation.navigate("DayScreen")}
                 title="Logga Ut"
                 onPress={() => this.logOut()}
                 type="outline"
               />
             </View>
           </View>
+
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
