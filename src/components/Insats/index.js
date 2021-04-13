@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, PanResponder, Animated, Text } from "react-native";
+import { StyleSheet, View, PanResponder, Animated, Text, Modal, Alert, Pressable,} from "react-native";
 import firebase from "../../database/firebaseDb";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, ThemeProvider } from "react-native-elements";
@@ -17,6 +17,7 @@ export default class Insats extends Component {
       layouts: props.layouts,
       scrollOfsetY: props.scrollOfsetY,
       dayColor: props.dayColor,
+      modalVisible: false,
     };
 
     this.panResponder = PanResponder.create({
@@ -28,9 +29,9 @@ export default class Insats extends Component {
       ),
       onPanResponderRelease: (e, gesture) => {
         if (gesture.dx == 0 && gesture.dy == 0) {
-          this.state.navigation.navigate("InsatsDetailScreen", {
-            insatskey: this.state.insats.key,
-          });
+          // this.state.navigation.navigate("InsatsDetailScreen", {
+          //   insatskey: this.state.insats.key,
+          // });
         } else if (
           gesture.x0 + gesture.dx >= 1120 &&
           gesture.x0 + gesture.dx <= 1280 &&
@@ -140,9 +141,12 @@ export default class Insats extends Component {
         console.error("Error: ", error);
       });
   }
-
+  setModalVisible = (visible) => {
+    this.setState({ modalVisible: visible });
+  };
   render() {
     const { message, id } = this.state;
+    const { modalVisible } = this.state;
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),
     };
@@ -151,7 +155,39 @@ export default class Insats extends Component {
         {...this.panResponder.panHandlers}
         style={[panStyle, styles.instatsList]}
       >
-        <Text key={this.state.id}>{message}</Text>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              this.setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View style={styles.modalText}>
+                 <Text style={{fontSize:22}}>{message}!</Text> 
+                 <Text style={{fontSize:17}}>The Time: {this.state.insats.fromTime}!</Text> 
+                 <Text style={{fontSize:17}}>The Date: {this.state.insats.date}!</Text> 
+                  
+                  
+
+                </View>
+                <Pressable
+                  style={[styles.button, styles.buttonClose, ]}
+                  onPress={() => this.setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.textStyle}>Hide Modal</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+          <Pressable onPress={() => this.setModalVisible(true)}>
+            <Text key={this.state.id}>{message}</Text>
+          </Pressable>
+        </View>
       </Animated.View>
     );
   }
@@ -171,5 +207,49 @@ let styles = StyleSheet.create({
     justifyContent: "center",
     shadowRadius: 2,
   },
-  edit: {},
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+    zIndex: 8,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "#ff8c00",
+    borderRadius: 10,
+    padding: 55,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    zIndex: 8,
+
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
 });
