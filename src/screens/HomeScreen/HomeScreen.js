@@ -134,6 +134,7 @@ export default class HomeScreen extends Component {
     });
   };
 
+  // basic firestore logout function
   logOut() {
     loggingOut();
     this.props.navigation.replace("Login");
@@ -274,12 +275,14 @@ export default class HomeScreen extends Component {
     );
   }
 
+  // sets how far we have scrolled in the scrollview to keep y values correct when dragging insatser
   handleScroll = (event) => {
     this.setState({
       scrollOfsetY: event.nativeEvent.contentOffset.y,
     });
   };
 
+  // removes duplets that are created in the moment when you swap two insatser
   onSwap(key1, key2) {
     let keyToSplice1 = 0,
       keyToSplice2 = 0;
@@ -300,6 +303,7 @@ export default class HomeScreen extends Component {
     }
   }
 
+  // render function
   render() {
     const {
       insatser,
@@ -566,12 +570,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f1f8ff",
     flexDirection: "row",
     marginTop: 5,
-    //backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   headItems: {
     width: 140,
+    paddingLeft: 20,
     alignSelf: "center",
-    //backgroundColor: "white",
   },
 
   test: {
