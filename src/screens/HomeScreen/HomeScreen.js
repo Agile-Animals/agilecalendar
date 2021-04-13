@@ -139,6 +139,7 @@ export default class HomeScreen extends Component {
     this.props.navigation.replace("Login");
   }
 
+  // used to set swedish names of days
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
@@ -161,6 +162,7 @@ export default class HomeScreen extends Component {
     }
   }
 
+  // decides what insatser to show in the cloud
   checkConsumedInsats(tmpType) {
     for (let i = 0; i < this.state.insatser.length; ++i) {
       if (
@@ -175,6 +177,7 @@ export default class HomeScreen extends Component {
     return 1;
   }
 
+  // set the weekStart variable to the week that has been chosen
   setWeek(newWeek) {
     this.setState({
       weekStart: moment(this.state.weekStart)
@@ -187,6 +190,7 @@ export default class HomeScreen extends Component {
     this.state.layouts = [];
   }
 
+  // updates layouts array with the data of any insatser
   getLayout(
     layout,
     dayIndex,
@@ -215,13 +219,15 @@ export default class HomeScreen extends Component {
     });
   }
 
+  // used to get the height of insatsblock on screen
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
     });
   }
 
-  renderDays(time, day, index, dayIndex) {
+  // renders all insatser that can be dragged as insatser components and empty <view> for
+  renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (
@@ -246,7 +252,6 @@ export default class HomeScreen extends Component {
                 );
               }}
               key={this.state.insatser[i].key}
-              style={{ color: "red" }}
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
@@ -426,43 +431,49 @@ export default class HomeScreen extends Component {
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, today, index, 1);
+                return this.renderDays(item, today, index, 1, "monday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday2, index, 2);
+                return this.renderDays(item, aday2, index, 2, "tuesday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday3, index, 3);
+                return this.renderDays(
+                  item,
+                  aday3,
+                  index,
+                  3,
+                  "wednesday color"
+                );
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday4, index, 4);
+                return this.renderDays(item, aday4, index, 4, "thursday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday5, index, 5);
+                return this.renderDays(item, aday5, index, 5, "friday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday6, index, 6);
+                return this.renderDays(item, aday6, index, 6, "saturday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday7, index, 7);
+                return this.renderDays(item, aday7, index, 7, "sunday color");
               })}
             </View>
 

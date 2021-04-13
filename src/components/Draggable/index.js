@@ -440,8 +440,5 @@ let styles = StyleSheet.create({
   },
   test: {
     backgroundColor: "#ff8c00",
-    
-   
-
   },
 });

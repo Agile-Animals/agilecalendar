@@ -16,6 +16,7 @@ export default class Insats extends Component {
       navigation: props.navigation,
       layouts: props.layouts,
       scrollOfsetY: props.scrollOfsetY,
+      dayColor: props.dayColor,
     };
 
     this.panResponder = PanResponder.create({
@@ -39,17 +40,6 @@ export default class Insats extends Component {
           this.deleteInsats();
         } else {
           for (let i = 0; i < this.state.layouts.length; ++i) {
-            console.log("Check the values carefully...\n");
-            console.log(gesture.x0 + gesture.dx + " >= ");
-            console.log(this.state.layouts[i].x);
-            console.log(gesture.x0 + gesture.dx + "<=");
-            console.log(this.state.layouts[i].x + this.state.layouts[i].width);
-            console.log(gesture.y0 + gesture.dy + ">=");
-            console.log(this.state.layouts[i].y + 220);
-            console.log(gesture.y0 + gesture.dy + "<=");
-            console.log(
-              this.state.layouts[i].y + this.state.layouts[i].height + 220
-            );
             if (
               gesture.x0 + gesture.dx >= this.state.layouts[i].x &&
               gesture.x0 + gesture.dx <=
@@ -174,7 +164,8 @@ let styles = StyleSheet.create({
     paddingBottom: 10,
     borderColor: "black",
     borderWidth: 2,
-    backgroundColor: "#ccc",
+    // change background to dayColor somehow
+    backgroundColor: "blue",
     shadowOpacity: 0.2,
     alignItems: "center",
     justifyContent: "center",
