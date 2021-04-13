@@ -165,7 +165,7 @@ let styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 2,
     // change background to dayColor somehow
-    backgroundColor: "blue",
+    backgroundColor: "white",
     shadowOpacity: 0.2,
     alignItems: "center",
     justifyContent: "center",

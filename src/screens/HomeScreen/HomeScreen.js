@@ -24,6 +24,7 @@ import moment from "moment";
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
+    // this should only query for the current weeks insatser
     this.firestoreRef = firebase
       .firestore()
       .collection("insatser")
@@ -533,7 +534,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    // color: "red",
   },
   instatsListEmpty: {
     paddingTop: 10,
