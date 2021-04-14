@@ -364,54 +364,55 @@ export default class Draggable extends Component {
 
   // using schedule checks if there are any free personnel between two times
   // toDo: get documents read them and then overwrite correct one if the wanted times are free
-  checkPersonnel(thisFromTime, thisToTime) {
-    let timeDocs = [
-      "00:00-07:00 1",
-      "07:00-12:00 2",
-      "12:00-19:00 3",
-      "19:00-23:00 2",
-      "23:00-00:00 1",
-    ];
-    console.log(thisFromTime + "-" + thisToTime);
-    let test = [thisFromTime + "-" + thisToTime];
-    for (let i = 0; i < 5; ++i) {
-      let [a, b] = timeDocs[i].split("-");
-      let [c, d] = b.split(" ");
-      if (thisFromTime >= a && thisToTime <= b) {
-        // needs work
-        // const updateDBRef = firebase
-        //   .firestore()
-        //   .collection("vardag")
-        //   .doc(timeDocs[i])
-        //   .then(function (querySnapshot) {
-        //     console.log(querySnapshot.docs[0].data());
-        //   });
-        console.log(a);
-        console.log(c);
-        console.log(d);
-        // updateDBRef
-        //   .set(
-        //     {
-        //       timeArray: test,
-        //     },
-        //     { merge: true }
-        //   )
-        //   .catch((error) => {
-        //     console.error("Error: ", error);
-        //   });
-        i = 6;
-      }
-    }
-    return 1;
-  }
+  // checkPersonnel(thisFromTime, thisToTime) {
+  //   let timeDocs = [
+  //     "00:00-07:00 1",
+  //     "07:00-12:00 2",
+  //     "12:00-19:00 3",
+  //     "19:00-23:00 2",
+  //     "23:00-00:00 1",
+  //   ];
+  //   console.log(thisFromTime + "-" + thisToTime);
+  //   let test = [thisFromTime + "-" + thisToTime];
+  //   for (let i = 0; i < 5; ++i) {
+  //     let [a, b] = timeDocs[i].split("-");
+  //     let [c, d] = b.split(" ");
+  //     if (thisFromTime >= a && thisToTime <= b) {
+  // needs work
+  // const updateDBRef = firebase
+  //   .firestore()
+  //   .collection("vardag")
+  //   .doc(timeDocs[i])
+  //   .then(function (querySnapshot) {
+  //     console.log(querySnapshot.docs[0].data());
+  //   });
+  // console.log(a);
+  // console.log(c);
+  // console.log(d);
+  // updateDBRef
+  //   .set(
+  //     {
+  //       timeArray: test,
+  //     },
+  //     { merge: true }
+  //   )
+  //   .catch((error) => {
+  //     console.error("Error: ", error);
+  //   });
+  //       i = 6;
+  //     }
+  //   }
+  //   return 1;
+  // }
 
   // creates insats unless there already is one at the time and date
   storeInsats() {
     let duplet = 0;
-    let personAvailable = this.checkPersonnel(
-      this.state.fromTime,
-      this.state.toTime
-    );
+    let personAvailable = 1;
+    // this.checkPersonnel(
+    //   this.state.fromTime,
+    //   this.state.toTime
+    // );
     if (this.state.insatser.length == 0 && personAvailable == 1) {
       this.dbRef.add({
         helperName: "test",

@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet, View, PanResponder, Animated, Text, Modal, Alert, Pressable,} from "react-native";
+import {
+  StyleSheet,
+  View,
+  PanResponder,
+  Animated,
+  Text,
+  Modal,
+  Alert,
+  Pressable,
+} from "react-native";
 import firebase from "../../database/firebaseDb";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, ThemeProvider } from "react-native-elements";
@@ -28,10 +37,8 @@ export default class Insats extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        if (gesture.dx == 0 && gesture.dy == 0) {
-          // this.state.navigation.navigate("InsatsDetailScreen", {
-          //   insatskey: this.state.insats.key,
-          // });
+        if (gesture.dx < 30 && gesture.dy < 10) {
+          this.setModalVisible(true);
         } else if (
           gesture.x0 + gesture.dx >= 1120 &&
           gesture.x0 + gesture.dx <= 1280 &&
@@ -141,9 +148,11 @@ export default class Insats extends Component {
         console.error("Error: ", error);
       });
   }
+
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible });
   };
+
   render() {
     const { message, id } = this.state;
     const { modalVisible } = this.state;
@@ -168,15 +177,16 @@ export default class Insats extends Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
-                 <Text style={{fontSize:22}}>{message}!</Text> 
-                 <Text style={{fontSize:17}}>The Time: {this.state.insats.fromTime}!</Text> 
-                 <Text style={{fontSize:17}}>The Date: {this.state.insats.date}!</Text> 
-                  
-                  
-
+                  <Text style={{ fontSize: 22 }}>{message}!</Text>
+                  <Text style={{ fontSize: 17 }}>
+                    The Time: {this.state.insats.fromTime}!
+                  </Text>
+                  <Text style={{ fontSize: 17 }}>
+                    The Date: {this.state.insats.date}!
+                  </Text>
                 </View>
                 <Pressable
-                  style={[styles.button, styles.buttonClose, ]}
+                  style={[styles.button, styles.buttonClose]}
                   onPress={() => this.setModalVisible(!modalVisible)}
                 >
                   <Text style={styles.textStyle}>Hide Modal</Text>
@@ -184,9 +194,9 @@ export default class Insats extends Component {
               </View>
             </View>
           </Modal>
-          <Pressable onPress={() => this.setModalVisible(true)}>
-            <Text key={this.state.id}>{message}</Text>
-          </Pressable>
+          {/* <Pressable onPress={() => this.setModalVisible(true)}> */}
+          <Text key={this.state.id}>{message}</Text>
+          {/* </Pressable> */}
         </View>
       </Animated.View>
     );
@@ -225,8 +235,7 @@ let styles = StyleSheet.create({
     shadowOffset: {
       width: 0,
       height: 2,
-    zIndex: 8,
-
+      zIndex: 8,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
