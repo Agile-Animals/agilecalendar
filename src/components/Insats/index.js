@@ -32,12 +32,13 @@ export default class Insats extends Component {
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
       onPanResponderGrant: (e, gesture) => {},
+      onPanResponderTerminationRequest: (e, gesture) => false,
       onPanResponderMove: Animated.event(
         [null, { dx: this.state.pan.x, dy: this.state.pan.y }],
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
-        if (gesture.dx < 30 && gesture.dy < 10) {
+        if (gesture.dx == 0 && gesture.dy == 0) {
           this.setModalVisible(true);
         } else if (
           gesture.x0 + gesture.dx >= 1120 &&

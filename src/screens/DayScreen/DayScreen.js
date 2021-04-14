@@ -134,6 +134,7 @@ export default class DayScreen extends Component {
                 message={this.state.insatser[i].insatsType}
                 id={this.state.insatser[i].key}
                 navigation={this.props.navigation}
+                insats={this.state.insatser[i]}
               />
             </View>
           );
