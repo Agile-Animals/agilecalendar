@@ -180,17 +180,17 @@ export default class Insats extends Component {
                 <View style={styles.modalText}>
                   <Text style={{ fontSize: 22 }}>{message}!</Text>
                   <Text style={{ fontSize: 17 }}>
-                    The Time: {this.state.insats.fromTime}!
+                    Från: {this.state.insats.fromTime} - Till: {this.state.insats.toTime}!
                   </Text>
                   <Text style={{ fontSize: 17 }}>
-                    The Date: {this.state.insats.date}!
+                    Datum: {this.state.insats.date}!
                   </Text>
                 </View>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => this.setModalVisible(!modalVisible)}
                 >
-                  <Text style={styles.textStyle}>Hide Modal</Text>
+                  <Text style={styles.textStyle}> Stänga </Text>
                 </Pressable>
               </View>
             </View>
