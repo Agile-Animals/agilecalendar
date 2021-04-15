@@ -26,7 +26,7 @@ export default function SignUp({ navigation }) {
     setPassword("");
     setConfirmPassword("");
   };
-
+  // function for pop out alert window if any requried information is missing 
   const handlePress = () => {
     if (!firstName) {
       Alert.alert("First name is required");
@@ -45,7 +45,7 @@ export default function SignUp({ navigation }) {
       emptyState();
     }
   };
-
+  // return for adding user with detailed information
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -111,7 +111,7 @@ export default function SignUp({ navigation }) {
     </ScrollView>
   );
 }
-
+// styling here 
 const styles = StyleSheet.create({
   container: {
     height: "100%",
