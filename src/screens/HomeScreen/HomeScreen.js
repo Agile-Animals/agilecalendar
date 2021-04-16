@@ -1,5 +1,18 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, ActivityIndicator, Alert, View, Animated, Pressable, ImageBackground, useWindowDimensions, ScrollView, PanResponder, TouchableOpacity,} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  Alert,
+  View,
+  Animated,
+  Pressable,
+  ImageBackground,
+  useWindowDimensions,
+  ScrollView,
+  PanResponder,
+  TouchableOpacity,
+} from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
@@ -7,7 +20,6 @@ import Insats from "../../components/Insats";
 import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
-
 
 export default class HomeScreen extends Component {
   constructor(props) {
@@ -235,7 +247,7 @@ export default class HomeScreen extends Component {
               }}
               key={this.state.insatser[i].key}
               style={{ color: "red" }}
-              testID = "leyTest"
+              testID="leyTest"
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
@@ -319,7 +331,8 @@ export default class HomeScreen extends Component {
             justifyContent: "space-between",
           }}
         >
-          <ImageBackground data-testid = "insats"
+          <ImageBackground
+            data-testid="insats"
             source={require("../../../assets/moln.png")}
             style={styles.moln}
           >
@@ -337,7 +350,7 @@ export default class HomeScreen extends Component {
               ) : null;
             })}
           </ImageBackground>
-          <View  style={styles.button}>
+          <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title={
@@ -414,7 +427,10 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}  data-testid = "inputs1">
+            <View
+              style={{ width: 140, backgroundColor: "#ff8c00" }}
+              data-testid="inputs1"
+            >
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, today, index, 1);
               })}

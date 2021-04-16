@@ -13,6 +13,6 @@ describe("des", () => {
     expect(() => render(<HomeScreen />)).not.toThrow();
   });
   test("renders default elements", () => {
-     expect(() => render(<HomeScreen />));
-   });
+    expect(() => render(<HomeScreen />));
+  });
 });

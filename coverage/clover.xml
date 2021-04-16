@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1618563634203" clover="3.2.0">
+  <project timestamp="1618563634203" name="All files">
+    <metrics statements="68" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="26" coveredmethods="0" elements="120" coveredelements="0" complexity="0" loc="68" ncloc="68" packages="1" files="1" classes="1"/>
+    <file name="HomeScreen.js" path="E:\Program Files (x86)\git rep\agilecalendar\src\screens\HomeScreen\HomeScreen.js">
+      <metrics statements="68" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="26" coveredmethods="0"/>
+      <line num="30" count="0" type="stmt"/>
+      <line num="31" count="0" type="stmt"/>
+      <line num="143" count="0" type="stmt"/>
+      <line num="144" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="145" count="0" type="stmt"/>
+      <line num="146" count="0" type="stmt"/>
+      <line num="147" count="0" type="stmt"/>
+      <line num="148" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="152" count="0" type="stmt"/>
+      <line num="154" count="0" type="stmt"/>
+      <line num="156" count="0" type="stmt"/>
+      <line num="165" count="0" type="stmt"/>
+      <line num="166" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="170" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="171" count="0" type="stmt"/>
+      <line num="175" count="0" type="stmt"/>
+      <line num="179" count="0" type="stmt"/>
+      <line num="187" count="0" type="stmt"/>
+      <line num="202" count="0" type="stmt"/>
+      <line num="219" count="0" type="stmt"/>
+      <line num="225" count="0" type="stmt"/>
+      <line num="226" count="0" type="stmt"/>
+      <line num="227" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="231" count="0" type="stmt"/>
+      <line num="235" count="0" type="stmt"/>
+      <line num="266" count="0" type="stmt"/>
+      <line num="273" count="0" type="stmt"/>
+      <line num="274" count="0" type="stmt"/>
+      <line num="280" count="0" type="stmt"/>
+      <line num="281" count="0" type="stmt"/>
+      <line num="282" count="0" type="stmt"/>
+      <line num="283" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="284" count="0" type="stmt"/>
+      <line num="286" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="287" count="0" type="stmt"/>
+      <line num="290" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="291" count="0" type="stmt"/>
+      <line num="292" count="0" type="stmt"/>
+      <line num="294" count="0" type="stmt"/>
+      <line num="295" count="0" type="stmt"/>
+      <line num="308" count="0" type="stmt"/>
+      <line num="310" count="0" type="stmt"/>
+      <line num="311" count="0" type="stmt"/>
+      <line num="312" count="0" type="stmt"/>
+      <line num="313" count="0" type="stmt"/>
+      <line num="314" count="0" type="stmt"/>
+      <line num="315" count="0" type="stmt"/>
+      <line num="316" count="0" type="stmt"/>
+      <line num="317" count="0" type="stmt"/>
+      <line num="318" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="319" count="0" type="stmt"/>
+      <line num="326" count="0" type="stmt"/>
+      <line num="340" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="360" count="0" type="stmt"/>
+      <line num="379" count="0" type="stmt"/>
+      <line num="391" count="0" type="stmt"/>
+      <line num="400" count="0" type="stmt"/>
+      <line num="410" count="0" type="stmt"/>
+      <line num="422" count="0" type="stmt"/>
+      <line num="435" count="0" type="stmt"/>
+      <line num="441" count="0" type="stmt"/>
+      <line num="447" count="0" type="stmt"/>
+      <line num="453" count="0" type="stmt"/>
+      <line num="459" count="0" type="stmt"/>
+      <line num="465" count="0" type="stmt"/>
+      <line num="471" count="0" type="stmt"/>
+      <line num="478" count="0" type="stmt"/>
+      <line num="492" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>
