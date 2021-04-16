@@ -364,55 +364,59 @@ export default class Draggable extends Component {
 
   // using schedule checks if there are any free personnel between two times
   // toDo: get documents read them and then overwrite correct one if the wanted times are free
-  // checkPersonnel(thisFromTime, thisToTime) {
-  //   let timeDocs = [
-  //     "00:00-07:00 1",
-  //     "07:00-12:00 2",
-  //     "12:00-19:00 3",
-  //     "19:00-23:00 2",
-  //     "23:00-00:00 1",
-  //   ];
-  //   console.log(thisFromTime + "-" + thisToTime);
-  //   let test = [thisFromTime + "-" + thisToTime];
-  //   for (let i = 0; i < 5; ++i) {
-  //     let [a, b] = timeDocs[i].split("-");
-  //     let [c, d] = b.split(" ");
-  //     if (thisFromTime >= a && thisToTime <= b) {
-  // needs work
-  // const updateDBRef = firebase
-  //   .firestore()
-  //   .collection("vardag")
-  //   .doc(timeDocs[i])
-  //   .then(function (querySnapshot) {
-  //     console.log(querySnapshot.docs[0].data());
-  //   });
-  // console.log(a);
-  // console.log(c);
-  // console.log(d);
-  // updateDBRef
-  //   .set(
-  //     {
-  //       timeArray: test,
-  //     },
-  //     { merge: true }
-  //   )
-  //   .catch((error) => {
-  //     console.error("Error: ", error);
-  //   });
-  //       i = 6;
-  //     }
-  //   }
-  //   return 1;
-  // }
+  async checkPersonnel(fromTime, toTime, date) {
+    let timeDocs = [
+      "00:00-07:00 1",
+      "07:00-12:00 2",
+      "12:00-19:00 3",
+      "19:00-23:00 2",
+      "23:00-00:00 1",
+    ];
+    for (let i = 0; i < 5; ++i) {
+      let [a, b] = timeDocs[i].split("-");
+      let [c, d] = b.split(" ");
+      if (fromTime >= a && toTime <= b) {
+        // needs work
+        const updateDBRef = firebase
+          .firestore()
+          .collection("vardag")
+          .doc(timeDocs[i]);
+        let doc = await updateDBRef.get();
+        var newTimes = [];
+        var data = await doc.data();
+        let personnelNr = 0;
+        data.times.map((item, index) => {
+          newTimes.push(item);
+          if (item == fromTime + "," + toTime + "," + date) {
+            personnelNr++;
+          }
+        });
+        if (personnelNr < d) {
+          newTimes.push(fromTime + "," + toTime + "," + date);
+          updateDBRef.set(
+            {
+              times: newTimes,
+            },
+            { merge: true }
+          );
+        } else {
+          Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+          return 0;
+        }
+        break;
+      }
+    }
+    return 1;
+  }
 
   // creates insats unless there already is one at the time and date
-  storeInsats() {
+  async storeInsats() {
     let duplet = 0;
-    let personAvailable = 1;
-    // this.checkPersonnel(
-    //   this.state.fromTime,
-    //   this.state.toTime
-    // );
+    let personAvailable = await this.checkPersonnel(
+      this.state.fromTime,
+      this.state.toTime,
+      this.state.date
+    );
     if (this.state.insatser.length == 0 && personAvailable == 1) {
       this.dbRef.add({
         helperName: "test",
@@ -456,7 +460,7 @@ export default class Draggable extends Component {
   }
 
   render() {
-    return <View style={styles.test}>{this.renderDraggable()}</View>;
+    return <View>{this.renderDraggable()}</View>;
   }
 
   renderDraggable() {
@@ -486,10 +490,6 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "center",
     alignContent: "center",
-    borderStartColor: "red",
-    backgroundColor: "#ff8c00",
-  },
-  test: {
-    backgroundColor: "#ff8c00",
+    backgroundColor: "gray",
   },
 });

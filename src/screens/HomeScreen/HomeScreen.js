@@ -24,7 +24,7 @@ import moment from "moment";
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    // this should only query for the current weeks insatser
+    // this should instead only query for the current weeks insatser
     this.firestoreRef = firebase
       .firestore()
       .collection("insatser")
@@ -238,7 +238,6 @@ export default class HomeScreen extends Component {
         ) {
           return (
             <View
-              style={{ color: "red" }}
               onLayout={(event) => {
                 this.getLayout(
                   event.nativeEvent.layout,
@@ -262,7 +261,6 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
-                style={{ color: "red" }}
               />
             </View>
           );
@@ -327,7 +325,7 @@ export default class HomeScreen extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="red" />
+          <ActivityIndicator size="large" />
         </View>
       );
     }
@@ -516,14 +514,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
-    color: "red",
   },
   item: {
     height: 43.5,
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    color: "red",
   },
   instatsList: {
     paddingTop: 10,
@@ -545,7 +541,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
-    color: "red",
   },
   moln: {
     marginTop: 43.33,
@@ -583,6 +578,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   preloader: {
-    backgroundColor: "red",
+    backgroundColor: "blue",
   },
 });

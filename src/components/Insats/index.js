@@ -115,7 +115,13 @@ export default class Insats extends Component {
     }
   }
 
-  deleteInsats() {
+  // removes insats from database and also removes its' values from layouts
+  async deleteInsats() {
+    this.freePersonnel(
+      this.state.insats.fromTime,
+      this.state.insats.toTime,
+      this.state.insats.date
+    );
     for (let i = 0; i < this.state.layouts.length; ++i) {
       if (this.state.layouts[i].key == this.state.insats.key) {
         this.state.layouts.splice(i, 1);
@@ -128,6 +134,50 @@ export default class Insats extends Component {
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
     });
+  }
+
+  // frees booked personnel when deleting insats
+  async freePersonnel(fromTime, toTime, date) {
+    console.log(fromTime);
+    console.log(toTime);
+    console.log(date);
+    let timeDocs = [
+      "00:00-07:00 1",
+      "07:00-12:00 2",
+      "12:00-19:00 3",
+      "19:00-23:00 2",
+      "23:00-00:00 1",
+    ];
+    for (let i = 0; i < 5; ++i) {
+      let [a, b] = timeDocs[i].split("-");
+      let [c, d] = b.split(" ");
+      if (fromTime >= a && toTime <= b) {
+        const updateDBRef = firebase
+          .firestore()
+          .collection("vardag")
+          .doc(timeDocs[i]);
+        let doc = await updateDBRef.get();
+        var newTimes = [];
+        var data = await doc.data();
+        var timeIndex = 0,
+          cnt = 0;
+        data.times.map((item, index) => {
+          newTimes.push(item);
+          if (item == fromTime + "," + toTime + "," + date) {
+            timeIndex = cnt;
+          } else {
+            cnt++;
+          }
+        });
+        newTimes.splice(timeIndex, 1);
+        updateDBRef.set({
+          times: newTimes,
+        });
+        return 0;
+      }
+    }
+    console.log("end");
+    return 0;
   }
 
   updateInsats(insats, newFrom, newTo, newDate) {
@@ -180,7 +230,8 @@ export default class Insats extends Component {
                 <View style={styles.modalText}>
                   <Text style={{ fontSize: 22 }}>{message}!</Text>
                   <Text style={{ fontSize: 17 }}>
-                    Från: {this.state.insats.fromTime} - Till: {this.state.insats.toTime}!
+                    Från: {this.state.insats.fromTime} - Till:{" "}
+                    {this.state.insats.toTime}!
                   </Text>
                   <Text style={{ fontSize: 17 }}>
                     Datum: {this.state.insats.date}!
@@ -190,14 +241,12 @@ export default class Insats extends Component {
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => this.setModalVisible(!modalVisible)}
                 >
-                  <Text style={styles.textStyle}> Stänga </Text>
+                  <Text style={styles.textStyle}> Dölj </Text>
                 </Pressable>
               </View>
             </View>
           </Modal>
-          {/* <Pressable onPress={() => this.setModalVisible(true)}> */}
           <Text key={this.state.id}>{message}</Text>
-          {/* </Pressable> */}
         </View>
       </Animated.View>
     );
