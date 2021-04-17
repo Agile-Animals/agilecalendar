@@ -28,7 +28,7 @@ export default class HomeScreen extends Component {
     this.firestoreRef = firebase
       .firestore()
       .collection("insatser")
-      .where("boende", "==", firebase.auth().currentUser.uid);
+      .where("boende", "==", "4Dw3FVHoEKQbVOzq8Yn222D1ogO2");
     this.state = {
       isLoading: true,
       insatser: [],

@@ -20,7 +20,7 @@ export default class Insats extends Component {
     this.state = {
       pan: new Animated.ValueXY(),
       message: props.message,
-      boende: firebase.auth().currentUser.uid,
+      boende: "4Dw3FVHoEKQbVOzq8Yn222D1ogO2",
       insats: props.insats,
       navigation: props.navigation,
       layouts: props.layouts,
@@ -244,13 +244,13 @@ export default class Insats extends Component {
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
                   <Text style={{ fontSize: 22 }}>{message}!</Text>
-                  <Text style={{ fontSize: 17 }}>
+                  {/* <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
                     {this.state.insats.toTime}!
-                  </Text>
-                  <Text style={{ fontSize: 17 }}>
+                  </Text> */}
+                  {/* <Text style={{ fontSize: 17 }}>
                     Datum: {this.state.insats.date}!
-                  </Text>
+                  </Text> */}
                 </View>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}

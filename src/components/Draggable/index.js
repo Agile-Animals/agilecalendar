@@ -19,7 +19,7 @@ export default class Draggable extends Component {
       message: props.message,
       helperName: "test",
       insatsType: "Fritext",
-      boende: firebase.auth().currentUser.uid,
+      boende: "4Dw3FVHoEKQbVOzq8Yn222D1ogO2",
       fromTime: "",
       toTime: "",
       date: new Date().toJSON().substring(0, 10),
@@ -438,7 +438,7 @@ export default class Draggable extends Component {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
-        boende: firebase.auth().currentUser.uid,
+        boende: "4Dw3FVHoEKQbVOzq8Yn222D1ogO2",
         fromTime: this.state.fromTime,
         toTime: this.state.toTime,
         date: this.state.date,
@@ -467,7 +467,7 @@ export default class Draggable extends Component {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
-        boende: firebase.auth().currentUser.uid,
+        boende: "4Dw3FVHoEKQbVOzq8Yn222D1ogO2",
         fromTime: this.state.fromTime,
         toTime: this.state.toTime,
         date: this.state.date,
