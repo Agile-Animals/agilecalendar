@@ -21,9 +21,9 @@ const App = () => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <NavigationContainer>
+        {/* <NavigationContainer>
           <LoginStack />
-        </NavigationContainer>
+        </NavigationContainer> */}
       </SafeAreaView>
     </>
   );
