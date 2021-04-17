@@ -138,24 +138,39 @@ export default class Insats extends Component {
 
   // frees booked personnel when deleting insats
   async freePersonnel(fromTime, toTime, date) {
-    console.log(fromTime);
-    console.log(toTime);
-    console.log(date);
     let timeDocs = [
-      "00:00-07:00 1",
-      "07:00-12:00 2",
-      "12:00-19:00 3",
-      "19:00-23:00 2",
-      "23:00-00:00 1",
+      [
+        "00:00-07:00 1",
+        "07:00-12:00 2",
+        "12:00-19:00 3",
+        "19:00-23:00 2",
+        "23:00-24:00 1",
+      ],
+      [
+        "00:00-07:00 1",
+        "07:00-11:00 2",
+        "11:00-20:00 3",
+        "20:00-23:00 2",
+        "23:00-24:00 1",
+      ],
     ];
+    var dayType = "vardag";
+    var docIndex = 0;
+    if (
+      moment(date).format("ddd") == "Sat" ||
+      moment(date).format("ddd") == "Sun"
+    ) {
+      dayType = "helg";
+      docIndex = 1;
+    }
     for (let i = 0; i < 5; ++i) {
-      let [a, b] = timeDocs[i].split("-");
+      let [a, b] = timeDocs[docIndex][i].split("-");
       let [c, d] = b.split(" ");
       if (fromTime >= a && toTime <= b) {
         const updateDBRef = firebase
           .firestore()
-          .collection("vardag")
-          .doc(timeDocs[i]);
+          .collection(dayType)
+          .doc(timeDocs[docIndex][i]);
         let doc = await updateDBRef.get();
         var newTimes = [];
         var data = await doc.data();

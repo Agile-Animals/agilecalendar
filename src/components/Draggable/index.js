@@ -366,21 +366,38 @@ export default class Draggable extends Component {
   // toDo: get documents read them and then overwrite correct one if the wanted times are free
   async checkPersonnel(fromTime, toTime, date) {
     let timeDocs = [
-      "00:00-07:00 1",
-      "07:00-12:00 2",
-      "12:00-19:00 3",
-      "19:00-23:00 2",
-      "23:00-00:00 1",
+      [
+        "00:00-07:00 1",
+        "07:00-12:00 2",
+        "12:00-19:00 3",
+        "19:00-23:00 2",
+        "23:00-24:00 1",
+      ],
+      [
+        "00:00-07:00 1",
+        "07:00-11:00 2",
+        "11:00-20:00 3",
+        "20:00-23:00 2",
+        "23:00-24:00 1",
+      ],
     ];
+    var dayType = "vardag";
+    var docIndex = 0;
+    if (
+      moment(date).format("ddd") == "Sat" ||
+      moment(date).format("ddd") == "Sun"
+    ) {
+      dayType = "helg";
+      docIndex = 1;
+    }
     for (let i = 0; i < 5; ++i) {
-      let [a, b] = timeDocs[i].split("-");
+      let [a, b] = timeDocs[docIndex][i].split("-");
       let [c, d] = b.split(" ");
       if (fromTime >= a && toTime <= b) {
-        // needs work
-        const updateDBRef = firebase
+        const updateDBRef = await firebase
           .firestore()
-          .collection("vardag")
-          .doc(timeDocs[i]);
+          .collection(dayType)
+          .doc(timeDocs[docIndex][i]);
         let doc = await updateDBRef.get();
         var newTimes = [];
         var data = await doc.data();
@@ -403,7 +420,7 @@ export default class Draggable extends Component {
           Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
           return 0;
         }
-        break;
+        i = 6;
       }
     }
     return 1;
