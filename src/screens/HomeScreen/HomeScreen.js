@@ -370,9 +370,28 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.header}>
-            <Text category="h2" style={{ fontSize: 20 }}>
-              Vecka {moment(this.state.weekStart).format("WW")}
-            </Text>
+            <View style={{ width: 120, backgroundColor: "white" }}>
+              <Button
+                title={
+                  "Nuvarande Vecka: " + moment().startOf("isoWeek").format("WW")
+                }
+                onPress={() =>
+                  this.setWeek(
+                    moment().startOf("isoWeek").format("WW") -
+                      moment(this.state.weekStart).format("WW")
+                  )
+                }
+                type="outline"
+              />
+            </View>
+            <View style={styles.header}>
+              <Text>
+                {" "}
+                Det är nu vecka: {moment(this.state.weekStart).format(
+                  "WW"
+                )}{" "}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.button}>
