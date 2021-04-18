@@ -394,32 +394,32 @@ export default class Draggable extends Component {
       let [a, b] = timeDocs[docIndex][i].split("-");
       let [c, d] = b.split(" ");
       if (fromTime >= a && toTime <= b) {
-        const updateDBRef = await firebase
-          .firestore()
-          .collection(dayType)
-          .doc(timeDocs[docIndex][i]);
-        let doc = await updateDBRef.get();
-        var newTimes = [];
-        var data = await doc.data();
-        let personnelNr = 0;
-        data.times.map((item, index) => {
-          newTimes.push(item);
-          if (item == fromTime + "," + toTime + "," + date) {
-            personnelNr++;
-          }
-        });
-        if (personnelNr < d) {
-          newTimes.push(fromTime + "," + toTime + "," + date);
-          updateDBRef.set(
-            {
-              times: newTimes,
-            },
-            { merge: true }
-          );
-        } else {
-          Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
-          return 0;
-        }
+        // const updateDBRef = await firebase
+        //   .firestore()
+        //   .collection(dayType)
+        //   .doc(timeDocs[docIndex][i]);
+        // let doc = await updateDBRef.get();
+        // var newTimes = ["00:00,01:00,2021-04-24"];
+        // var data = await doc.data();
+        // let personnelNr = 0;
+        // data.times.map((item, index) => {
+        //   newTimes.push(item);
+        //   if (item == fromTime + "," + toTime + "," + date) {
+        //     personnelNr++;
+        //   }
+        // });
+        // if (personnelNr < d) {
+        // newTimes.push(fromTime + "," + toTime + "," + date);
+        // updateDBRef.set(
+        //   {
+        //     times: newTimes,
+        //   },
+        //   { merge: true }
+        // );
+        // } else {
+        // Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+        // return 0;
+        // }
         i = 6;
       }
     }
@@ -429,7 +429,7 @@ export default class Draggable extends Component {
   // creates insats unless there already is one at the time and date
   async storeInsats() {
     let duplet = 0;
-    let personAvailable = await this.checkPersonnel(
+    let personAvailable = this.checkPersonnel(
       this.state.fromTime,
       this.state.toTime,
       this.state.date
