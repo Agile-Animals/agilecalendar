@@ -23,11 +23,12 @@ import moment from "moment";
 
 export default class HomeScreen extends Component {
   constructor(props) {
-    // this.firestoreRef = firebase
-    //   .firestore()
-    //   .collection("insatser")
-    //   .where("boende", "==", firebase.auth().currentUser.uid);
     super(props);
+    // this should instead only query for the current weeks insatser
+    this.firestoreRef = firebase
+      .firestore()
+      .collection("insatser")
+      .where("boende", "==", "4Dw3FVHoEKQbVOzq8Yn222D1ogO2");
     this.state = {
       isLoading: true,
       insatser: [],
@@ -97,48 +98,50 @@ export default class HomeScreen extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
-  // }
+  componentDidMount() {
+    this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
+  }
 
-  // componentWillUnmount() {
-  //   this.unsubscribe();
-  // }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
-  // getCollection = (querySnapshot) => {
-  //   const insatser = [];
-  //   querySnapshot.forEach((res) => {
-  //     const {
-  //       boende,
-  //       fromTime,
-  //       toTime,
-  //       date,
-  //       helperName,
-  //       insatsType,
-  //       freeText,
-  //     } = res.data();
-  //     insatser.push({
-  //       key: res.id,
-  //       boende,
-  //       fromTime,
-  //       toTime,
-  //       date,
-  //       helperName,
-  //       insatsType,
-  //       freeText,
-  //     });
-  //   });
-  //   this.setState({
-  //     insatser,
-  //     isLoading: false,
-  //   });
-  // };
+  getCollection = (querySnapshot) => {
+    const insatser = [];
+    querySnapshot.forEach((res) => {
+      const {
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        freeText,
+      } = res.data();
+      insatser.push({
+        key: res.id,
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        freeText,
+      });
+    });
+    this.setState({
+      insatser,
+      isLoading: false,
+    });
+  };
 
-  // logOut() {
-  //   loggingOut();
-  //   this.props.navigation.replace("Login");
-  // }
+  // basic firestore logout function
+  logOut() {
+    loggingOut();
+    this.props.navigation.replace("Login");
+  }
 
+  // used to set swedish names of days
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
@@ -161,6 +164,7 @@ export default class HomeScreen extends Component {
     }
   }
 
+  // decides what insatser to show in the cloud
   checkConsumedInsats(tmpType) {
     for (let i = 0; i < this.state.insatser.length; ++i) {
       if (
@@ -175,6 +179,7 @@ export default class HomeScreen extends Component {
     return 1;
   }
 
+  // set the weekStart variable to the week that has been chosen
   setWeek(newWeek) {
     this.setState({
       weekStart: moment(this.state.weekStart)
@@ -187,6 +192,7 @@ export default class HomeScreen extends Component {
     this.state.layouts = [];
   }
 
+  // updates layouts array with the data of any insatser
   getLayout(
     layout,
     dayIndex,
@@ -215,13 +221,15 @@ export default class HomeScreen extends Component {
     });
   }
 
+  // used to get the height of insatsblock on screen
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
     });
   }
 
-  renderDays(time, day, index, dayIndex) {
+  // renders all insatser that can be dragged as insatser components and empty <view> for
+  renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (
@@ -230,7 +238,6 @@ export default class HomeScreen extends Component {
         ) {
           return (
             <View
-              style={{ color: "red" }}
               onLayout={(event) => {
                 this.getLayout(
                   event.nativeEvent.layout,
@@ -246,8 +253,6 @@ export default class HomeScreen extends Component {
                 );
               }}
               key={this.state.insatser[i].key}
-              style={{ color: "red" }}
-              testID="leyTest"
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
@@ -256,7 +261,6 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
-                style={{ color: "red" }}
               />
             </View>
           );
@@ -270,12 +274,14 @@ export default class HomeScreen extends Component {
     );
   }
 
+  // sets how far we have scrolled in the scrollview to keep y values correct when dragging insatser
   handleScroll = (event) => {
     this.setState({
       scrollOfsetY: event.nativeEvent.contentOffset.y,
     });
   };
 
+  // removes duplets that are created in the moment when you swap two insatser
   onSwap(key1, key2) {
     let keyToSplice1 = 0,
       keyToSplice2 = 0;
@@ -296,6 +302,7 @@ export default class HomeScreen extends Component {
     }
   }
 
+  // render function
   render() {
     const {
       insatser,
@@ -318,7 +325,7 @@ export default class HomeScreen extends Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="red" />
+          <ActivityIndicator size="large" />
         </View>
       );
     }
@@ -332,7 +339,6 @@ export default class HomeScreen extends Component {
           }}
         >
           <ImageBackground
-            data-testid="insats"
             source={require("../../../assets/moln.png")}
             style={styles.moln}
           >
@@ -385,14 +391,13 @@ export default class HomeScreen extends Component {
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
-                // title="DagVy"
-                // onPress={() => this.props.navigation.navigate("DayScreen")}
                 title="Logga Ut"
                 onPress={() => this.logOut()}
                 type="outline"
               />
             </View>
           </View>
+
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
@@ -427,48 +432,51 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View
-              style={{ width: 140, backgroundColor: "#ff8c00" }}
-              data-testid="inputs1"
-            >
+            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, today, index, 1);
+                return this.renderDays(item, today, index, 1, "monday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday2, index, 2);
+                return this.renderDays(item, aday2, index, 2, "tuesday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday3, index, 3);
+                return this.renderDays(
+                  item,
+                  aday3,
+                  index,
+                  3,
+                  "wednesday color"
+                );
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday4, index, 4);
+                return this.renderDays(item, aday4, index, 4, "thursday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday5, index, 5);
+                return this.renderDays(item, aday5, index, 5, "friday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday6, index, 6);
+                return this.renderDays(item, aday6, index, 6, "saturday color");
               })}
             </View>
 
             <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday7, index, 7);
+                return this.renderDays(item, aday7, index, 7, "sunday color");
               })}
             </View>
 
@@ -506,14 +514,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
-    color: "red",
   },
   item: {
     height: 43.5,
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    color: "red",
   },
   instatsList: {
     paddingTop: 10,
@@ -524,7 +530,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    // color: "red",
   },
   instatsListEmpty: {
     paddingTop: 10,
@@ -536,7 +541,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
-    color: "red",
   },
   moln: {
     marginTop: 43.33,
@@ -561,12 +565,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f1f8ff",
     flexDirection: "row",
     marginTop: 5,
-    //backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   headItems: {
     width: 140,
+    paddingLeft: 20,
     alignSelf: "center",
-    //backgroundColor: "white",
   },
 
   test: {
@@ -575,6 +578,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   preloader: {
-    backgroundColor: "red",
+    backgroundColor: "blue",
   },
 });

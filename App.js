@@ -5,8 +5,14 @@ import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { LoginStack } from "./src/navigation";
 import firebase from "./src/database/firebaseDb";
+import { useWindowDimensions } from "react-native";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs(["Setting a timer"]);
 
 const App = () => {
+  const windowWidth = useWindowDimensions().width;
+  const windowHeight = useWindowDimensions().height;
   if (!firebase.apps.length) {
     console.log("Connected with Firebase");
     firebase.initializeApp(apiKeys.firebaseConfig);

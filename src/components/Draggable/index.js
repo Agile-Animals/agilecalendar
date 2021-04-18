@@ -19,7 +19,7 @@ export default class Draggable extends Component {
       message: props.message,
       helperName: "test",
       insatsType: "Fritext",
-      boende: firebase.auth().currentUser.uid,
+      boende: "4Dw3FVHoEKQbVOzq8Yn222D1ogO2",
       fromTime: "",
       toTime: "",
       date: new Date().toJSON().substring(0, 10),
@@ -91,6 +91,7 @@ export default class Draggable extends Component {
     });
   }
 
+  // helps keep these props updated
   shouldComponentUpdate(nextProps) {
     if (nextProps.weekStart != this.props.weekStart) return true;
     if (nextProps.insatser != this.props.insatser) return true;
@@ -99,8 +100,8 @@ export default class Draggable extends Component {
     return true;
   }
 
+  // helps keep these props updated
   componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
     if (this.props.weekStart !== prevProps.weekStart) {
       this.setState({ weekStart: this.props.weekStart });
     }
@@ -115,6 +116,7 @@ export default class Draggable extends Component {
     }
   }
 
+  // checks if you have dropped something in this area and creates the appropriate insats
   isDropAreaY1(gesture) {
     if (this.isDropArea1x(gesture)) {
       let tmpFrom = "",
@@ -360,13 +362,83 @@ export default class Draggable extends Component {
     this.setState(state);
   };
 
-  storeInsats() {
+  // using schedule checks if there are any free personnel between two times
+  // toDo: get documents read them and then overwrite correct one if the wanted times are free
+  async checkPersonnel(fromTime, toTime, date) {
+    let timeDocs = [
+      [
+        "00:00-07:00 1",
+        "07:00-12:00 2",
+        "12:00-19:00 3",
+        "19:00-23:00 2",
+        "23:00-24:00 1",
+      ],
+      [
+        "00:00-07:00 1",
+        "07:00-11:00 2",
+        "11:00-20:00 3",
+        "20:00-23:00 2",
+        "23:00-24:00 1",
+      ],
+    ];
+    var dayType = "vardag";
+    var docIndex = 0;
+    if (
+      moment(date).format("ddd") == "Sat" ||
+      moment(date).format("ddd") == "Sun"
+    ) {
+      dayType = "helg";
+      docIndex = 1;
+    }
+    for (let i = 0; i < 5; ++i) {
+      let [a, b] = timeDocs[docIndex][i].split("-");
+      let [c, d] = b.split(" ");
+      if (fromTime >= a && toTime <= b) {
+        // const updateDBRef = await firebase
+        //   .firestore()
+        //   .collection(dayType)
+        //   .doc(timeDocs[docIndex][i]);
+        // let doc = await updateDBRef.get();
+        // var newTimes = ["00:00,01:00,2021-04-24"];
+        // var data = await doc.data();
+        // let personnelNr = 0;
+        // data.times.map((item, index) => {
+        //   newTimes.push(item);
+        //   if (item == fromTime + "," + toTime + "," + date) {
+        //     personnelNr++;
+        //   }
+        // });
+        // if (personnelNr < d) {
+        // newTimes.push(fromTime + "," + toTime + "," + date);
+        // updateDBRef.set(
+        //   {
+        //     times: newTimes,
+        //   },
+        //   { merge: true }
+        // );
+        // } else {
+        // Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+        // return 0;
+        // }
+        i = 6;
+      }
+    }
+    return 1;
+  }
+
+  // creates insats unless there already is one at the time and date
+  async storeInsats() {
     let duplet = 0;
-    if (this.state.insatser.length == 0) {
+    let personAvailable = this.checkPersonnel(
+      this.state.fromTime,
+      this.state.toTime,
+      this.state.date
+    );
+    if (this.state.insatser.length == 0 && personAvailable == 1) {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
-        boende: firebase.auth().currentUser.uid,
+        boende: "4Dw3FVHoEKQbVOzq8Yn222D1ogO2",
         fromTime: this.state.fromTime,
         toTime: this.state.toTime,
         date: this.state.date,
@@ -391,11 +463,11 @@ export default class Draggable extends Component {
         }
       }
     }
-    if (duplet == 0) {
+    if (duplet == 0 && personAvailable == 1) {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
-        boende: firebase.auth().currentUser.uid,
+        boende: "4Dw3FVHoEKQbVOzq8Yn222D1ogO2",
         fromTime: this.state.fromTime,
         toTime: this.state.toTime,
         date: this.state.date,
@@ -405,7 +477,7 @@ export default class Draggable extends Component {
   }
 
   render() {
-    return <View style={styles.test}>{this.renderDraggable()}</View>;
+    return <View>{this.renderDraggable()}</View>;
   }
 
   renderDraggable() {
@@ -435,13 +507,6 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "center",
     alignContent: "center",
-    borderStartColor: "red",
-    backgroundColor: "#ff8c00",
-  },
-  test: {
-    backgroundColor: "#ff8c00",
-    
-   
-
+    backgroundColor: "gray",
   },
 });
