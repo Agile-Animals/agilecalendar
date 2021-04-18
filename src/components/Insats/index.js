@@ -175,19 +175,23 @@ export default class Insats extends Component {
         var newTimes = [];
         var data = await doc.data();
         var timeIndex = 0,
-          cnt = 0;
+          cnt = 0,
+          found = 0;
         data.times.map((item, index) => {
           newTimes.push(item);
           if (item == fromTime + "," + toTime + "," + date) {
             timeIndex = cnt;
+            found = 1;
           } else {
             cnt++;
           }
         });
-        newTimes.splice(timeIndex, 1);
-        updateDBRef.set({
-          times: newTimes,
-        });
+        if (found == 1) {
+          newTimes.splice(timeIndex, 1);
+          updateDBRef.set({
+            times: newTimes,
+          });
+        }
         return 0;
       }
     }
