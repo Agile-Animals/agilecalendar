@@ -338,22 +338,22 @@ export default class Draggable extends Component {
     return gesture.moveX > 140 && gesture.moveX < 280;
   }
   isDropArea2x(gesture) {
-    return gesture.moveX < 420 && gesture.moveX > 280;
+    return gesture.moveX > 280 && gesture.moveX < 420;
   }
   isDropArea3x(gesture) {
-    return gesture.moveX < 560 && gesture.moveX > 420;
+    return gesture.moveX > 420 && gesture.moveX < 560;
   }
   isDropArea4x(gesture) {
-    return gesture.moveX < 700 && gesture.moveX > 560;
+    return gesture.moveX > 560 && gesture.moveX < 700;
   }
   isDropArea5x(gesture) {
-    return gesture.moveX < 840 && gesture.moveX > 700;
+    return gesture.moveX > 700 && gesture.moveX < 840;
   }
   isDropArea6x(gesture) {
-    return gesture.moveX < 980 && gesture.moveX > 840;
+    return gesture.moveX > 840 && gesture.moveX < 980;
   }
   isDropArea7x(gesture) {
-    return gesture.moveX < 1120 && gesture.moveX > 980;
+    return esture.moveX > 980 && ggesture.moveX < 1120;
   }
 
   inputValueUpdate = (val, prop) => {
