@@ -182,6 +182,7 @@ export default class Insats extends Component {
           if (item == fromTime + "," + toTime + "," + date) {
             timeIndex = cnt;
             found = 1;
+            console.log(item);
           } else {
             cnt++;
           }
@@ -191,12 +192,11 @@ export default class Insats extends Component {
           updateDBRef.set({
             times: newTimes,
           });
+          return 0;
         }
-        return 0;
       }
     }
-    console.log("end");
-    return 0;
+    return -1;
   }
 
   updateInsats(insats, newFrom, newTo, newDate) {
