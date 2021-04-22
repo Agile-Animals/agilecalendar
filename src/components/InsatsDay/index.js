@@ -83,8 +83,8 @@ export default class Insats extends Component {
 let styles = StyleSheet.create({
   instatsList: {
     flexDirection: "row",
-    paddingTop: 20,
-    paddingBottom: 22,
+    paddingTop: 10,
+    paddingBottom: 10,
     borderColor: "black",
     borderWidth: 2,
     backgroundColor: "white",

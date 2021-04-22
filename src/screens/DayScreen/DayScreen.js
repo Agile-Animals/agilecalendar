@@ -153,7 +153,7 @@ export default class DayScreen extends Component {
           return (
             <View key={this.state.insatser[i].key} style={styles.instatsList}>
               <Pressable>
-                <Text> {this.state.insatser[i].fromTime} -</Text><Text> {this.state.insatser[i].toTime} </Text>
+                <Text> {this.state.insatser[i].fromTime} -{this.state.insatser[i].toTime} </Text>
 
               </Pressable>
             </View>
