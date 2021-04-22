@@ -273,46 +273,43 @@ export default class HomeScreen extends Component {
           <Text></Text>
         </View>
       );
-    }
-    else if (dayIndex == 2) {
+    } else if (dayIndex == 2) {
       return (
         <View style={styles.instatsListEmpty2} key={index}>
           <Text></Text>
         </View>
       );
-    }
-    else if (dayIndex == 3) {
+    } else if (dayIndex == 3) {
       return (
         <View style={styles.instatsListEmpty3} key={index}>
           <Text></Text>
         </View>
       );
-    }    else if (dayIndex == 4) {
+    } else if (dayIndex == 4) {
       return (
         <View style={styles.instatsListEmpty4} key={index}>
           <Text></Text>
         </View>
       );
-    }    else if (dayIndex == 5) {
+    } else if (dayIndex == 5) {
       return (
         <View style={styles.instatsListEmpty5} key={index}>
           <Text></Text>
         </View>
       );
-    }    else if (dayIndex == 6) {
+    } else if (dayIndex == 6) {
       return (
         <View style={styles.instatsListEmpty6} key={index}>
           <Text></Text>
         </View>
       );
-    }    else if (dayIndex == 7) {
+    } else if (dayIndex == 7) {
       return (
         <View style={styles.instatsListEmpty7} key={index}>
           <Text></Text>
         </View>
       );
     }
-
   }
 
   // sets how far we have scrolled in the scrollview to keep y values correct when dragging insatser
@@ -482,7 +479,7 @@ export default class HomeScreen extends Component {
 
         <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={index}>
@@ -492,19 +489,19 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, today, index, 1, "monday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday2, index, 2, "tuesday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(
                   item,
@@ -516,25 +513,25 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday4, index, 4, "thursday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday5, index, 5, "friday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday6, index, 6, "saturday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday7, index, 7, "sunday color");
               })}
@@ -623,7 +620,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
-  },  
+  },
   instatsListEmpty4: {
     paddingTop: 10,
     paddingBottom: 10,
@@ -634,7 +631,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
-  },  
+  },
   instatsListEmpty5: {
     paddingTop: 10,
     paddingBottom: 10,
@@ -645,7 +642,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
-  },  
+  },
   instatsListEmpty6: {
     paddingTop: 10,
     paddingBottom: 10,
@@ -656,7 +653,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
-  },  
+  },
   instatsListEmpty7: {
     paddingTop: 10,
     paddingBottom: 10,

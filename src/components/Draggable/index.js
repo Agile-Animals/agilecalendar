@@ -507,6 +507,6 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "center",
     alignContent: "center",
-    backgroundColor: "gray",
+    backgroundColor: "white",
   },
 });
