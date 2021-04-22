@@ -267,11 +267,52 @@ export default class HomeScreen extends Component {
         }
       }
     }
-    return (
-      <View style={styles.instatsListEmpty} key={index}>
-        <Text></Text>
-      </View>
-    );
+    if (dayIndex == 1) {
+      return (
+        <View style={styles.instatsListEmpty1} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }
+    else if (dayIndex == 2) {
+      return (
+        <View style={styles.instatsListEmpty2} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }
+    else if (dayIndex == 3) {
+      return (
+        <View style={styles.instatsListEmpty3} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }    else if (dayIndex == 4) {
+      return (
+        <View style={styles.instatsListEmpty4} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }    else if (dayIndex == 5) {
+      return (
+        <View style={styles.instatsListEmpty5} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }    else if (dayIndex == 6) {
+      return (
+        <View style={styles.instatsListEmpty6} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }    else if (dayIndex == 7) {
+      return (
+        <View style={styles.instatsListEmpty7} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }
+
   }
 
   // sets how far we have scrolled in the scrollview to keep y values correct when dragging insatser
@@ -528,7 +569,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   listContainer: {
-    backgroundColor: "rgba(49, 118, 197, 1.0)",
+    backgroundColor: "white",
     width: "100%",
     flex: 1,
     flexDirection: "row",
@@ -544,19 +585,85 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "rgba(49, 118, 197, 1.0)",
+    borderColor: "white",
     borderWidth: 2,
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },
-  instatsListEmpty: {
+  instatsListEmpty1: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "rgba(49, 118, 197, 1.0)",
+    borderColor: "white",
     borderWidth: 2,
-    backgroundColor: "#ccc",
+    backgroundColor: "#45bf15",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },
+  instatsListEmpty2: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#399bc2",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },
+  instatsListEmpty3: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#c4c1b6",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },  
+  instatsListEmpty4: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#c4b347",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },  
+  instatsListEmpty5: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#e3e63c",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },  
+  instatsListEmpty6: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#e89eb4",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },  
+  instatsListEmpty7: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#eb7852",
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,

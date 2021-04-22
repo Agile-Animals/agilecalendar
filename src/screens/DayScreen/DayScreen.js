@@ -7,6 +7,7 @@ import {
   View,
   Animated,
   Pressable,
+  Modal,
   ListItem,
   useWindowDimensions,
   ScrollView,
@@ -16,7 +17,7 @@ import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Insats from "../../components/Insats";
+import Insats from "../../components/InsatsDay";
 import moment from "moment";
 
 export default class DayScreen extends Component {
@@ -27,6 +28,8 @@ export default class DayScreen extends Component {
       .collection("insatser")
       .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
+      modalVisible: false,
+      // message: props.message,
       isLoading: true,
       insatser: [],
       times: [
@@ -100,7 +103,24 @@ export default class DayScreen extends Component {
     this.props.navigation.replace("Login");
   }
 
-  renderDays(time, day, index) {
+  // renderDays(time, day, index) {
+  //   for (let i = 0; i < 24; i++) {
+  //     for (let i = 0; i < this.state.insatser.length; ++i) {
+  //       if (
+  //         this.state.insatser[i].fromTime == time &&
+  //         this.state.insatser[i].date == day
+  //       ) {
+  //         return (
+  //           <View key={this.state.insatser[i].key} style={styles.instatsList}>
+  //             <Insats message={this.state.insatser[i].insatsType} />
+  //           </View>
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
+
+  renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (
@@ -108,18 +128,21 @@ export default class DayScreen extends Component {
           this.state.insatser[i].date == day
         ) {
           return (
-            <View key={this.state.insatser[i].key} style={styles.instatsList}>
-              <Pressable
-              >
-                <Text> {this.state.insatser[i].insatsType} </Text>
-              </Pressable>
+            <View
+              key={this.state.insatser[i].key}
+            >
+              <Insats
+                message={this.state.insatser[i].insatsType}
+                insats={this.state.insatser[i]}
+                navigation={this.props.navigation}
+                scrollOfsetY={this.state.scrollOfsetY}
+              />
             </View>
           );
         }
       }
     }
   }
-
   renderTimes(time, day, index) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -129,9 +152,9 @@ export default class DayScreen extends Component {
         ) {
           return (
             <View key={this.state.insatser[i].key} style={styles.instatsList}>
-              <Pressable
-              >
-                <Text> {this.state.insatser[i].fromTime} </Text>
+              <Pressable>
+                <Text> {this.state.insatser[i].fromTime} -</Text><Text> {this.state.insatser[i].toTime} </Text>
+
               </Pressable>
             </View>
           );
@@ -139,6 +162,7 @@ export default class DayScreen extends Component {
       }
     }
   }
+
 
   render() {
     var today = new Date();
@@ -151,7 +175,6 @@ export default class DayScreen extends Component {
         </View>
       );
     }
-
     return (
       <View style={styles.container}>
         <View style={styles.header}>
