@@ -1,6 +1,7 @@
 import * as firebase from 'firebase';
 import firestore from 'firebase/firestore'
-
+// our database configiration 
+// 
 const firebaseConfig = {
     apiKey: "AIzaSyAbAASayEdJK5fb2DcG_VyGtmDLf36zj-M",
     authDomain: "agilecalendar-86be5.firebaseapp.com",

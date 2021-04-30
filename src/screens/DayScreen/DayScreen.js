@@ -7,6 +7,7 @@ import {
   View,
   Animated,
   Pressable,
+  Modal,
   ListItem,
   useWindowDimensions,
   ScrollView,
@@ -16,7 +17,7 @@ import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Insats from "../../components/Insats";
+import Insats from "../../components/InsatsDay";
 import moment from "moment";
 
 export default class DayScreen extends Component {
@@ -27,19 +28,10 @@ export default class DayScreen extends Component {
       .collection("insatser")
       .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
+      modalVisible: false,
+      // message: props.message,
       isLoading: true,
       insatser: [],
-      tmpDays: [
-        "Måndag",
-        "Tisdag",
-        "Onsdag",
-        "Torsdag",
-        "Fredag",
-        "Lördag",
-        "Söndag",
-      ],
-      dayChecker: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      days: ["", "", "", "", "", "", ""],
       times: [
         "00:00",
         "01:00",
@@ -111,17 +103,24 @@ export default class DayScreen extends Component {
     this.props.navigation.replace("Login");
   }
 
-  dynamicDays() {
-    for (let i = 0; i < 7; ++i) {
-      if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
-        this.state.days[0] = "Idag";
-        this.state.days[0] += " " + moment(this.state.today).format("MM-DD");
-        i = 9;
-      }
-    }
-  }
+  // renderDays(time, day, index) {
+  //   for (let i = 0; i < 24; i++) {
+  //     for (let i = 0; i < this.state.insatser.length; ++i) {
+  //       if (
+  //         this.state.insatser[i].fromTime == time &&
+  //         this.state.insatser[i].date == day
+  //       ) {
+  //         return (
+  //           <View key={this.state.insatser[i].key} style={styles.instatsList}>
+  //             <Insats message={this.state.insatser[i].insatsType} />
+  //           </View>
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
 
-  renderDays(time, day, index) {
+  renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (
@@ -129,29 +128,46 @@ export default class DayScreen extends Component {
           this.state.insatser[i].date == day
         ) {
           return (
-            <View key={this.state.insatser[i].key}>
+            <View
+              key={this.state.insatser[i].key}
+            >
               <Insats
                 message={this.state.insatser[i].insatsType}
-                id={this.state.insatser[i].key}
+                insats={this.state.insatser[i]}
                 navigation={this.props.navigation}
+                scrollOfsetY={this.state.scrollOfsetY}
               />
             </View>
           );
         }
       }
     }
-    return (
-      <View style={styles.instatsListEmpty} key={index}>
-        <Text></Text>
-      </View>
-    );
+  }
+  renderTimes(time, day, index) {
+    for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < this.state.insatser.length; ++i) {
+        if (
+          this.state.insatser[i].fromTime == time &&
+          this.state.insatser[i].date == day
+        ) {
+          return (
+            <View key={this.state.insatser[i].key} style={styles.instatsList}>
+              <Pressable>
+                <Text> {this.state.insatser[i].fromTime} -{this.state.insatser[i].toTime} </Text>
+
+              </Pressable>
+            </View>
+          );
+        }
+      }
+    }
   }
 
+
   render() {
-    const { insatser, days } = this.state;
     var today = new Date();
     today = moment(today).format("YYYY-MM-DD");
-    this.dynamicDays();
+    // this.dynamicDays();
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
@@ -159,7 +175,6 @@ export default class DayScreen extends Component {
         </View>
       );
     }
-
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -195,17 +210,13 @@ export default class DayScreen extends Component {
         </View>
         <View style={styles.head}>
           <Text style={styles.headItems}></Text>
-          <Text style={styles.headItems}>{this.state.days[0]}</Text>
+          {/* <Text style={styles.headItems}>{this.state.days[0]}</Text> */}
         </View>
         <ScrollView>
           <View style={styles.listContainer}>
             <View style={{ width: 140 }}>
               {this.state.times.map((item, index) => {
-                return (
-                  <Text style={styles.instatsList} key={index}>
-                    {item}
-                  </Text>
-                );
+                return this.renderTimes(item, today, index);
               })}
             </View>
 
@@ -242,13 +253,16 @@ const styles = StyleSheet.create({
     shadowColor: "red",
   },
   instatsList: {
+    flexDirection: "row",
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: 7,
     borderColor: "black",
     borderWidth: 2,
-    backgroundColor: "#ccc",
-    shadowOpacity: 0.8,
+    // change background to dayColor somehow
+    backgroundColor: "white",
+    shadowOpacity: 0.2,
+    alignItems: "center",
+    justifyContent: "center",
     shadowRadius: 2,
   },
   button: {

@@ -1,5 +1,18 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, ActivityIndicator, Alert, View, Animated, Pressable, ImageBackground, useWindowDimensions, ScrollView, PanResponder, TouchableOpacity,} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  Alert,
+  View,
+  Animated,
+  Pressable,
+  ImageBackground,
+  useWindowDimensions,
+  ScrollView,
+  PanResponder,
+  TouchableOpacity,
+} from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
@@ -8,14 +21,14 @@ import { Button, ThemeProvider } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
 
-
 export default class HomeScreen extends Component {
   constructor(props) {
-    // this.firestoreRef = firebase
-    //   .firestore()
-    //   .collection("insatser")
-    //   .where("boende", "==", firebase.auth().currentUser.uid);
     super(props);
+    // this should instead only query for the current weeks insatser
+    this.firestoreRef = firebase
+      .firestore()
+      .collection("insatser")
+      .where("boende", "==", firebase.auth().currentUser.uid);
     this.state = {
       isLoading: true,
       insatser: [],
@@ -57,25 +70,25 @@ export default class HomeScreen extends Component {
         "22:00",
         "23:00",
       ],
-      insatsTypes: [
-        "Städning",
-        "Tvätt",
-        "Matlagning",
-        "Inköp",
-        "Ekonomi",
-        "Aktivitet",
-        "Dusch/bad",
-        "Toalettbesök",
-        "Uppsnyggning",
-        "Matsituation",
-        "Vila och sömn",
-        "På-o avklädning",
-        "Tillsyn",
-        "Förflyttning",
-        "Arbetsassistans",
-        "Besök hos vårdgivare",
-        "Bemötande",
-      ],
+      insatsTypes: {
+        Städning: 1,
+        Tvätt: 2,
+        Matlagning: 3,
+        Inköp: 4,
+        Ekonomi: 5,
+        Aktivitet: 6,
+        "Dusch/bad": 7,
+        Toalettbesök: 8,
+        // Uppsnyggning: 1,
+        // Matsituation: 1,
+        // "Vila och sömn": 1,
+        // "På-o avklädning": 1,
+        // Tillsyn: 1,
+        // Förflyttning: 1,
+        // Arbetsassistans: 1,
+        // "Besök hos vårdgivare": 1,
+        // Bemötande: 1,
+      },
       today: moment().format("YYYY-MM-DD"),
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
@@ -84,49 +97,52 @@ export default class HomeScreen extends Component {
       insatsHeight: 0,
     };
   }
+  componentDidMount() {
+    this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
+  }
 
-  // componentDidMount() {
-  //   this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
-  // }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
-  // componentWillUnmount() {
-  //   this.unsubscribe();
-  // }
+  getCollection = (querySnapshot) => {
+    const insatser = [];
+    querySnapshot.forEach((res) => {
+      const {
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        insatsCounter,
+        freeText,
+      } = res.data();
+      insatser.push({
+        key: res.id,
+        boende,
+        fromTime,
+        toTime,
+        date,
+        helperName,
+        insatsType,
+        insatsCounter,
+        freeText,
+      });
+    });
+    this.setState({
+      insatser,
+      isLoading: false,
+    });
+  };
 
-  // getCollection = (querySnapshot) => {
-  //   const insatser = [];
-  //   querySnapshot.forEach((res) => {
-  //     const {
-  //       boende,
-  //       fromTime,
-  //       toTime,
-  //       date,
-  //       helperName,
-  //       insatsType,
-  //       freeText,
-  //     } = res.data();
-  //     insatser.push({
-  //       key: res.id,
-  //       boende,
-  //       fromTime,
-  //       toTime,
-  //       date,
-  //       helperName,
-  //       insatsType,
-  //       freeText,
-  //     });
-  //   });
-  //   this.setState({
-  //     insatser,
-  //     isLoading: false,
-  //   });
-  // };
+  // basic firestore logout function
+  logOut() {
+    loggingOut();
+    this.props.navigation.replace("Login");
+  }
 
-  // logOut() {
-  //   loggingOut();
-  //   this.props.navigation.replace("Login");
-  // }
-
+  // used to set swedish names of days
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
       if (moment(this.state.today).format("ddd") === this.state.dayChecker[i]) {
@@ -149,20 +165,50 @@ export default class HomeScreen extends Component {
     }
   }
 
-  checkConsumedInsats(tmpType) {
+  // decides what insatser to show in the cloud
+  checkConsumedInsats(tmpType, tmptype2) {
+    
     for (let i = 0; i < this.state.insatser.length; ++i) {
       if (
         this.state.insatser[i].date >= this.state.weekStart &&
         this.state.insatser[i].date <= this.state.weekEnd
       ) {
-        if (tmpType == this.state.insatser[i].insatsType) {
+        if (tmpType == this.state.insatser[i].insatsTypes) {
+          console.log(this.state.insatser[i].insatsTypes);
           return -1;
+        
+        }
+      }
+      if (
+        this.state.insatser[i].date >= this.state.weekStart &&
+        this.state.insatser[i].date <= this.state.weekEnd
+      ) {
+        if (tmptype2 == this.state.insatser[i].insatsTypes) {
+          console.log(this.state.insatser[i].insatsTypes);
+          return tmptype2 ;
+        
         }
       }
     }
     return 1;
   }
 
+  // checkConsumedInsats(tmpType) {
+  //   for (let i = 0; i < this.state.insatser.length; ++i) {
+  //     if (
+  //       this.state.insatser[i].date >= this.state.weekStart &&
+  //       this.state.insatser[i].date <= this.state.weekEnd
+  //     ) {
+  //       if (tmpType == this.state.insatser[i].insatsTypes) {
+  //         console.log(this.state.insatser[i].insatsTypes);
+  //         return -1;
+  //       }
+  //     }
+  //   }
+  //   return 1;
+  // }
+
+  // set the weekStart variable to the week that has been chosen
   setWeek(newWeek) {
     this.setState({
       weekStart: moment(this.state.weekStart)
@@ -175,6 +221,7 @@ export default class HomeScreen extends Component {
     this.state.layouts = [];
   }
 
+  // updates layouts array with the data of any insatser
   getLayout(
     layout,
     dayIndex,
@@ -185,6 +232,7 @@ export default class HomeScreen extends Component {
     date,
     helperName,
     insatsType,
+    insatsCounter,
     freeText
   ) {
     this.state.layouts.push({
@@ -199,17 +247,20 @@ export default class HomeScreen extends Component {
       date: date,
       helperName: helperName,
       insatsType: insatsType,
+      insatsCounter: insatsCounter,
       freeText: freeText,
     });
   }
 
+  // used to get the height of insatsblock on screen
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
     });
   }
 
-  renderDays(time, day, index, dayIndex) {
+  // renders all insatser that can be dragged as insatser components and empty <view> for
+  renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (
@@ -218,7 +269,6 @@ export default class HomeScreen extends Component {
         ) {
           return (
             <View
-              style={{ color: "red" }}
               onLayout={(event) => {
                 this.getLayout(
                   event.nativeEvent.layout,
@@ -230,40 +280,82 @@ export default class HomeScreen extends Component {
                   this.state.insatser[i].date,
                   this.state.insatser[i].helperName,
                   this.state.insatser[i].insatsType,
+                  this.state.insatser[i].insatsCounter,
                   this.state.insatser[i].freeText
                 );
               }}
               key={this.state.insatser[i].key}
-              style={{ color: "red" }}
-              testID = "leyTest"
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
+                numberOfInsats={this.state.insatser[i].insatsCounter}
                 insats={this.state.insatser[i]}
                 navigation={this.props.navigation}
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
-                style={{ color: "red" }}
               />
             </View>
           );
         }
       }
     }
-    return (
-      <View style={styles.instatsListEmpty} key={index}>
-        <Text></Text>
-      </View>
-    );
+    // let man = {"man":1}
+    // console.log(Object.keys(man))
+
+    if (dayIndex == 1) {
+      return (
+        <View style={styles.instatsListEmpty1} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 2) {
+      return (
+        <View style={styles.instatsListEmpty2} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 3) {
+      return (
+        <View style={styles.instatsListEmpty3} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 4) {
+      return (
+        <View style={styles.instatsListEmpty4} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 5) {
+      return (
+        <View style={styles.instatsListEmpty5} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 6) {
+      return (
+        <View style={styles.instatsListEmpty6} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 7) {
+      return (
+        <View style={styles.instatsListEmpty7} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }
   }
 
+  // sets how far we have scrolled in the scrollview to keep y values correct when dragging insatser
   handleScroll = (event) => {
     this.setState({
       scrollOfsetY: event.nativeEvent.contentOffset.y,
     });
   };
 
+  // removes duplets that are created in the moment when you swap two insatser
   onSwap(key1, key2) {
     let keyToSplice1 = 0,
       keyToSplice2 = 0;
@@ -284,6 +376,7 @@ export default class HomeScreen extends Component {
     }
   }
 
+  // render function
   render() {
     const {
       insatser,
@@ -303,10 +396,11 @@ export default class HomeScreen extends Component {
     var aday6 = moment(this.state.weekStart).add(5, "day").format("YYYY-MM-DD");
     var aday7 = moment(this.state.weekStart).add(6, "day").format("YYYY-MM-DD");
     this.dynamicDays();
+
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="red" />
+          <ActivityIndicator size="large" />
         </View>
       );
     }
@@ -319,25 +413,32 @@ export default class HomeScreen extends Component {
             justifyContent: "space-between",
           }}
         >
-          <ImageBackground data-testid = "insats"
+          <ImageBackground
             source={require("../../../assets/moln.png")}
             style={styles.moln}
           >
-            {this.state.insatsTypes.map((item, index) => {
-              return 1 === this.checkConsumedInsats(item) ? (
+
+            {Object.entries(insatsTypes).map(([item, value], index) => {
+              // console.log("the value" + value)
+              // console.log("the value" + value)
+
+
+              return 1 === this.checkConsumedInsats(item, value) ? (
                 <View key={index}>
+                  {/* {console.log("the value" + value)} */}
                   <Draggable
                     message={item}
+                    numberOfInsats={value}
                     weekStart={this.state.weekStart}
                     insatser={this.state.insatser}
                     scrollOfsetY={this.state.scrollOfsetY}
                     insatsHeight={this.state.insatsHeight}
-                  />
+                    />
                 </View>
               ) : null;
             })}
           </ImageBackground>
-          <View  style={styles.button}>
+          <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
                 title={
@@ -351,9 +452,28 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.header}>
-            <Text category="h2" style={{ fontSize: 20 }}>
-              Vecka {moment(this.state.weekStart).format("WW")}
-            </Text>
+            <View style={{ width: 120, backgroundColor: "white" }}>
+              <Button
+                title={
+                  "Nuvarande Vecka: " + moment().startOf("isoWeek").format("WW")
+                }
+                onPress={() =>
+                  this.setWeek(
+                    moment().startOf("isoWeek").format("WW") -
+                      moment(this.state.weekStart).format("WW")
+                  )
+                }
+                type="outline"
+              />
+            </View>
+            <View style={styles.header}>
+              <Text>
+                {" "}
+                Det är nu vecka: {moment(this.state.weekStart).format(
+                  "WW"
+                )}{" "}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.button}>
@@ -372,14 +492,13 @@ export default class HomeScreen extends Component {
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
-                // title="DagVy"
-                // onPress={() => this.props.navigation.navigate("DayScreen")}
                 title="Logga Ut"
                 onPress={() => this.logOut()}
                 type="outline"
               />
             </View>
           </View>
+
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
@@ -404,7 +523,7 @@ export default class HomeScreen extends Component {
 
         <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
           <View style={styles.listContainer}>
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={index}>
@@ -414,45 +533,51 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}  data-testid = "inputs1">
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, today, index, 1);
+                return this.renderDays(item, today, index, 1, "monday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday2, index, 2);
+                return this.renderDays(item, aday2, index, 2, "tuesday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday3, index, 3);
+                return this.renderDays(
+                  item,
+                  aday3,
+                  index,
+                  3,
+                  "wednesday color"
+                );
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday4, index, 4);
+                return this.renderDays(item, aday4, index, 4, "thursday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday5, index, 5);
+                return this.renderDays(item, aday5, index, 5, "friday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday6, index, 6);
+                return this.renderDays(item, aday6, index, 6, "saturday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
-                return this.renderDays(item, aday7, index, 7);
+                return this.renderDays(item, aday7, index, 7, "sunday color");
               })}
             </View>
 
@@ -485,42 +610,104 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   listContainer: {
-    backgroundColor: "rgba(49, 118, 197, 1.0)",
+    backgroundColor: "white",
     width: "100%",
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
-    color: "red",
   },
   item: {
     height: 43.5,
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
-    color: "red",
   },
   instatsList: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "rgba(49, 118, 197, 1.0)",
+    borderColor: "white",
     borderWidth: 2,
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    // color: "red",
   },
-  instatsListEmpty: {
+  instatsListEmpty1: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "rgba(49, 118, 197, 1.0)",
+    borderColor: "white",
     borderWidth: 2,
-    backgroundColor: "#ccc",
+    backgroundColor: "#45bf15",
     shadowOpacity: 0.2,
     shadowRadius: 2,
     zIndex: -2,
-    color: "red",
+  },
+  instatsListEmpty2: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#399bc2",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },
+  instatsListEmpty3: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#c4c1b6",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },
+  instatsListEmpty4: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#c4b347",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },
+  instatsListEmpty5: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#e3e63c",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },
+  instatsListEmpty6: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#e89eb4",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
+  },
+  instatsListEmpty7: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#eb7852",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    zIndex: -2,
   },
   moln: {
     marginTop: 43.33,
@@ -545,12 +732,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f1f8ff",
     flexDirection: "row",
     marginTop: 5,
-    //backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   headItems: {
     width: 140,
+    paddingLeft: 20,
     alignSelf: "center",
-    //backgroundColor: "white",
   },
 
   test: {
@@ -559,6 +745,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   preloader: {
-    backgroundColor: "red",
+    backgroundColor: "blue",
   },
 });
