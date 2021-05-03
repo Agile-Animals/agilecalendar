@@ -28,6 +28,7 @@ export default class Draggable extends Component {
       insatser: props.insatser,
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
+      userID: props.userID,
     };
 
     this.panResponder = PanResponder.create({
@@ -426,6 +427,37 @@ export default class Draggable extends Component {
     return 1;
   }
 
+  // this should use the helpers pushToken, not the creators like in this test.
+  // in firestore we would get their user ID and get the pushToken from their user document.
+  async sendNotification() {
+    const updateDBRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.userID);
+    let doc = await updateDBRef.get();
+    var newTimes = [];
+    var pushToken = await doc.data().pushToken;
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: pushToken,
+        data: { extractData: "Some data" },
+        title: "Insats skapad:",
+        body:
+          this.state.insatsType +
+          " " +
+          this.state.fromTime +
+          "-" +
+          this.state.toTime,
+      }),
+    });
+  }
+
   // creates insats unless there already is one at the time and date
   async storeInsats() {
     let duplet = 0;
@@ -444,6 +476,7 @@ export default class Draggable extends Component {
         date: this.state.date,
         freeText: "",
       });
+      this.sendNotification();
       duplet = 1;
     } else {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -473,6 +506,7 @@ export default class Draggable extends Component {
         date: this.state.date,
         freeText: "",
       });
+      this.sendNotification();
     }
   }
 

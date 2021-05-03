@@ -27,6 +27,7 @@ export default class Insats extends Component {
       scrollOfsetY: props.scrollOfsetY,
       dayColor: props.dayColor,
       modalVisible: false,
+      userID: props.userID,
     };
 
     this.panResponder = PanResponder.create({
@@ -103,7 +104,6 @@ export default class Insats extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
     if (this.props.layouts !== prevProps.layouts) {
       this.setState({ layouts: this.props.layouts });
     }
@@ -113,6 +113,35 @@ export default class Insats extends Component {
     if (this.props.scrollOfsetY !== prevProps.scrollOfsetY) {
       this.setState({ scrollOfsetY: this.props.scrollOfsetY });
     }
+  }
+
+  async sendNotification() {
+    const updateDBRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.userID);
+    let doc = await updateDBRef.get();
+    var newTimes = [];
+    var pushToken = await doc.data().pushToken;
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: pushToken,
+        data: { extractData: "Some data" },
+        title: "Insats borttagen:",
+        body:
+          this.state.insats.insatsType +
+          " " +
+          this.state.insats.fromTime +
+          "-" +
+          this.state.insats.toTime,
+      }),
+    });
   }
 
   // removes insats from database and also removes its' values from layouts
@@ -134,6 +163,7 @@ export default class Insats extends Component {
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
     });
+    this.sendNotification();
   }
 
   // frees booked personnel when deleting insats
