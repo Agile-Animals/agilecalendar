@@ -27,7 +27,6 @@ export default class Insats extends Component {
       scrollOfsetY: props.scrollOfsetY,
       dayColor: props.dayColor,
       modalVisible: false,
-      userID: props.userID,
     };
 
     this.panResponder = PanResponder.create({
@@ -104,6 +103,7 @@ export default class Insats extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
     if (this.props.layouts !== prevProps.layouts) {
       this.setState({ layouts: this.props.layouts });
     }
@@ -115,35 +115,6 @@ export default class Insats extends Component {
     }
   }
 
-  async sendNotification() {
-    const updateDBRef = firebase
-      .firestore()
-      .collection("users")
-      .doc(this.state.userID);
-    let doc = await updateDBRef.get();
-    var newTimes = [];
-    var pushToken = await doc.data().pushToken;
-    fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-Encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to: pushToken,
-        data: { extractData: "Some data" },
-        title: "Insats borttagen:",
-        body:
-          this.state.insats.insatsType +
-          " " +
-          this.state.insats.fromTime +
-          "-" +
-          this.state.insats.toTime,
-      }),
-    });
-  }
-
   // removes insats from database and also removes its' values from layouts
   async deleteInsats() {
     this.freePersonnel(
@@ -151,6 +122,12 @@ export default class Insats extends Component {
       this.state.insats.toTime,
       this.state.insats.date
     );
+    // this.freeInsats(      
+    //   this.state.insatsType,
+    //   this.state.boende,
+    //   moment(this.state.weekStart).format("WW"),
+    //   moment(this.state.weekStart).format("YYYY"),
+    // );
     for (let i = 0; i < this.state.layouts.length; ++i) {
       if (this.state.layouts[i].key == this.state.insats.key) {
         this.state.layouts.splice(i, 1);
@@ -163,7 +140,6 @@ export default class Insats extends Component {
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
     });
-    this.sendNotification();
   }
 
   // frees booked personnel when deleting insats
@@ -228,6 +204,61 @@ export default class Insats extends Component {
     return 0;
   }
 
+
+  // async freeinsats(insatstype, boende, veckaNummer, år) {
+  //   let Insatserna = [
+  //     "Städning:2",
+  //     "Tvätt:1",
+  //     "Matlagning:1",
+  //     "Inköp:1",
+  //     "Ekonomi:1",
+  //     "Aktivitet:1",
+  //     "Dusch/bad:1",
+  //     "Toalettbesök:1",
+  //     "Uppsnyggning:1",
+  //     "Matsituation:1",
+  //     "Vila och sömn:1",
+  //     "På-o avklädning:1",
+  //     "Tillsyn:1",
+  //     "Förflyttning:1",
+  //     "Arbetsassistans:1",
+  //     "Besök hos vårdgivare:1",
+  //     "Bemötande:1",
+  //   ]
+  //   var insatsTimes = "insatsTimes";
+  //   for(i= 0; i< 18; ++i) {
+  //     let [a, b] = Insatserna[i].split(":");
+  //     if (insatstype == a) {
+  //       const updateDBRef = await firebase
+  //         .firestore().collection(insatsTimes).doc(Insatserna[i]);
+  //       let doc2 = await updateDBRef.get();
+  //       var newInsatsTimes = [];
+  //       var data2 = await doc2.data();
+  //       let insansnum = 0;
+  //       data2.times.map((item, index) => {
+  //         newInsatsTimes.push(item);
+  //         if (item == insatstype + "," + boende + "," + veckaNummer +","+ år) {
+  //           insansnum++;
+  //         }
+  //       });
+  //       if (insansnum < b) {
+  //         newInsatsTimes.push(insatstype + "," + boende + "," +veckaNummer + ","+ år);
+  //         updateDBRef.set(
+  //           {
+  //             times: newInsatsTimes,
+  //           },
+  //           { merge: true }
+  //         );
+  //       } else {
+  //         Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+  //         return 0;
+  //       }
+  //       i = 19;
+  //     }
+  //   }
+  //   return 1;
+
+  // }
   updateInsats(insats, newFrom, newTo, newDate) {
     const updateDBRef = firebase
       .firestore()

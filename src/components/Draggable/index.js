@@ -28,7 +28,6 @@ export default class Draggable extends Component {
       insatser: props.insatser,
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
-      userID: props.userID,
     };
 
     this.panResponder = PanResponder.create({
@@ -404,6 +403,7 @@ export default class Draggable extends Component {
         var data = await doc.data();
         let personnelNr = 0;
         data.times.map((item, index) => {
+          console.log(data)
           newTimes.push(item);
           if (item == fromTime + "," + toTime + "," + date) {
             personnelNr++;
@@ -427,36 +427,63 @@ export default class Draggable extends Component {
     return 1;
   }
 
-  // this should use the helpers pushToken, not the creators like in this test.
-  // in firestore we would get their user ID and get the pushToken from their user document.
-  async sendNotification() {
-    const updateDBRef = firebase
-      .firestore()
-      .collection("users")
-      .doc(this.state.userID);
-    let doc = await updateDBRef.get();
-    var newTimes = [];
-    var pushToken = await doc.data().pushToken;
-    fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-Encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to: pushToken,
-        data: { extractData: "Some data" },
-        title: "Insats skapad:",
-        body:
-          this.state.insatsType +
-          " " +
-          this.state.fromTime +
-          "-" +
-          this.state.toTime,
-      }),
-    });
-  }
+  // async insatsMoreThanOne(insatstype, boende) {
+  //   let insatserna = [
+  //     "Städning_2",
+  //     "Tvätt_1",
+  //     "Matlagning_1",
+  //     "Inköp_1",
+  //     "Ekonomi_1",
+  //     "Aktivitet_1",
+  //     "Dusch/bad_1",
+  //     "Toalettbesök_1",
+  //     "Uppsnyggning_1",
+  //     "Matsituation_1",
+  //     "Vila och sömn_1",
+  //     "På-o avklädning_1",
+  //     "Tillsyn_1",
+  //     "Förflyttning_1",
+  //     "Arbetsassistans_1",
+  //     "Besök hos vårdgivare_1",
+  //     "Bemötande_1",
+  //   ];
+  //   // var insatsTimes = ;
+  //   var veckaNummer = moment(this.state.weekStart).format("WW");
+  //   var år = moment(this.state.weekStart).format("YYYY");
+  //   for (i = 0; i < 17; ++i) {
+  //     let [a, b] = insatserna[i].split("_");
+  //     if (a == insatstype) {
+  // const updateDBRef = await firebase
+  //   .firestore()
+  //   .collection("insatsTimes")
+  //   .doc(insatserna[i]);
+  //   let doc = await updateDBRef.get();
+  //   var newInsatsTimes = [];
+  //   var data = await doc.data();
+  //   let insansnum = 0;
+  //   data.insatss.map((item, index) => {
+  //           newInsatsTimes.push(item);
+  //           if (item == insatstype + "," + boende + "," + veckaNummer +","+ år) {
+  //             insansnum++;
+  //           }
+  //         });
+  //         if (insansnum < b) {
+  //           newInsatsTimes.push(insatstype + "," + boende + "," +veckaNummer + ","+ år);
+  //           updateDBRef.set(
+  //             {
+  //               insatss: newInsatsTimes,
+  //             },
+  //             { merge: true }
+  //           );
+  //         } else {
+  //           Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+  //           return 0;
+  //         }
+  //         i = 18;
+  //       }
+  //     }
+  //     return 1;
+  //     }
 
   // creates insats unless there already is one at the time and date
   async storeInsats() {
@@ -466,7 +493,14 @@ export default class Draggable extends Component {
       this.state.toTime,
       this.state.date
     );
-    if (this.state.insatser.length == 0 && personAvailable == 1) {
+
+    // let insatsManyTimes = await this.insatsMoreThanOne(
+    //   this.state.insatsType,
+    //   this.state.boende,
+
+    // );
+    // this.insatsMoreThanOne(this.state.insatsType);
+    if (this.state.insatser.length == 0 && personAvailable == 1 ) {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
@@ -476,7 +510,6 @@ export default class Draggable extends Component {
         date: this.state.date,
         freeText: "",
       });
-      this.sendNotification();
       duplet = 1;
     } else {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -496,7 +529,7 @@ export default class Draggable extends Component {
         }
       }
     }
-    if (duplet == 0 && personAvailable == 1) {
+    if (duplet == 0 && personAvailable == 1 ) {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
@@ -506,7 +539,6 @@ export default class Draggable extends Component {
         date: this.state.date,
         freeText: "",
       });
-      this.sendNotification();
     }
   }
 

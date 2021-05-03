@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { registration } from "../../API/firebaseMethods";
-import * as Notifications from "expo-notifications";
 
 export default function SignUp({ navigation }) {
   const [firstName, setFirstName] = useState("");
@@ -27,8 +26,8 @@ export default function SignUp({ navigation }) {
     setPassword("");
     setConfirmPassword("");
   };
-  // function for pop out alert window if any requried information is missing
-  const handlePress = async () => {
+  // function for pop out alert window if any requried information is missing 
+  const handlePress = () => {
     if (!firstName) {
       Alert.alert("First name is required");
     } else if (!email) {
@@ -41,8 +40,7 @@ export default function SignUp({ navigation }) {
     } else if (password !== confirmPassword) {
       Alert.alert("Password does not match!");
     } else {
-      const pushToken = await Notifications.getExpoPushTokenAsync();
-      registration(email, password, lastName, firstName, pushToken.data);
+      registration(email, password, lastName, firstName);
       navigation.navigate("Loading");
       emptyState();
     }
@@ -113,7 +111,7 @@ export default function SignUp({ navigation }) {
     </ScrollView>
   );
 }
-// styling here
+// styling here 
 const styles = StyleSheet.create({
   container: {
     height: "100%",

@@ -261,7 +261,6 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
-                userID={firebase.auth().currentUser.uid} // unused when we have personnel
               />
             </View>
           );
@@ -390,7 +389,6 @@ export default class HomeScreen extends Component {
                     insatser={this.state.insatser}
                     scrollOfsetY={this.state.scrollOfsetY}
                     insatsHeight={this.state.insatsHeight}
-                    userID={firebase.auth().currentUser.uid} // unused when we have personnel
                   />
                 </View>
               ) : null;
