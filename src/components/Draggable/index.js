@@ -17,10 +17,8 @@ export default class Draggable extends Component {
     this.state = {
       pan: new Animated.ValueXY(),
       message: props.message,
-      numberOfInsats: props.numberOfInsats,
       helperName: "test",
       insatsType: "Fritext",
-      insatsCounter:4,
       boende: firebase.auth().currentUser.uid,
       fromTime: "",
       toTime: "",
@@ -30,7 +28,6 @@ export default class Draggable extends Component {
       insatser: props.insatser,
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
-
     };
 
     this.panResponder = PanResponder.create({
@@ -133,7 +130,6 @@ export default class Draggable extends Component {
             220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.numberOfInsats, "insatsCounter");
           this.inputValueUpdate(this.state.weekStart, "date");
           if (i < 10) {
             tmpFrom = "0";
@@ -165,7 +161,6 @@ export default class Draggable extends Component {
             220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.numberOfInsats, "insatsCounter");
           this.inputValueUpdate(this.aday2, "date");
           if (i < 10) {
             tmpFrom = "0";
@@ -197,7 +192,6 @@ export default class Draggable extends Component {
             220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.numberOfInsats, "insatsCounter");
           this.inputValueUpdate(this.aday3, "date");
           if (i < 10) {
             tmpFrom = "0";
@@ -229,7 +223,6 @@ export default class Draggable extends Component {
             220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.numberOfInsats, "insatsCounter");
           this.inputValueUpdate(this.aday4, "date");
           if (i < 10) {
             tmpFrom = "0";
@@ -261,7 +254,6 @@ export default class Draggable extends Component {
             220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.numberOfInsats, "insatsCounter");
           this.inputValueUpdate(this.aday5, "date");
           if (i < 10) {
             tmpFrom = "0";
@@ -293,7 +285,6 @@ export default class Draggable extends Component {
             220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.numberOfInsats, "insatsCounter");
           this.inputValueUpdate(this.aday6, "date");
           if (i < 10) {
             tmpFrom = "0";
@@ -325,7 +316,6 @@ export default class Draggable extends Component {
             220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
-          this.inputValueUpdate(this.state.numberOfInsats, "insatsCounter");
           this.inputValueUpdate(this.aday7, "date");
           if (i < 10) {
             tmpFrom = "0";
@@ -436,38 +426,91 @@ export default class Draggable extends Component {
     return 1;
   }
 
+  async insatsMoreThanOne(insatstype, boende) {
+    let insatserna = [
+      "Städning_2",
+      "Tvätt_1",
+      "Matlagning_1",
+      "Inköp_1",
+      "Ekonomi_1",
+      "Aktivitet_1",
+      "Dusch/bad_1",
+      "Toalettbesök_1",
+      "Uppsnyggning_1",
+      "Matsituation_1",
+      "Vila och sömn_1",
+      "På-o avklädning_1",
+      "Tillsyn_1",
+      "Förflyttning_1",
+      "Arbetsassistans_1",
+      "Besök hos vårdgivare_1",
+      "Bemötande_1",
+    ];
+    // var insatsTimes = ;
+    var veckaNummer = moment(this.state.weekStart).format("WW");
+    var år = moment(this.state.weekStart).format("YYYY");
+    for (i = 0; i < 17; ++i) {
+      let [a, b] = insatserna[i].split("_");
+      if (a == insatstype) {
+  const updateDBRef = await firebase
+    .firestore()
+    .collection("insatsTimes")
+    .doc(insatserna[i]);
+    let doc = await updateDBRef.get();
+    var newInsatsTimes = [];
+    var data = await doc.data();
+    let insansnum = 0;
+    data.insatss.map((item, index) => {
+            newInsatsTimes.push(item);
+            if (item == insatstype + "," + boende + "," + veckaNummer +","+ år) {
+              insansnum++;
+            }
+          });
+          if (insansnum < b) {
+            newInsatsTimes.push(insatstype + "," + boende + "," +veckaNummer + ","+ år);
+            updateDBRef.set(
+              {
+                insatss: newInsatsTimes,
+              },
+              { merge: true }
+            );
+          } else {
+            Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+            return 0;
+          }
+          i = 18;
+        }
+      }
+      return 1;
+      }
+
   // creates insats unless there already is one at the time and date
-  
   async storeInsats() {
-    this.state.numberOfInsats --;
-    
     let duplet = 0;
     let personAvailable = await this.checkPersonnel(
       this.state.fromTime,
-      this.state.date,
       this.state.toTime,
+      this.state.date
+    );
+
+    let insatsManyTimes = await this.insatsMoreThanOne(
+      this.state.insatsType,
+      this.state.boende,
 
     );
-    console.log(this.state.numberOfInsats);
-    if (this.state.insatser.length == 0 && personAvailable == 1) {
-
+    // this.insatsMoreThanOne(this.state.insatsType);
+    if (this.state.insatser.length == 0 && personAvailable == 1 && insatsManyTimes == 1) {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
-        insatsCounter: this.state.insatsCounter ,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
         toTime: this.state.toTime,
         date: this.state.date,
         freeText: "",
-
       });
-
       duplet = 1;
     } else {
-
-
-
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (this.state.date == this.state.insatser[i].date) {
           if (
@@ -485,12 +528,10 @@ export default class Draggable extends Component {
         }
       }
     }
-
-    if (duplet == 0 && personAvailable == 1) {
+    if (duplet == 0 && personAvailable == 1 && insatsManyTimes == 1) {
       this.dbRef.add({
-        helperName: "test222",
+        helperName: "test",
         insatsType: this.state.insatsType,
-        insatsCounter: this.state.insatsCounter,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
         toTime: this.state.toTime,
@@ -505,7 +546,7 @@ export default class Draggable extends Component {
   }
 
   renderDraggable() {
-    const { message, weekStart, insatsHeight, numberOfInsats } = this.state;
+    const { message, weekStart, insatsHeight } = this.state;
 
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),
@@ -517,8 +558,6 @@ export default class Draggable extends Component {
         style={[panStyle, styles.circle]}
       >
         <Text> {this.state.message} </Text>
-        {/* <Text> {this.state.numberOfInsats} </Text> */}
-
       </Animated.View>
     );
   }

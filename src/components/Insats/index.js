@@ -20,7 +20,6 @@ export default class Insats extends Component {
     this.state = {
       pan: new Animated.ValueXY(),
       message: props.message,
-      numberOfInsats: props.numberOfInsats,
       boende: firebase.auth().currentUser.uid,
       insats: props.insats,
       navigation: props.navigation,
@@ -118,31 +117,29 @@ export default class Insats extends Component {
 
   // removes insats from database and also removes its' values from layouts
   async deleteInsats() {
-    
-    this.state.numberOfInsats ++;
-    this.state.numberOfInsats -1;
     this.freePersonnel(
-
       this.state.insats.fromTime,
       this.state.insats.toTime,
       this.state.insats.date
-      );
-      for (let i = 0; i < this.state.layouts.length; ++i) {
-
+    );
+    // this.freeInsats(      
+    //   this.state.insatsType,
+    //   this.state.boende,
+    //   moment(this.state.weekStart).format("WW"),
+    //   moment(this.state.weekStart).format("YYYY"),
+    // );
+    for (let i = 0; i < this.state.layouts.length; ++i) {
       if (this.state.layouts[i].key == this.state.insats.key) {
         this.state.layouts.splice(i, 1);
       }
     }
-    
     const dbRef = firebase
-    .firestore()
-    .collection("insatser")
-    .doc(this.state.insats.key);
+      .firestore()
+      .collection("insatser")
+      .doc(this.state.insats.key);
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
-      
     });
-    console.log(this.state.numberOfInsats);
   }
 
   // frees booked personnel when deleting insats
@@ -207,6 +204,61 @@ export default class Insats extends Component {
     return 0;
   }
 
+
+  // async freeinsats(insatstype, boende, veckaNummer, år) {
+  //   let Insatserna = [
+  //     "Städning:2",
+  //     "Tvätt:1",
+  //     "Matlagning:1",
+  //     "Inköp:1",
+  //     "Ekonomi:1",
+  //     "Aktivitet:1",
+  //     "Dusch/bad:1",
+  //     "Toalettbesök:1",
+  //     "Uppsnyggning:1",
+  //     "Matsituation:1",
+  //     "Vila och sömn:1",
+  //     "På-o avklädning:1",
+  //     "Tillsyn:1",
+  //     "Förflyttning:1",
+  //     "Arbetsassistans:1",
+  //     "Besök hos vårdgivare:1",
+  //     "Bemötande:1",
+  //   ]
+  //   var insatsTimes = "insatsTimes";
+  //   for(i= 0; i< 18; ++i) {
+  //     let [a, b] = Insatserna[i].split(":");
+  //     if (insatstype == a) {
+  //       const updateDBRef = await firebase
+  //         .firestore().collection(insatsTimes).doc(Insatserna[i]);
+  //       let doc2 = await updateDBRef.get();
+  //       var newInsatsTimes = [];
+  //       var data2 = await doc2.data();
+  //       let insansnum = 0;
+  //       data2.times.map((item, index) => {
+  //         newInsatsTimes.push(item);
+  //         if (item == insatstype + "," + boende + "," + veckaNummer +","+ år) {
+  //           insansnum++;
+  //         }
+  //       });
+  //       if (insansnum < b) {
+  //         newInsatsTimes.push(insatstype + "," + boende + "," +veckaNummer + ","+ år);
+  //         updateDBRef.set(
+  //           {
+  //             times: newInsatsTimes,
+  //           },
+  //           { merge: true }
+  //         );
+  //       } else {
+  //         Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+  //         return 0;
+  //       }
+  //       i = 19;
+  //     }
+  //   }
+  //   return 1;
+
+  // }
   updateInsats(insats, newFrom, newTo, newDate) {
     const updateDBRef = firebase
       .firestore()
@@ -220,7 +272,6 @@ export default class Insats extends Component {
         date: newDate,
         helperName: insats.helperName,
         insatsType: insats.insatsType,
-        insatsCounter: insats.insatsCounter,
         freeText: insats.freeText,
       })
       .catch((error) => {
@@ -234,7 +285,6 @@ export default class Insats extends Component {
 
   render() {
     const { message, id } = this.state;
-    // const {numberOfInsats, ids} = this.state;
     const { modalVisible } = this.state;
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),
@@ -258,8 +308,6 @@ export default class Insats extends Component {
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
                   <Text style={{ fontSize: 22 }}>{message}!</Text>
-                  {/* <Text style={{ fontSize: 22 }}>{numberOfInsats}!</Text> */}
-
                   <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
                     {this.state.insats.toTime}!
@@ -278,8 +326,6 @@ export default class Insats extends Component {
             </View>
           </Modal>
           <Text key={this.state.id}>{message}</Text>
-          {/* <Text key={this.state.ids}>{numberOfInsats}</Text> */}
-
         </View>
       </Animated.View>
     );

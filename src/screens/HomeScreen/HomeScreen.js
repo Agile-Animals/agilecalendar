@@ -70,25 +70,25 @@ export default class HomeScreen extends Component {
         "22:00",
         "23:00",
       ],
-      insatsTypes: {
-        Städning: 1,
-        Tvätt: 2,
-        Matlagning: 3,
-        Inköp: 4,
-        Ekonomi: 5,
-        Aktivitet: 6,
-        "Dusch/bad": 7,
-        Toalettbesök: 8,
-        // Uppsnyggning: 1,
-        // Matsituation: 1,
-        // "Vila och sömn": 1,
-        // "På-o avklädning": 1,
-        // Tillsyn: 1,
-        // Förflyttning: 1,
-        // Arbetsassistans: 1,
-        // "Besök hos vårdgivare": 1,
-        // Bemötande: 1,
-      },
+      insatsTypes: [
+        "Städning",
+        "Tvätt",
+        "Matlagning",
+        "Inköp",
+        "Ekonomi",
+        "Aktivitet",
+        "Dusch/bad",
+        "Toalettbesök",
+        "Uppsnyggning",
+        "Matsituation",
+        "Vila och sömn",
+        "På-o avklädning",
+        "Tillsyn",
+        "Förflyttning",
+        "Arbetsassistans",
+        "Besök hos vårdgivare",
+        "Bemötande",
+      ],
       today: moment().format("YYYY-MM-DD"),
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
@@ -97,6 +97,7 @@ export default class HomeScreen extends Component {
       insatsHeight: 0,
     };
   }
+
   componentDidMount() {
     this.unsubscribe = this.firestoreRef.onSnapshot(this.getCollection);
   }
@@ -115,7 +116,6 @@ export default class HomeScreen extends Component {
         date,
         helperName,
         insatsType,
-        insatsCounter,
         freeText,
       } = res.data();
       insatser.push({
@@ -126,7 +126,6 @@ export default class HomeScreen extends Component {
         date,
         helperName,
         insatsType,
-        insatsCounter,
         freeText,
       });
     });
@@ -166,47 +165,19 @@ export default class HomeScreen extends Component {
   }
 
   // decides what insatser to show in the cloud
-  checkConsumedInsats(tmpType, tmptype2) {
-    
+  checkConsumedInsats(tmpType) {
     for (let i = 0; i < this.state.insatser.length; ++i) {
       if (
         this.state.insatser[i].date >= this.state.weekStart &&
         this.state.insatser[i].date <= this.state.weekEnd
       ) {
-        if (tmpType == this.state.insatser[i].insatsTypes) {
-          console.log(this.state.insatser[i].insatsTypes);
+        if (tmpType == this.state.insatser[i].insatsType) {
           return -1;
-        
-        }
-      }
-      if (
-        this.state.insatser[i].date >= this.state.weekStart &&
-        this.state.insatser[i].date <= this.state.weekEnd
-      ) {
-        if (tmptype2 == this.state.insatser[i].insatsTypes) {
-          console.log(this.state.insatser[i].insatsTypes);
-          return tmptype2 ;
-        
         }
       }
     }
     return 1;
   }
-
-  // checkConsumedInsats(tmpType) {
-  //   for (let i = 0; i < this.state.insatser.length; ++i) {
-  //     if (
-  //       this.state.insatser[i].date >= this.state.weekStart &&
-  //       this.state.insatser[i].date <= this.state.weekEnd
-  //     ) {
-  //       if (tmpType == this.state.insatser[i].insatsTypes) {
-  //         console.log(this.state.insatser[i].insatsTypes);
-  //         return -1;
-  //       }
-  //     }
-  //   }
-  //   return 1;
-  // }
 
   // set the weekStart variable to the week that has been chosen
   setWeek(newWeek) {
@@ -232,7 +203,6 @@ export default class HomeScreen extends Component {
     date,
     helperName,
     insatsType,
-    insatsCounter,
     freeText
   ) {
     this.state.layouts.push({
@@ -247,7 +217,6 @@ export default class HomeScreen extends Component {
       date: date,
       helperName: helperName,
       insatsType: insatsType,
-      insatsCounter: insatsCounter,
       freeText: freeText,
     });
   }
@@ -280,7 +249,6 @@ export default class HomeScreen extends Component {
                   this.state.insatser[i].date,
                   this.state.insatser[i].helperName,
                   this.state.insatser[i].insatsType,
-                  this.state.insatser[i].insatsCounter,
                   this.state.insatser[i].freeText
                 );
               }}
@@ -288,7 +256,6 @@ export default class HomeScreen extends Component {
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
-                numberOfInsats={this.state.insatser[i].insatsCounter}
                 insats={this.state.insatser[i]}
                 navigation={this.props.navigation}
                 onSwap={this.onSwap.bind(this)}
@@ -300,9 +267,6 @@ export default class HomeScreen extends Component {
         }
       }
     }
-    // let man = {"man":1}
-    // console.log(Object.keys(man))
-
     if (dayIndex == 1) {
       return (
         <View style={styles.instatsListEmpty1} key={index}>
@@ -396,7 +360,6 @@ export default class HomeScreen extends Component {
     var aday6 = moment(this.state.weekStart).add(5, "day").format("YYYY-MM-DD");
     var aday7 = moment(this.state.weekStart).add(6, "day").format("YYYY-MM-DD");
     this.dynamicDays();
-
     if (this.state.isLoading) {
       return (
         <View style={styles.preloader}>
@@ -417,23 +380,16 @@ export default class HomeScreen extends Component {
             source={require("../../../assets/moln.png")}
             style={styles.moln}
           >
-
-            {Object.entries(insatsTypes).map(([item, value], index) => {
-              // console.log("the value" + value)
-              // console.log("the value" + value)
-
-
-              return 1 === this.checkConsumedInsats(item, value) ? (
+            {this.state.insatsTypes.map((item, index) => {
+              return 1 === this.checkConsumedInsats(item) ? (
                 <View key={index}>
-                  {/* {console.log("the value" + value)} */}
                   <Draggable
                     message={item}
-                    numberOfInsats={value}
                     weekStart={this.state.weekStart}
                     insatser={this.state.insatser}
                     scrollOfsetY={this.state.scrollOfsetY}
                     insatsHeight={this.state.insatsHeight}
-                    />
+                  />
                 </View>
               ) : null;
             })}
