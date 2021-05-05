@@ -79,7 +79,7 @@ export default class HomeScreen extends Component {
         "Inköp",
         "Ekonomi",
         "Aktivitet",
-        "Dusch/bad",
+        "Dusch",
         "Toalettbesök",
         "Uppsnyggning",
         "Matsituation",
