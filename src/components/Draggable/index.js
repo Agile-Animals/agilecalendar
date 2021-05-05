@@ -29,7 +29,6 @@ export default class Draggable extends Component {
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
     };
-
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
       onPanResponderMove: Animated.event(
@@ -403,7 +402,7 @@ export default class Draggable extends Component {
         var data = await doc.data();
         let personnelNr = 0;
         data.times.map((item, index) => {
-          console.log(data)
+          // console.log(data)
           newTimes.push(item);
           if (item == fromTime + "," + toTime + "," + date) {
             personnelNr++;
@@ -429,13 +428,13 @@ export default class Draggable extends Component {
 
   // async insatsMoreThanOne(insatstype, boende) {
   //   let insatserna = [
-  //     "Städning_2",
+  //     "Städning_4",
   //     "Tvätt_1",
   //     "Matlagning_1",
   //     "Inköp_1",
   //     "Ekonomi_1",
   //     "Aktivitet_1",
-  //     "Dusch/bad_1",
+  //     "Dusch_1",
   //     "Toalettbesök_1",
   //     "Uppsnyggning_1",
   //     "Matsituation_1",
@@ -453,37 +452,112 @@ export default class Draggable extends Component {
   //   for (i = 0; i < 17; ++i) {
   //     let [a, b] = insatserna[i].split("_");
   //     if (a == insatstype) {
-  // const updateDBRef = await firebase
-  //   .firestore()
-  //   .collection("insatsTimes")
-  //   .doc(insatserna[i]);
-  //   let doc = await updateDBRef.get();
-  //   var newInsatsTimes = [];
-  //   var data = await doc.data();
-  //   let insansnum = 0;
-  //   data.insatss.map((item, index) => {
-  //           newInsatsTimes.push(item);
-  //           if (item == insatstype + "," + boende + "," + veckaNummer +","+ år) {
-  //             insansnum++;
-  //           }
-  //         });
-  //         if (insansnum < b) {
-  //           newInsatsTimes.push(insatstype + "," + boende + "," +veckaNummer + ","+ år);
-  //           updateDBRef.set(
-  //             {
-  //               insatss: newInsatsTimes,
-  //             },
-  //             { merge: true }
-  //           );
-  //         } else {
-  //           Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
-  //           return 0;
+  //       const updateDBRef = await firebase
+  //         .firestore()
+  //         .collection("insatsTimes")
+  //         .doc(insatserna[i]);
+  //       let doc = await updateDBRef.get();
+  //       var newInsatsTimes = [];
+  //       var data = await doc.data();
+  //       let insansnum = b;
+  //       data.insatss.map((item1, item2,item3,item4,item5, index) => {
+  //         newInsatsTimes.push(item1, item2,item3,item4,item5);
+  //         insansnum--;
+  //         if (item1 ==insatstype ,item2 == boende , item3 == veckaNummer , item4 ==år , item5==insansnum) {
+  //         console.log("ute", insansnum);
   //         }
-  //         i = 18;
+  //       });
+
+  //       if (insansnum >= 0) {
+          
+  //         newInsatsTimes.push(
+  //           item1 ==insatstype ,item2 == boende , item3 == veckaNummer , item4 ==år , item5==insansnum
+  //           );
+  //         insansnum--;
+  //         updateDBRef.set(
+  //           {
+  //             insatss: newInsatsTimes,
+  //           },
+  //           { merge: true }
+  //         );
+  //       } else {
+  //         // console.log("inne", insansnum);
+  //         // Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+  //         return -1;
   //       }
+  //       i = 18;
+  //       console.log("ute", insansnum);
   //     }
-  //     return 1;
-  //     }
+  //   }
+  //   return 1;
+  // }
+
+
+  async insatsMoreThanOne(insatstype, boende) {
+    let insatserna = [
+      "Städning_4",
+      "Tvätt_1",
+      "Matlagning_1",
+      "Inköp_1",
+      "Ekonomi_1",
+      "Aktivitet_1",
+      "Dusch_1",
+      "Toalettbesök_1",
+      "Uppsnyggning_1",
+      "Matsituation_1",
+      "Vila och sömn_1",
+      "På-o avklädning_1",
+      "Tillsyn_1",
+      "Förflyttning_1",
+      "Arbetsassistans_1",
+      "Besök hos vårdgivare_1",
+      "Bemötande_1",
+    ];
+    // var insatsTimes = ;
+    var veckaNummer = moment(this.state.weekStart).format("WW");
+    var år = moment(this.state.weekStart).format("YYYY");
+    for (i = 0; i < 17; ++i) {
+      let [a, b] = insatserna[i].split("_");
+      if (a == insatstype) {
+        const updateDBRef = await firebase
+          .firestore()
+          .collection("insatsTimes")
+          .doc(insatserna[i]);
+        let doc = await updateDBRef.get();
+        var newInsatsTimes = [];
+        var data = await doc.data();
+        let insansnum = b;
+        data.insatss.map((item, index) => {
+          newInsatsTimes.push(item);
+          insansnum--;
+          if (item ==insatstype + "," + boende + "," + veckaNummer + "," + år + insansnum) {
+          console.log("ute", insansnum);
+          }
+        });
+
+        if (insansnum > 0) {
+          
+          newInsatsTimes.push(
+            insatstype + "," + boende + "," + veckaNummer + "," + år  + ", "+ insansnum
+            );
+          insansnum--;
+          updateDBRef.set(
+            {
+              insatss: newInsatsTimes,
+            },
+            { merge: true }
+          );
+        } else {
+          // console.log("inne", insansnum);
+          // Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
+          return -1;
+        }
+        i = 18;
+        console.log("ute", insansnum);
+      }
+    }
+    return 1;
+  }
 
   // creates insats unless there already is one at the time and date
   async storeInsats() {
@@ -494,13 +568,12 @@ export default class Draggable extends Component {
       this.state.date
     );
 
-    // let insatsManyTimes = await this.insatsMoreThanOne(
-    //   this.state.insatsType,
-    //   this.state.boende,
-
-    // );
+    let insatsManyTimes = await this.insatsMoreThanOne(
+      this.state.insatsType,
+      this.state.boende
+    );
     // this.insatsMoreThanOne(this.state.insatsType);
-    if (this.state.insatser.length == 0 && personAvailable == 1 ) {
+    if (this.state.insatser.length == 0 && personAvailable == 1 && insatsManyTimes == 1) {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,
@@ -529,7 +602,7 @@ export default class Draggable extends Component {
         }
       }
     }
-    if (duplet == 0 && personAvailable == 1 ) {
+    if (duplet == 0 && personAvailable == 1  && insatsManyTimes == 1) {
       this.dbRef.add({
         helperName: "test",
         insatsType: this.state.insatsType,

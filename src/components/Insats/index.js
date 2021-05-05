@@ -207,45 +207,52 @@ export default class Insats extends Component {
 
   // async freeinsats(insatstype, boende, veckaNummer, år) {
   //   let Insatserna = [
-  //     "Städning:2",
-  //     "Tvätt:1",
-  //     "Matlagning:1",
-  //     "Inköp:1",
-  //     "Ekonomi:1",
-  //     "Aktivitet:1",
-  //     "Dusch/bad:1",
-  //     "Toalettbesök:1",
-  //     "Uppsnyggning:1",
-  //     "Matsituation:1",
-  //     "Vila och sömn:1",
-  //     "På-o avklädning:1",
-  //     "Tillsyn:1",
-  //     "Förflyttning:1",
-  //     "Arbetsassistans:1",
-  //     "Besök hos vårdgivare:1",
-  //     "Bemötande:1",
+  //     "Städning_2",
+  //     "Tvätt_1",
+  //     "Matlagning_1",
+  //     "Inköp_1",
+  //     "Ekonomi_1",
+  //     "Aktivitet_1",
+  //     "Dusch_1",
+  //     "Toalettbesök_1",
+  //     "Uppsnyggning_1",
+  //     "Matsituation_1",
+  //     "Vila och sömn_1",
+  //     "På-o avklädning_1",
+  //     "Tillsyn_1",
+  //     "Förflyttning_1",
+  //     "Arbetsassistans_1",
+  //     "Besök hos vårdgivare_1",
+  //     "Bemötande_1",
   //   ]
-  //   var insatsTimes = "insatsTimes";
   //   for(i= 0; i< 18; ++i) {
-  //     let [a, b] = Insatserna[i].split(":");
-  //     if (insatstype == a) {
+  //     let [a, b] = Insatserna[i].split("_");
+  //     if (a == insatstype) {
   //       const updateDBRef = await firebase
-  //         .firestore().collection(insatsTimes).doc(Insatserna[i]);
-  //       let doc2 = await updateDBRef.get();
+  //         .firestore()
+  //         .collection("insatsTimes")
+  //         .doc(insatserna[i]);
+  //       let doc = await updateDBRef.get();
   //       var newInsatsTimes = [];
-  //       var data2 = await doc2.data();
+  //       var data = await doc.data();
   //       let insansnum = 0;
-  //       data2.times.map((item, index) => {
+  //       data.insatss.map((item, index) => {
+  //         console.log(data);
+  //         console.log(insansnum);
   //         newInsatsTimes.push(item);
-  //         if (item == insatstype + "," + boende + "," + veckaNummer +","+ år) {
-  //           insansnum++;
+  //         if (item ==insatstype + "," + boende + "," + veckaNummer + "," + år + b) {
+  //           insansnum--;
+  //         console.log(insansnum);
+
   //         }
   //       });
   //       if (insansnum < b) {
-  //         newInsatsTimes.push(insatstype + "," + boende + "," +veckaNummer + ","+ år);
+  //         newInsatsTimes.push(
+  //           insatstype + "," + boende + "," + veckaNummer + "," + år  + ", "+ b
+  //         );
   //         updateDBRef.set(
   //           {
-  //             times: newInsatsTimes,
+  //             insatss: newInsatsTimes,
   //           },
   //           { merge: true }
   //         );
@@ -253,11 +260,10 @@ export default class Insats extends Component {
   //         Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
   //         return 0;
   //       }
-  //       i = 19;
+  //       i = 18;
   //     }
   //   }
   //   return 1;
-
   // }
   updateInsats(insats, newFrom, newTo, newDate) {
     const updateDBRef = firebase

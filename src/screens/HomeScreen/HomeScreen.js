@@ -24,6 +24,8 @@ import moment from "moment";
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
+    this.TheinsatsData = firebase.firestore().collection("insatsTimes");
+
     // this should instead only query for the current weeks insatser
     this.firestoreRef = firebase
       .firestore()
@@ -95,6 +97,25 @@ export default class HomeScreen extends Component {
       scrollOfsetY: "",
       layouts: [],
       insatsHeight: 0,
+      insatserna: [
+        "Städning_4",
+        "Tvätt_1",
+        "Matlagning_1",
+        "Inköp_1",
+        "Ekonomi_1",
+        "Aktivitet_1",
+        "Dusch_1",
+        "Toalettbesök_1",
+        "Uppsnyggning_1",
+        "Matsituation_1",
+        "Vila och sömn_1",
+        "På-o avklädning_1",
+        "Tillsyn_1",
+        "Förflyttning_1",
+        "Arbetsassistans_1",
+        "Besök hos vårdgivare_1",
+        "Bemötande_1",
+      ],
     };
   }
 
@@ -141,6 +162,45 @@ export default class HomeScreen extends Component {
     this.props.navigation.replace("Login");
   }
 
+  // for (j = 0; j < 17; ++j) {
+  //   let [a, b] = this.state.insatserna[j].split("_");
+  //   const updateDBRef = await firebase
+  //     .firestore()
+  //     .collection("insatsTimes")
+  //     .doc(this.state.insatserna[j]);
+  //   let doc = await updateDBRef.get();
+  //   var data = await doc.data();
+  //   if (
+  //     this.state.insatser[i].date >= this.state.weekStart &&
+  //     this.state.insatser[i].date <= this.state.weekEnd &&
+  //     this.state.insatser[i].insatstype == a
+  //   ) {
+  //     console.log(data);
+  //   }
+  // }
+  // theDatas() {
+  //   // this.TheinsatsData.get().then((snapshot) => {
+  //   //   snapshot.forEach(doc => {
+  //   //     console.log(doc.data())
+  //   //   })
+  //   // } )
+  //   // console.log(this.TheinsatsData)
+  //   // this.TheinsatsData.map((item, index) => {
+
+  //   // })
+  //   // for (i = 0; i < this.state.insatser.length; ++i) {
+  //     this.TheinsatsData.get().then((snapshot) => {
+  //       snapshot.forEach((doc) => {
+  //         var lett = doc.data().insatss[1]
+  //         if (lett != undefined){
+
+  //           console.log(lett.slice(-1));
+  //         }
+  //       });
+  //     });
+  //   // }
+  // }
+
   // used to set swedish names of days
   dynamicDays() {
     for (let i = 0; i < 7; ++i) {
@@ -171,8 +231,9 @@ export default class HomeScreen extends Component {
         this.state.insatser[i].date >= this.state.weekStart &&
         this.state.insatser[i].date <= this.state.weekEnd
       ) {
+        // console.log("hej")
         if (tmpType == this.state.insatser[i].insatsType) {
-          return -1;
+        return 1;
         }
       }
     }
@@ -351,7 +412,8 @@ export default class HomeScreen extends Component {
       layouts,
       insatsHeight,
     } = this.state;
-
+    // console.log(this.state.boende)
+    // this.theDatas();
     var today = moment(this.state.weekStart).format("YYYY-MM-DD");
     var aday2 = moment(this.state.weekStart).add(1, "day").format("YYYY-MM-DD");
     var aday3 = moment(this.state.weekStart).add(2, "day").format("YYYY-MM-DD");
