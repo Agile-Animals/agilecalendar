@@ -93,6 +93,7 @@ export default class HomeScreen extends Component {
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       scrollOfsetY: "",
+      initialScrollOffsetY: 0,
       layouts: [],
       insatsHeight: 0,
     };
@@ -190,6 +191,7 @@ export default class HomeScreen extends Component {
         .format("YYYY-MM-DD"),
     });
     this.state.layouts = [];
+    this.scrollToInitialPosition();
   }
 
   // updates layouts array with the data of any insatser
@@ -225,6 +227,7 @@ export default class HomeScreen extends Component {
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
+      initialScrollOffsetY: layout.height * 7,
     });
   }
 
@@ -340,6 +343,13 @@ export default class HomeScreen extends Component {
       this.state.layouts.splice(keyToSplice2, 1);
     }
   }
+
+  scrollToInitialPosition = () => {
+    this.scrollViewRef.scrollTo({
+      y: this.state.initialScrollOffsetY,
+      animated: false,
+    });
+  };
 
   // render function
   render() {
@@ -479,7 +489,14 @@ export default class HomeScreen extends Component {
           })}
         </View>
 
-        <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
+        <ScrollView
+          ref={(ref) => {
+            this.scrollViewRef = ref;
+          }}
+          onLayout={this.scrollToInitialPosition}
+          onScroll={this.handleScroll}
+          scrollEnabled={!dragging}
+        >
           <View style={styles.listContainer}>
             <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
@@ -539,7 +556,7 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, backgroundColor: "black" }}>
               <Text
                 onLayout={(event) => {
                   this.getLayoutHeight(event.nativeEvent.layout);
