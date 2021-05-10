@@ -15,6 +15,8 @@ import { Button, Input, Text, ThemeProvider } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Dimensions } from "react-native";
 import { useWindowDimensions } from "react-native";
+import * as Notifications from "expo-notifications";
+
 // function for user login
 const LoginScreen = ({ navigation }) => {
   const guidelineBaseWidth = 350;
@@ -42,7 +44,8 @@ const LoginScreen = ({ navigation }) => {
       setEmail("");
       setPassword("");
     } else {
-      await signIn(email, password);
+      const pushToken = await Notifications.getExpoPushTokenAsync();
+      await signIn(email, password, pushToken.data);
       setEmail("");
       setPassword("");
       navigation.navigate("Loading");

@@ -28,9 +28,15 @@ export async function registration(
   }
 }
 
-export async function signIn(email, password) {
+export async function signIn(email, password, pushToken) {
   try {
     await firebase.auth().signInWithEmailAndPassword(email, password);
+    const currentUser = firebase.auth().currentUser;
+
+    const db = firebase.firestore();
+    db.collection("users").doc(currentUser.uid).update({
+      pushToken: pushToken,
+    });
   } catch (err) {
     Alert.alert("Fel lösenord eller e-postadress.", err.message);
   }
