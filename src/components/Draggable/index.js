@@ -127,7 +127,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            222 + (i + 1) * this.state.insatsHeight
+            220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.state.weekStart, "date");
@@ -158,7 +158,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            222 + (i + 1) * this.state.insatsHeight
+            220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday2, "date");
@@ -189,7 +189,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            222 + (i + 1) * this.state.insatsHeight
+            220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday3, "date");
@@ -220,7 +220,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            222 + (i + 1) * this.state.insatsHeight
+            220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday4, "date");
@@ -251,7 +251,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            222 + (i + 1) * this.state.insatsHeight
+            220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday5, "date");
@@ -282,7 +282,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            222 + (i + 1) * this.state.insatsHeight
+            220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday6, "date");
@@ -313,7 +313,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            222 + (i + 1) * this.state.insatsHeight
+            220 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday7, "date");
@@ -428,7 +428,7 @@ export default class Draggable extends Component {
 
   // this should use the helpers pushToken, not the creators like in this test.
   // in firestore we would get their user ID and get the pushToken from their user document.
-async sendNotification(message) {
+  async sendNotification(message) {
     const updateDBRef = firebase
       .firestore()
       .collection("users")
@@ -459,22 +459,28 @@ async sendNotification(message) {
 
   // creates insats unless there already is one at the time and date
   async storeInsats() {
+    console.log(this.state.scrollOfsetY);
+    let wasEmpty = 0;
+    let updated = 0;
     if (this.state.insatser.length == 0) {
       let personAvailable = await this.checkPersonnel(
         this.state.fromTime,
         this.state.toTime,
         this.state.date
       );
-      this.dbRef.add({
-        helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
-        insatsType: this.state.insatsType,
-        boende: firebase.auth().currentUser.uid,
-        fromTime: this.state.fromTime,
-        toTime: this.state.toTime,
-        date: this.state.date,
-        freeText: "",
-      });
-      this.sendNotification("Insats skapad:");
+      if (personAvailable == 1) {
+        this.dbRef.add({
+          helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
+          insatsType: this.state.insatsType,
+          boende: firebase.auth().currentUser.uid,
+          fromTime: this.state.fromTime,
+          toTime: this.state.toTime,
+          date: this.state.date,
+          freeText: "",
+        });
+        this.sendNotification("Insats skapad:");
+      }
+      wasEmpty = 1;
     } else {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (this.state.date == this.state.insatser[i].date) {
@@ -496,8 +502,28 @@ async sendNotification(message) {
             });
             i = this.state.insatser.length + 2;
             this.sendNotification("Insats ändrad:");
+            updated = 1;
           }
         }
+      }
+    }
+    if (wasEmpty === 0 && updated === 0) {
+      let personAvailable = await this.checkPersonnel(
+        this.state.fromTime,
+        this.state.toTime,
+        this.state.date
+      );
+      if (personAvailable == 1) {
+        this.dbRef.add({
+          helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
+          insatsType: this.state.insatsType,
+          boende: firebase.auth().currentUser.uid,
+          fromTime: this.state.fromTime,
+          toTime: this.state.toTime,
+          date: this.state.date,
+          freeText: "",
+        });
+        this.sendNotification("Insats skapad:");
       }
     }
   }

@@ -232,6 +232,7 @@ export default class HomeScreen extends Component {
     this.setState({
       insatsHeight: layout.height,
       initialScrollOffsetY: layout.height * 7,
+      scrollOfsetY: layout.height * 7,
     });
   }
 
