@@ -239,7 +239,7 @@ export default class Insats extends Component {
         fromTime: newFrom,
         toTime: newTo,
         date: newDate,
-        helperName: insats.helperName,
+        helperID: insats.helperID,
         insatsType: insats.insatsType,
         freeText: insats.freeText,
       })
@@ -279,10 +279,10 @@ export default class Insats extends Component {
                   <Text style={{ fontSize: 22 }}>{message}!</Text>
                   <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
-                    {this.state.insats.toTime}!
+                    {this.state.insats.toTime}
                   </Text>
                   <Text style={{ fontSize: 17 }}>
-                    Datum: {this.state.insats.date}!
+                    Datum: {this.state.insats.date}
                   </Text>
                 </View>
                 <Pressable

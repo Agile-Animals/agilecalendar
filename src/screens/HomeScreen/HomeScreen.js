@@ -115,7 +115,7 @@ export default class HomeScreen extends Component {
         fromTime,
         toTime,
         date,
-        helperName,
+        helperID,
         insatsType,
         freeText,
       } = res.data();
@@ -125,7 +125,7 @@ export default class HomeScreen extends Component {
         fromTime,
         toTime,
         date,
-        helperName,
+        helperID,
         insatsType,
         freeText,
       });
@@ -203,7 +203,7 @@ export default class HomeScreen extends Component {
     fromTime,
     toTime,
     date,
-    helperName,
+    helperID,
     insatsType,
     freeText
   ) {
@@ -217,13 +217,14 @@ export default class HomeScreen extends Component {
       fromTime: fromTime,
       toTime: toTime,
       date: date,
-      helperName: helperName,
+      helperID: helperID,
       insatsType: insatsType,
       freeText: freeText,
     });
   }
 
-  // used to get the height of insatsblock on screen
+  // used to get the height of insatsblock on screen and set how far
+  // we need to scroll down to show 07:00 as the first timeslot
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
@@ -231,7 +232,7 @@ export default class HomeScreen extends Component {
     });
   }
 
-  // renders all insatser that can be dragged as insatser components and empty <view> for
+  // renders all insatser that can be dragged as insatser components
   renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -250,7 +251,7 @@ export default class HomeScreen extends Component {
                   this.state.insatser[i].fromTime,
                   this.state.insatser[i].toTime,
                   this.state.insatser[i].date,
-                  this.state.insatser[i].helperName,
+                  this.state.insatser[i].helperID,
                   this.state.insatser[i].insatsType,
                   this.state.insatser[i].freeText
                 );
@@ -264,7 +265,7 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
-                userID={firebase.auth().currentUser.uid} // unused when we have personnel
+                userID={this.state.helperID} // personnel ID
               />
             </View>
           );
@@ -344,6 +345,8 @@ export default class HomeScreen extends Component {
     }
   }
 
+  // Scrolls the ScrollView on HomeScreen as far as the value stored in initialScrollOffsetY
+  // whose value is changed in
   scrollToInitialPosition = () => {
     this.scrollViewRef.scrollTo({
       y: this.state.initialScrollOffsetY,

@@ -7,7 +7,8 @@ export async function registration(
   password,
   lastName,
   firstName,
-  pushToken
+  pushToken,
+  isPersonnel = false
 ) {
   try {
     await firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -19,6 +20,7 @@ export async function registration(
       lastName: lastName,
       firstName: firstName,
       pushToken: pushToken,
+      isPersonnel: isPersonnel,
     });
   } catch (err) {
     Alert.alert(

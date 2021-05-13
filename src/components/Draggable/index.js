@@ -17,7 +17,7 @@ export default class Draggable extends Component {
     this.state = {
       pan: new Animated.ValueXY(),
       message: props.message,
-      helperName: "test",
+      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
       insatsType: "Fritext",
       boende: firebase.auth().currentUser.uid,
       fromTime: "",
@@ -128,7 +128,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.state.weekStart, "date");
@@ -159,7 +159,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday2, "date");
@@ -190,7 +190,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday3, "date");
@@ -221,7 +221,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday4, "date");
@@ -252,7 +252,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday5, "date");
@@ -283,7 +283,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday6, "date");
@@ -314,7 +314,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday7, "date");
@@ -430,10 +430,7 @@ export default class Draggable extends Component {
   // this should use the helpers pushToken, not the creators like in this test.
   // in firestore we would get their user ID and get the pushToken from their user document.
   async sendNotification() {
-    const updateDBRef = firebase
-      .firestore()
-      .collection("users")
-      .doc(this.state.userID);
+    const updateDBRef = firebase.firestore().collection("users").doc(helperID);
     let doc = await updateDBRef.get();
     var newTimes = [];
     var pushToken = await doc.data().pushToken;
@@ -468,7 +465,7 @@ export default class Draggable extends Component {
     );
     if (this.state.insatser.length == 0 && personAvailable == 1) {
       this.dbRef.add({
-        helperName: "test",
+        helperID: "test",
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
@@ -498,7 +495,7 @@ export default class Draggable extends Component {
     }
     if (duplet == 0 && personAvailable == 1) {
       this.dbRef.add({
-        helperName: "test",
+        helperID: "test",
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
