@@ -49,6 +49,6 @@ export async function loggingOut() {
   try {
     await firebase.auth().signOut();
   } catch (err) {
-    Alert.alert("There is something wrong!", err.message);
+    Alert.alert("Något gick fel.", err.message);
   }
 }

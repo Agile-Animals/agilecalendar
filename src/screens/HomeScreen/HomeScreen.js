@@ -12,6 +12,8 @@ import {
   ScrollView,
   PanResponder,
   TouchableOpacity,
+  UIManager,
+  findNodeHandle,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
@@ -226,6 +228,7 @@ export default class HomeScreen extends Component {
   // used to get the height of insatsblock on screen and set how far
   // we need to scroll down to show 07:00 as the first timeslot
   getLayoutHeight(layout) {
+    console.log(layout);
     this.setState({
       insatsHeight: layout.height,
       initialScrollOffsetY: layout.height * 7,
@@ -350,7 +353,6 @@ export default class HomeScreen extends Component {
   scrollToInitialPosition = () => {
     this.scrollViewRef.scrollTo({
       y: this.state.initialScrollOffsetY,
-      animated: false,
     });
   };
 
@@ -437,11 +439,10 @@ export default class HomeScreen extends Component {
               />
             </View>
             <View style={styles.header}>
-              <Text>
+              <Text style={{ fontSize: 18 }}>
                 {" "}
-                Det är nu vecka: {moment(this.state.weekStart).format(
-                  "WW"
-                )}{" "}
+                Du ser just nu vecka:{" "}
+                {moment(this.state.weekStart).format("WW")}{" "}
               </Text>
             </View>
           </View>
@@ -560,10 +561,10 @@ export default class HomeScreen extends Component {
 
             <View style={{ width: 140, backgroundColor: "black" }}>
               <Text
+                style={styles.soptunna}
                 onLayout={(event) => {
                   this.getLayoutHeight(event.nativeEvent.layout);
                 }}
-                style={styles.instatsList}
               >
                 Soptunna
               </Text>
@@ -723,5 +724,15 @@ const styles = StyleSheet.create({
   },
   preloader: {
     backgroundColor: "blue",
+  },
+  soptunna: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#ccc",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
 });
