@@ -24,8 +24,6 @@ import moment from "moment";
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.TheinsatsData = firebase.firestore().collection("insatsTimes");
-
     // this should instead only query for the current weeks insatser
     this.firestoreRef = firebase
       .firestore()
@@ -79,7 +77,7 @@ export default class HomeScreen extends Component {
         "Inköp",
         "Ekonomi",
         "Aktivitet",
-        "Dusch",
+        "Dusch/bad",
         "Toalettbesök",
         "Uppsnyggning",
         "Matsituation",
@@ -95,27 +93,9 @@ export default class HomeScreen extends Component {
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       scrollOfsetY: "",
+      initialScrollOffsetY: 0,
       layouts: [],
       insatsHeight: 0,
-      insatserna: [
-        "Städning_4",
-        "Tvätt_1",
-        "Matlagning_1",
-        "Inköp_1",
-        "Ekonomi_1",
-        "Aktivitet_1",
-        "Dusch_1",
-        "Toalettbesök_1",
-        "Uppsnyggning_1",
-        "Matsituation_1",
-        "Vila och sömn_1",
-        "På-o avklädning_1",
-        "Tillsyn_1",
-        "Förflyttning_1",
-        "Arbetsassistans_1",
-        "Besök hos vårdgivare_1",
-        "Bemötande_1",
-      ],
     };
   }
 
@@ -135,7 +115,7 @@ export default class HomeScreen extends Component {
         fromTime,
         toTime,
         date,
-        helperName,
+        helperID,
         insatsType,
         freeText,
       } = res.data();
@@ -145,7 +125,7 @@ export default class HomeScreen extends Component {
         fromTime,
         toTime,
         date,
-        helperName,
+        helperID,
         insatsType,
         freeText,
       });
@@ -161,45 +141,6 @@ export default class HomeScreen extends Component {
     loggingOut();
     this.props.navigation.replace("Login");
   }
-
-  // for (j = 0; j < 17; ++j) {
-  //   let [a, b] = this.state.insatserna[j].split("_");
-  //   const updateDBRef = await firebase
-  //     .firestore()
-  //     .collection("insatsTimes")
-  //     .doc(this.state.insatserna[j]);
-  //   let doc = await updateDBRef.get();
-  //   var data = await doc.data();
-  //   if (
-  //     this.state.insatser[i].date >= this.state.weekStart &&
-  //     this.state.insatser[i].date <= this.state.weekEnd &&
-  //     this.state.insatser[i].insatstype == a
-  //   ) {
-  //     console.log(data);
-  //   }
-  // }
-  // theDatas() {
-  //   // this.TheinsatsData.get().then((snapshot) => {
-  //   //   snapshot.forEach(doc => {
-  //   //     console.log(doc.data())
-  //   //   })
-  //   // } )
-  //   // console.log(this.TheinsatsData)
-  //   // this.TheinsatsData.map((item, index) => {
-
-  //   // })
-  //   // for (i = 0; i < this.state.insatser.length; ++i) {
-  //     this.TheinsatsData.get().then((snapshot) => {
-  //       snapshot.forEach((doc) => {
-  //         var lett = doc.data().insatss[1]
-  //         if (lett != undefined){
-
-  //           console.log(lett.slice(-1));
-  //         }
-  //       });
-  //     });
-  //   // }
-  // }
 
   // used to set swedish names of days
   dynamicDays() {
@@ -231,9 +172,8 @@ export default class HomeScreen extends Component {
         this.state.insatser[i].date >= this.state.weekStart &&
         this.state.insatser[i].date <= this.state.weekEnd
       ) {
-        // console.log("hej")
         if (tmpType == this.state.insatser[i].insatsType) {
-        return 1;
+          return -1;
         }
       }
     }
@@ -251,6 +191,7 @@ export default class HomeScreen extends Component {
         .format("YYYY-MM-DD"),
     });
     this.state.layouts = [];
+    this.scrollToInitialPosition();
   }
 
   // updates layouts array with the data of any insatser
@@ -262,7 +203,7 @@ export default class HomeScreen extends Component {
     fromTime,
     toTime,
     date,
-    helperName,
+    helperID,
     insatsType,
     freeText
   ) {
@@ -276,20 +217,22 @@ export default class HomeScreen extends Component {
       fromTime: fromTime,
       toTime: toTime,
       date: date,
-      helperName: helperName,
+      helperID: helperID,
       insatsType: insatsType,
       freeText: freeText,
     });
   }
 
-  // used to get the height of insatsblock on screen
+  // used to get the height of insatsblock on screen and set how far
+  // we need to scroll down to show 07:00 as the first timeslot
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
+      initialScrollOffsetY: layout.height * 7,
     });
   }
 
-  // renders all insatser that can be dragged as insatser components and empty <view> for
+  // renders all insatser that can be dragged as insatser components
   renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -308,7 +251,7 @@ export default class HomeScreen extends Component {
                   this.state.insatser[i].fromTime,
                   this.state.insatser[i].toTime,
                   this.state.insatser[i].date,
-                  this.state.insatser[i].helperName,
+                  this.state.insatser[i].helperID,
                   this.state.insatser[i].insatsType,
                   this.state.insatser[i].freeText
                 );
@@ -322,6 +265,7 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
+                userID={this.state.insatser[i].helperID} // personnel ID
               />
             </View>
           );
@@ -401,6 +345,15 @@ export default class HomeScreen extends Component {
     }
   }
 
+  // Scrolls the ScrollView on HomeScreen as far as the value stored in initialScrollOffsetY
+  // whose value is changed in
+  scrollToInitialPosition = () => {
+    this.scrollViewRef.scrollTo({
+      y: this.state.initialScrollOffsetY,
+      animated: false,
+    });
+  };
+
   // render function
   render() {
     const {
@@ -412,8 +365,7 @@ export default class HomeScreen extends Component {
       layouts,
       insatsHeight,
     } = this.state;
-    // console.log(this.state.boende)
-    // this.theDatas();
+
     var today = moment(this.state.weekStart).format("YYYY-MM-DD");
     var aday2 = moment(this.state.weekStart).add(1, "day").format("YYYY-MM-DD");
     var aday3 = moment(this.state.weekStart).add(2, "day").format("YYYY-MM-DD");
@@ -539,7 +491,14 @@ export default class HomeScreen extends Component {
           })}
         </View>
 
-        <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
+        <ScrollView
+          ref={(ref) => {
+            this.scrollViewRef = ref;
+          }}
+          onLayout={this.scrollToInitialPosition}
+          onScroll={this.handleScroll}
+          scrollEnabled={!dragging}
+        >
           <View style={styles.listContainer}>
             <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
@@ -599,7 +558,7 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View style={{ width: 140, backgroundColor: "black" }}>
               <Text
                 onLayout={(event) => {
                   this.getLayoutHeight(event.nativeEvent.layout);

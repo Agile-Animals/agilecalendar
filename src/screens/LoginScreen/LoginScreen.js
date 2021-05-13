@@ -15,7 +15,9 @@ import { Button, Input, Text, ThemeProvider } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Dimensions } from "react-native";
 import { useWindowDimensions } from "react-native";
-// function for user login 
+import * as Notifications from "expo-notifications";
+
+// function for user login
 const LoginScreen = ({ navigation }) => {
   const guidelineBaseWidth = 350;
   const guidelineBaseHeight = 680;
@@ -27,7 +29,7 @@ const LoginScreen = ({ navigation }) => {
   const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
-// function for pop out alert window if any requried information is missing 
+  // function for pop out alert window if any requried information is missing
   const onSubmit = async () => {
     if (!password && !email) {
       Alert.alert("E-postadress och Lösenord saknas.");
@@ -42,13 +44,14 @@ const LoginScreen = ({ navigation }) => {
       setEmail("");
       setPassword("");
     } else {
-      await signIn(email, password);
+      const pushToken = await Notifications.getExpoPushTokenAsync();
+      await signIn(email, password, pushToken.data);
       setEmail("");
       setPassword("");
       navigation.navigate("Loading");
     }
   };
-// return for input user email and password to be able to login 
+  // return for input user email and password to be able to login
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -91,7 +94,7 @@ const LoginScreen = ({ navigation }) => {
     </ScrollView>
   );
 };
-//styling here 
+//styling here
 const styles = StyleSheet.create({
   container: {
     height: "100%",

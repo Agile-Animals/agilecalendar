@@ -17,7 +17,7 @@ export default class Draggable extends Component {
     this.state = {
       pan: new Animated.ValueXY(),
       message: props.message,
-      helperName: "test",
+      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
       insatsType: "Fritext",
       boende: firebase.auth().currentUser.uid,
       fromTime: "",
@@ -29,6 +29,7 @@ export default class Draggable extends Component {
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
     };
+
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
       onPanResponderMove: Animated.event(
@@ -126,7 +127,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.state.weekStart, "date");
@@ -157,7 +158,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday2, "date");
@@ -188,7 +189,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday3, "date");
@@ -219,7 +220,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday4, "date");
@@ -250,7 +251,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday5, "date");
@@ -281,7 +282,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday6, "date");
@@ -312,7 +313,7 @@ export default class Draggable extends Component {
           gesture.moveY + this.state.scrollOfsetY >
             220 + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            222 + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday7, "date");
@@ -402,7 +403,6 @@ export default class Draggable extends Component {
         var data = await doc.data();
         let personnelNr = 0;
         data.times.map((item, index) => {
-          // console.log(data)
           newTimes.push(item);
           if (item == fromTime + "," + toTime + "," + date) {
             personnelNr++;
@@ -426,137 +426,35 @@ export default class Draggable extends Component {
     return 1;
   }
 
-  // async insatsMoreThanOne(insatstype, boende) {
-  //   let insatserna = [
-  //     "Städning_4",
-  //     "Tvätt_1",
-  //     "Matlagning_1",
-  //     "Inköp_1",
-  //     "Ekonomi_1",
-  //     "Aktivitet_1",
-  //     "Dusch_1",
-  //     "Toalettbesök_1",
-  //     "Uppsnyggning_1",
-  //     "Matsituation_1",
-  //     "Vila och sömn_1",
-  //     "På-o avklädning_1",
-  //     "Tillsyn_1",
-  //     "Förflyttning_1",
-  //     "Arbetsassistans_1",
-  //     "Besök hos vårdgivare_1",
-  //     "Bemötande_1",
-  //   ];
-  //   // var insatsTimes = ;
-  //   var veckaNummer = moment(this.state.weekStart).format("WW");
-  //   var år = moment(this.state.weekStart).format("YYYY");
-  //   for (i = 0; i < 17; ++i) {
-  //     let [a, b] = insatserna[i].split("_");
-  //     if (a == insatstype) {
-  //       const updateDBRef = await firebase
-  //         .firestore()
-  //         .collection("insatsTimes")
-  //         .doc(insatserna[i]);
-  //       let doc = await updateDBRef.get();
-  //       var newInsatsTimes = [];
-  //       var data = await doc.data();
-  //       let insansnum = b;
-  //       data.insatss.map((item1, item2,item3,item4,item5, index) => {
-  //         newInsatsTimes.push(item1, item2,item3,item4,item5);
-  //         insansnum--;
-  //         if (item1 ==insatstype ,item2 == boende , item3 == veckaNummer , item4 ==år , item5==insansnum) {
-  //         console.log("ute", insansnum);
-  //         }
-  //       });
-
-  //       if (insansnum >= 0) {
-          
-  //         newInsatsTimes.push(
-  //           item1 ==insatstype ,item2 == boende , item3 == veckaNummer , item4 ==år , item5==insansnum
-  //           );
-  //         insansnum--;
-  //         updateDBRef.set(
-  //           {
-  //             insatss: newInsatsTimes,
-  //           },
-  //           { merge: true }
-  //         );
-  //       } else {
-  //         // console.log("inne", insansnum);
-  //         // Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
-  //         return -1;
-  //       }
-  //       i = 18;
-  //       console.log("ute", insansnum);
-  //     }
-  //   }
-  //   return 1;
-  // }
-
-
-  async insatsMoreThanOne(insatstype, boende) {
-    let insatserna = [
-      "Städning_4",
-      "Tvätt_1",
-      "Matlagning_1",
-      "Inköp_1",
-      "Ekonomi_1",
-      "Aktivitet_1",
-      "Dusch_1",
-      "Toalettbesök_1",
-      "Uppsnyggning_1",
-      "Matsituation_1",
-      "Vila och sömn_1",
-      "På-o avklädning_1",
-      "Tillsyn_1",
-      "Förflyttning_1",
-      "Arbetsassistans_1",
-      "Besök hos vårdgivare_1",
-      "Bemötande_1",
-    ];
-    // var insatsTimes = ;
-    var veckaNummer = moment(this.state.weekStart).format("WW");
-    var år = moment(this.state.weekStart).format("YYYY");
-    for (i = 0; i < 17; ++i) {
-      let [a, b] = insatserna[i].split("_");
-      if (a == insatstype) {
-        const updateDBRef = await firebase
-          .firestore()
-          .collection("insatsTimes")
-          .doc(insatserna[i]);
-        let doc = await updateDBRef.get();
-        var newInsatsTimes = [];
-        var data = await doc.data();
-        let insansnum = b;
-        data.insatss.map((item, index) => {
-          newInsatsTimes.push(item);
-          insansnum--;
-          if (item ==insatstype + "," + boende + "," + veckaNummer + "," + år + insansnum) {
-          console.log("ute", insansnum);
-          }
-        });
-
-        if (insansnum > 0) {
-          
-          newInsatsTimes.push(
-            insatstype + "," + boende + "," + veckaNummer + "," + år  + ", "+ insansnum
-            );
-          insansnum--;
-          updateDBRef.set(
-            {
-              insatss: newInsatsTimes,
-            },
-            { merge: true }
-          );
-        } else {
-          // console.log("inne", insansnum);
-          // Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
-          return -1;
-        }
-        i = 18;
-        console.log("ute", insansnum);
-      }
-    }
-    return 1;
+  // this should use the helpers pushToken, not the creators like in this test.
+  // in firestore we would get their user ID and get the pushToken from their user document.
+  async sendNotification() {
+    const updateDBRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.helperID);
+    let doc = await updateDBRef.get();
+    var newTimes = [];
+    var pushToken = await doc.data().pushToken;
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: pushToken,
+        data: { extractData: "Some data" },
+        title: "Insats skapad:",
+        body:
+          this.state.insatsType +
+          " " +
+          this.state.fromTime +
+          "-" +
+          this.state.toTime,
+      }),
+    });
   }
 
   // creates insats unless there already is one at the time and date
@@ -567,15 +465,9 @@ export default class Draggable extends Component {
       this.state.toTime,
       this.state.date
     );
-
-    let insatsManyTimes = await this.insatsMoreThanOne(
-      this.state.insatsType,
-      this.state.boende
-    );
-    // this.insatsMoreThanOne(this.state.insatsType);
-    if (this.state.insatser.length == 0 && personAvailable == 1 && insatsManyTimes == 1) {
+    if (this.state.insatser.length == 0 && personAvailable == 1) {
       this.dbRef.add({
-        helperName: "test",
+        helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
@@ -583,6 +475,7 @@ export default class Draggable extends Component {
         date: this.state.date,
         freeText: "",
       });
+      this.sendNotification();
       duplet = 1;
     } else {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -591,20 +484,27 @@ export default class Draggable extends Component {
             this.state.fromTime >= this.state.insatser[i].fromTime &&
             this.state.toTime <= this.state.insatser[i].toTime
           ) {
-            Alert.alert(
-              "Du har redan bokat:\n" +
-                this.state.insatser[i].insatsType +
-                " då."
-            );
+            const dbRef2 =this.dbRef.doc(this.state.insatser[i].key);
+            dbRef2.delete()
+
+             await this.dbRef.add ({
+              helperName: "test",
+              insatsType: this.state.insatsType,
+              boende: firebase.auth().currentUser.uid,
+              fromTime: this.state.fromTime,
+              toTime: this.state.toTime,
+              date: this.state.date,
+              freeText: "",
+            });
             duplet = 1;
             i = this.state.insatser.length + 2;
           }
         }
       }
     }
-    if (duplet == 0 && personAvailable == 1  && insatsManyTimes == 1) {
+    if (duplet == 0 && personAvailable == 1) {
       this.dbRef.add({
-        helperName: "test",
+        helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
@@ -612,6 +512,7 @@ export default class Draggable extends Component {
         date: this.state.date,
         freeText: "",
       });
+      this.sendNotification();
     }
   }
 

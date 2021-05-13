@@ -27,6 +27,7 @@ export default class Insats extends Component {
       scrollOfsetY: props.scrollOfsetY,
       dayColor: props.dayColor,
       modalVisible: false,
+      userID: props.userID,
     };
 
     this.panResponder = PanResponder.create({
@@ -103,7 +104,6 @@ export default class Insats extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
     if (this.props.layouts !== prevProps.layouts) {
       this.setState({ layouts: this.props.layouts });
     }
@@ -115,6 +115,35 @@ export default class Insats extends Component {
     }
   }
 
+  async sendNotification() {
+    const updateDBRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.userID);
+    let doc = await updateDBRef.get();
+    var newTimes = [];
+    var pushToken = await doc.data().pushToken;
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: pushToken,
+        data: { extractData: "Some data" },
+        title: "Insats borttagen:",
+        body:
+          this.state.insats.insatsType +
+          " " +
+          this.state.insats.fromTime +
+          "-" +
+          this.state.insats.toTime,
+      }),
+    });
+  }
+
   // removes insats from database and also removes its' values from layouts
   async deleteInsats() {
     this.freePersonnel(
@@ -122,12 +151,6 @@ export default class Insats extends Component {
       this.state.insats.toTime,
       this.state.insats.date
     );
-    // this.freeInsats(      
-    //   this.state.insatsType,
-    //   this.state.boende,
-    //   moment(this.state.weekStart).format("WW"),
-    //   moment(this.state.weekStart).format("YYYY"),
-    // );
     for (let i = 0; i < this.state.layouts.length; ++i) {
       if (this.state.layouts[i].key == this.state.insats.key) {
         this.state.layouts.splice(i, 1);
@@ -140,6 +163,7 @@ export default class Insats extends Component {
     dbRef.delete().then((res) => {
       console.log("Item removed from database");
     });
+    this.sendNotification();
   }
 
   // frees booked personnel when deleting insats
@@ -204,67 +228,6 @@ export default class Insats extends Component {
     return 0;
   }
 
-
-  // async freeinsats(insatstype, boende, veckaNummer, år) {
-  //   let Insatserna = [
-  //     "Städning_2",
-  //     "Tvätt_1",
-  //     "Matlagning_1",
-  //     "Inköp_1",
-  //     "Ekonomi_1",
-  //     "Aktivitet_1",
-  //     "Dusch_1",
-  //     "Toalettbesök_1",
-  //     "Uppsnyggning_1",
-  //     "Matsituation_1",
-  //     "Vila och sömn_1",
-  //     "På-o avklädning_1",
-  //     "Tillsyn_1",
-  //     "Förflyttning_1",
-  //     "Arbetsassistans_1",
-  //     "Besök hos vårdgivare_1",
-  //     "Bemötande_1",
-  //   ]
-  //   for(i= 0; i< 18; ++i) {
-  //     let [a, b] = Insatserna[i].split("_");
-  //     if (a == insatstype) {
-  //       const updateDBRef = await firebase
-  //         .firestore()
-  //         .collection("insatsTimes")
-  //         .doc(insatserna[i]);
-  //       let doc = await updateDBRef.get();
-  //       var newInsatsTimes = [];
-  //       var data = await doc.data();
-  //       let insansnum = 0;
-  //       data.insatss.map((item, index) => {
-  //         console.log(data);
-  //         console.log(insansnum);
-  //         newInsatsTimes.push(item);
-  //         if (item ==insatstype + "," + boende + "," + veckaNummer + "," + år + b) {
-  //           insansnum--;
-  //         console.log(insansnum);
-
-  //         }
-  //       });
-  //       if (insansnum < b) {
-  //         newInsatsTimes.push(
-  //           insatstype + "," + boende + "," + veckaNummer + "," + år  + ", "+ b
-  //         );
-  //         updateDBRef.set(
-  //           {
-  //             insatss: newInsatsTimes,
-  //           },
-  //           { merge: true }
-  //         );
-  //       } else {
-  //         Alert.alert("Tyvärr så finns inte nog med personal denna tid.");
-  //         return 0;
-  //       }
-  //       i = 18;
-  //     }
-  //   }
-  //   return 1;
-  // }
   updateInsats(insats, newFrom, newTo, newDate) {
     const updateDBRef = firebase
       .firestore()
@@ -276,7 +239,7 @@ export default class Insats extends Component {
         fromTime: newFrom,
         toTime: newTo,
         date: newDate,
-        helperName: insats.helperName,
+        helperID: insats.helperID,
         insatsType: insats.insatsType,
         freeText: insats.freeText,
       })
@@ -313,13 +276,13 @@ export default class Insats extends Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
-                  <Text style={{ fontSize: 22 }}>{message}!</Text>
+                  <Text style={{ fontSize: 22 }}>{message}</Text>
                   <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
-                    {this.state.insats.toTime}!
+                    {this.state.insats.toTime}
                   </Text>
                   <Text style={{ fontSize: 17 }}>
-                    Datum: {this.state.insats.date}!
+                    Datum: {this.state.insats.date}
                   </Text>
                 </View>
                 <Pressable
