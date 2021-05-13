@@ -460,12 +460,12 @@ export default class Draggable extends Component {
   // creates insats unless there already is one at the time and date
   async storeInsats() {
     let duplet = 0;
-    let personAvailable = await this.checkPersonnel(
-      this.state.fromTime,
-      this.state.toTime,
-      this.state.date
-    );
-    if (this.state.insatser.length == 0 && personAvailable == 1) {
+    if (this.state.insatser.length == 0) {
+      let personAvailable = await this.checkPersonnel(
+        this.state.fromTime,
+        this.state.toTime,
+        this.state.date
+      );
       this.dbRef.add({
         helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
         insatsType: this.state.insatsType,
@@ -484,10 +484,10 @@ export default class Draggable extends Component {
             this.state.fromTime >= this.state.insatser[i].fromTime &&
             this.state.toTime <= this.state.insatser[i].toTime
           ) {
-            const dbRef2 =this.dbRef.doc(this.state.insatser[i].key);
-            dbRef2.delete()
+            const dbRef2 = this.dbRef.doc(this.state.insatser[i].key);
+            dbRef2.delete();
 
-             await this.dbRef.add ({
+            await this.dbRef.add({
               helperName: "test",
               insatsType: this.state.insatsType,
               boende: firebase.auth().currentUser.uid,
@@ -502,17 +502,24 @@ export default class Draggable extends Component {
         }
       }
     }
-    if (duplet == 0 && personAvailable == 1) {
-      this.dbRef.add({
-        helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
-        insatsType: this.state.insatsType,
-        boende: firebase.auth().currentUser.uid,
-        fromTime: this.state.fromTime,
-        toTime: this.state.toTime,
-        date: this.state.date,
-        freeText: "",
-      });
-      this.sendNotification();
+    if (duplet == 0) {
+      let personAvailable = await this.checkPersonnel(
+        this.state.fromTime,
+        this.state.toTime,
+        this.state.date
+      );
+      if (personAvailable == 1) {
+        this.dbRef.add({
+          helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
+          insatsType: this.state.insatsType,
+          boende: firebase.auth().currentUser.uid,
+          fromTime: this.state.fromTime,
+          toTime: this.state.toTime,
+          date: this.state.date,
+          freeText: "",
+        });
+        this.sendNotification();
+      }
     }
   }
 
