@@ -428,7 +428,7 @@ export default class Draggable extends Component {
 
   // this should use the helpers pushToken, not the creators like in this test.
   // in firestore we would get their user ID and get the pushToken from their user document.
-  async sendNotification() {
+async sendNotification(message) {
     const updateDBRef = firebase
       .firestore()
       .collection("users")
@@ -446,7 +446,7 @@ export default class Draggable extends Component {
       body: JSON.stringify({
         to: pushToken,
         data: { extractData: "Some data" },
-        title: "Insats skapad:",
+        title: message,
         body:
           this.state.insatsType +
           " " +
@@ -459,13 +459,12 @@ export default class Draggable extends Component {
 
   // creates insats unless there already is one at the time and date
   async storeInsats() {
-    let duplet = 0;
-    let personAvailable = await this.checkPersonnel(
-      this.state.fromTime,
-      this.state.toTime,
-      this.state.date
-    );
-    if (this.state.insatser.length == 0 && personAvailable == 1) {
+    if (this.state.insatser.length == 0) {
+      let personAvailable = await this.checkPersonnel(
+        this.state.fromTime,
+        this.state.toTime,
+        this.state.date
+      );
       this.dbRef.add({
         helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
         insatsType: this.state.insatsType,
@@ -475,8 +474,7 @@ export default class Draggable extends Component {
         date: this.state.date,
         freeText: "",
       });
-      this.sendNotification();
-      duplet = 1;
+      this.sendNotification("Insats skapad:");
     } else {
       for (let i = 0; i < this.state.insatser.length; ++i) {
         if (this.state.date == this.state.insatser[i].date) {
@@ -484,28 +482,23 @@ export default class Draggable extends Component {
             this.state.fromTime >= this.state.insatser[i].fromTime &&
             this.state.toTime <= this.state.insatser[i].toTime
           ) {
-            Alert.alert(
-              "Du har redan bokat:\n" +
-                this.state.insatser[i].insatsType +
-                " då."
-            );
-            duplet = 1;
+            const dbRef2 = this.dbRef.doc(this.state.insatser[i].key);
+            dbRef2.delete();
+
+            await this.dbRef.add({
+              helperName: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
+              insatsType: this.state.insatsType,
+              boende: firebase.auth().currentUser.uid,
+              fromTime: this.state.fromTime,
+              toTime: this.state.toTime,
+              date: this.state.date,
+              freeText: "",
+            });
             i = this.state.insatser.length + 2;
+            this.sendNotification("Insats ändrad:");
           }
         }
       }
-    }
-    if (duplet == 0 && personAvailable == 1) {
-      this.dbRef.add({
-        helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
-        insatsType: this.state.insatsType,
-        boende: firebase.auth().currentUser.uid,
-        fromTime: this.state.fromTime,
-        toTime: this.state.toTime,
-        date: this.state.date,
-        freeText: "",
-      });
-      this.sendNotification();
     }
   }
 
