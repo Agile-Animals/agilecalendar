@@ -457,28 +457,6 @@ export default class Draggable extends Component {
     });
   }
 
-  updateInsats(insats, newinsats) {
-    const updateDBRef = firebase
-      .firestore()
-      .collection("insatser")
-      .doc(insats.key);
-    updateDBRef
-      .set({
-        boende: insats.boende,
-        fromTime: insats.newFrom,
-        toTime: insats.toTime,
-        date: insats.date,
-        helperName: insats.helperName,
-        insatsType: newinsats,
-        freeText: insats.freeText,
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      });
-  }
-
-
-
   // creates insats unless there already is one at the time and date
   async storeInsats() {
     let duplet = 0;
@@ -506,18 +484,18 @@ export default class Draggable extends Component {
             this.state.fromTime >= this.state.insatser[i].fromTime &&
             this.state.toTime <= this.state.insatser[i].toTime
           ) {
-            this.updateInsats(this.state.insatser[i], this.state.insatsType)
-            // const dbRef2 =this.dbRef.doc(this.state.insatser[i].key);
-            // dbRef2.delete()
-            //  await this.dbRef.add ({
-            //   helperName: "test",
-            //   insatsType: this.state.insatsType,
-            //   boende: firebase.auth().currentUser.uid,
-            //   fromTime: this.state.fromTime,
-            //   toTime: this.state.toTime,
-            //   date: this.state.date,
-            //   freeText: "",
-            // });
+            const dbRef2 =this.dbRef.doc(this.state.insatser[i].key);
+            dbRef2.delete()
+
+             await this.dbRef.add ({
+              helperName: "test",
+              insatsType: this.state.insatsType,
+              boende: firebase.auth().currentUser.uid,
+              fromTime: this.state.fromTime,
+              toTime: this.state.toTime,
+              date: this.state.date,
+              freeText: "",
+            });
             duplet = 1;
             i = this.state.insatser.length + 2;
           }
