@@ -430,10 +430,14 @@ export default class Draggable extends Component {
   // this should use the helpers pushToken, not the creators like in this test.
   // in firestore we would get their user ID and get the pushToken from their user document.
   async sendNotification() {
-    const updateDBRef = firebase.firestore().collection("users").doc(helperID);
+    const updateDBRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.helperID);
     let doc = await updateDBRef.get();
     var newTimes = [];
     var pushToken = await doc.data().pushToken;
+    console.log(pushToken);
     fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
       headers: {

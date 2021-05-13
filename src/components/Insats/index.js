@@ -276,7 +276,7 @@ export default class Insats extends Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
-                  <Text style={{ fontSize: 22 }}>{message}!</Text>
+                  <Text style={{ fontSize: 22 }}>{message}</Text>
                   <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
                     {this.state.insats.toTime}
