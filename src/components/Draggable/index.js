@@ -28,7 +28,6 @@ export default class Draggable extends Component {
       insatser: props.insatser,
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
-      userID: props.userID,
     };
 
     this.panResponder = PanResponder.create({
@@ -437,7 +436,6 @@ export default class Draggable extends Component {
     let doc = await updateDBRef.get();
     var newTimes = [];
     var pushToken = await doc.data().pushToken;
-    console.log(pushToken);
     fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
       headers: {
@@ -469,7 +467,7 @@ export default class Draggable extends Component {
     );
     if (this.state.insatser.length == 0 && personAvailable == 1) {
       this.dbRef.add({
-        helperID: "test",
+        helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
@@ -499,7 +497,7 @@ export default class Draggable extends Component {
     }
     if (duplet == 0 && personAvailable == 1) {
       this.dbRef.add({
-        helperID: "test",
+        helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // either personnel account or the person
         insatsType: this.state.insatsType,
         boende: firebase.auth().currentUser.uid,
         fromTime: this.state.fromTime,
