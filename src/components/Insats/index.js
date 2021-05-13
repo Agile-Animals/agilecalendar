@@ -27,7 +27,7 @@ export default class Insats extends Component {
       scrollOfsetY: props.scrollOfsetY,
       dayColor: props.dayColor,
       modalVisible: false,
-      userID: props.userID,
+      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
     };
 
     this.panResponder = PanResponder.create({
@@ -119,7 +119,7 @@ export default class Insats extends Component {
     const updateDBRef = firebase
       .firestore()
       .collection("users")
-      .doc(this.state.userID);
+      .doc(this.state.helperID);
     let doc = await updateDBRef.get();
     var newTimes = [];
     var pushToken = await doc.data().pushToken;

@@ -268,7 +268,6 @@ export default class HomeScreen extends Component {
                 onSwap={this.onSwap.bind(this)}
                 layouts={this.state.layouts}
                 scrollOfsetY={this.state.scrollOfsetY}
-                userID={this.state.insatser[i].helperID} // personnel ID
               />
             </View>
           );
