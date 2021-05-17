@@ -17,7 +17,6 @@ export default class Draggable extends Component {
     this.state = {
       pan: new Animated.ValueXY(),
       message: props.message,
-      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
       insatsType: "Fritext",
       boende: firebase.auth().currentUser.uid,
       fromTime: "",
@@ -28,6 +27,8 @@ export default class Draggable extends Component {
       insatser: props.insatser,
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
+      topPadding: 235, // should be dynamic
+      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // ID of personnel account on firestore
     };
 
     this.panResponder = PanResponder.create({
@@ -125,9 +126,9 @@ export default class Draggable extends Component {
       for (let i = 0; i < 24; ++i) {
         if (
           gesture.moveY + this.state.scrollOfsetY >
-            220 + i * this.state.insatsHeight &&
+            this.state.topPadding + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            this.state.topPadding + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.state.weekStart, "date");
@@ -156,9 +157,9 @@ export default class Draggable extends Component {
       for (let i = 0; i < 24; ++i) {
         if (
           gesture.moveY + this.state.scrollOfsetY >
-            220 + i * this.state.insatsHeight &&
+            this.state.topPadding + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            this.state.topPadding + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday2, "date");
@@ -187,9 +188,9 @@ export default class Draggable extends Component {
       for (let i = 0; i < 24; ++i) {
         if (
           gesture.moveY + this.state.scrollOfsetY >
-            220 + i * this.state.insatsHeight &&
+            this.state.topPadding + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            this.state.topPadding + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday3, "date");
@@ -218,9 +219,9 @@ export default class Draggable extends Component {
       for (let i = 0; i < 24; ++i) {
         if (
           gesture.moveY + this.state.scrollOfsetY >
-            220 + i * this.state.insatsHeight &&
+            this.state.topPadding + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            this.state.topPadding + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday4, "date");
@@ -249,9 +250,9 @@ export default class Draggable extends Component {
       for (let i = 0; i < 24; ++i) {
         if (
           gesture.moveY + this.state.scrollOfsetY >
-            220 + i * this.state.insatsHeight &&
+            this.state.topPadding + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            this.state.topPadding + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday5, "date");
@@ -280,9 +281,9 @@ export default class Draggable extends Component {
       for (let i = 0; i < 24; ++i) {
         if (
           gesture.moveY + this.state.scrollOfsetY >
-            220 + i * this.state.insatsHeight &&
+            this.state.topPadding + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            this.state.topPadding + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday6, "date");
@@ -311,9 +312,9 @@ export default class Draggable extends Component {
       for (let i = 0; i < 24; ++i) {
         if (
           gesture.moveY + this.state.scrollOfsetY >
-            220 + i * this.state.insatsHeight &&
+            this.state.topPadding + i * this.state.insatsHeight &&
           gesture.moveY + this.state.scrollOfsetY <
-            220 + (i + 1) * this.state.insatsHeight
+            this.state.topPadding + (i + 1) * this.state.insatsHeight
         ) {
           this.inputValueUpdate(this.state.message, "insatsType");
           this.inputValueUpdate(this.aday7, "date");
@@ -459,7 +460,6 @@ export default class Draggable extends Component {
 
   // creates insats unless there already is one at the time and date
   async storeInsats() {
-    console.log(this.state.scrollOfsetY);
     let wasEmpty = 0;
     let updated = 0;
     if (this.state.insatser.length == 0) {

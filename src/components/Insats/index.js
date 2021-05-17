@@ -12,7 +12,7 @@ import {
 import firebase from "../../database/firebaseDb";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, ThemeProvider } from "react-native-elements";
-import moment from "moment";
+import moment, { relativeTimeRounding } from "moment";
 
 export default class Insats extends Component {
   constructor(props) {
@@ -25,9 +25,9 @@ export default class Insats extends Component {
       navigation: props.navigation,
       layouts: props.layouts,
       scrollOfsetY: props.scrollOfsetY,
-      dayColor: props.dayColor,
       modalVisible: false,
-      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
+      topPadding: 235, // should be dynamic
+      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // ID of personnel account on firestore
     };
 
     this.panResponder = PanResponder.create({
@@ -55,9 +55,11 @@ export default class Insats extends Component {
               gesture.x0 + gesture.dx <=
                 this.state.layouts[i].x + this.state.layouts[i].width &&
               gesture.y0 + gesture.dy + this.state.scrollOfsetY >=
-                this.state.layouts[i].y + 220 &&
+                this.state.layouts[i].y + this.state.topPadding &&
               gesture.y0 + gesture.dy + this.state.scrollOfsetY <=
-                this.state.layouts[i].y + this.state.layouts[i].height + 220
+                this.state.layouts[i].y +
+                  this.state.layouts[i].height +
+                  this.state.topPadding
             ) {
               if (this.state.insats.key != this.state.layouts[i].key) {
                 let tmpFrom = this.state.insats.fromTime;
@@ -248,13 +250,14 @@ export default class Insats extends Component {
       });
   }
 
+  positionVar = "relative";
+
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible });
   };
 
   render() {
-    const { message, id } = this.state;
-    const { modalVisible } = this.state;
+    const { message, id, modalVisible } = this.state;
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),
     };
@@ -308,12 +311,12 @@ let styles = StyleSheet.create({
     paddingBottom: 10,
     borderColor: "black",
     borderWidth: 2,
-    // change background to dayColor somehow
     backgroundColor: "white",
     shadowOpacity: 0.2,
     alignItems: "center",
     justifyContent: "center",
     shadowRadius: 2,
+    zIndex: 20,
   },
 
   centeredView: {
@@ -343,9 +346,6 @@ let styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
   },
   buttonClose: {
     backgroundColor: "#2196F3",

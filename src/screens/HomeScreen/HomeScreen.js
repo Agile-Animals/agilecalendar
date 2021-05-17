@@ -112,15 +112,8 @@ export default class HomeScreen extends Component {
   getCollection = (querySnapshot) => {
     const insatser = [];
     querySnapshot.forEach((res) => {
-      const {
-        boende,
-        fromTime,
-        toTime,
-        date,
-        helperID,
-        insatsType,
-        freeText,
-      } = res.data();
+      const { boende, fromTime, toTime, date, helperID, insatsType, freeText } =
+        res.data();
       insatser.push({
         key: res.id,
         boende,
@@ -228,7 +221,6 @@ export default class HomeScreen extends Component {
   // used to get the height of insatsblock on screen and set how far
   // we need to scroll down to show 07:00 as the first timeslot
   getLayoutHeight(layout) {
-    console.log(layout);
     this.setState({
       insatsHeight: layout.height,
       initialScrollOffsetY: layout.height * 7,
@@ -261,6 +253,7 @@ export default class HomeScreen extends Component {
                 );
               }}
               key={this.state.insatser[i].key}
+              style={{ zindex: 30 }}
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
@@ -390,6 +383,7 @@ export default class HomeScreen extends Component {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
+            zIndex: 2,
           }}
         >
           <ImageBackground
@@ -411,8 +405,9 @@ export default class HomeScreen extends Component {
             })}
           </ImageBackground>
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "white" }}>
+            <View style={{ width: 120, backgroundColor: "white", zIndex: 2 }}>
               <Button
+                style={{ width: 120, backgroundColor: "white", zIndex: 2 }}
                 title={
                   "Vecka " +
                   moment(this.state.weekStart).add(-1, "week").format("WW")
@@ -424,8 +419,9 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.header}>
-            <View style={{ width: 120, backgroundColor: "white" }}>
+            <View style={{ width: 120, backgroundColor: "white", zIndex: 2 }}>
               <Button
+                style={{ zindex: 2 }}
                 title={
                   "Nuvarande Vecka: " + moment().startOf("isoWeek").format("WW")
                 }
@@ -448,8 +444,9 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "white" }}>
+            <View style={{ width: 120, backgroundColor: "white", zindex: 2 }}>
               <Button
+                style={{ zindex: 2 }}
                 title={
                   "Vecka " +
                   moment(this.state.weekStart).add(1, "week").format("WW")
@@ -461,8 +458,9 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "white" }}>
+            <View style={{ width: 120, backgroundColor: "white", zindex: 2 }}>
               <Button
+                style={{ zindex: 2 }}
                 title="Logga Ut"
                 onPress={() => this.logOut()}
                 type="outline"
@@ -471,8 +469,9 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "white" }}>
+            <View style={{ width: 120, backgroundColor: "white", zindex: 2 }}>
               <Button
+                style={{ zindex: 2 }}
                 title="DagVy"
                 onPress={() => this.props.navigation.navigate("DayScreen")}
                 type="outline"
@@ -499,9 +498,10 @@ export default class HomeScreen extends Component {
           onLayout={this.scrollToInitialPosition}
           onScroll={this.handleScroll}
           scrollEnabled={!dragging}
+          style={{ zindex: 20 }}
         >
           <View style={styles.listContainer}>
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={index}>
@@ -511,19 +511,19 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, today, index, 1, "monday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday2, index, 2, "tuesday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(
                   item,
@@ -535,31 +535,31 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday4, index, 4, "thursday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday5, index, 5, "friday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday6, index, 6, "saturday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white" }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday7, index, 7, "sunday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "black" }}>
+            <View style={{ width: 140, backgroundColor: "black", zindex: 2 }}>
               <Text
                 style={styles.soptunna}
                 onLayout={(event) => {
@@ -581,11 +581,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     backgroundColor: "rgba(49, 118, 197, 1.0)",
+    zIndex: 2,
   },
   header: {
     alignItems: "center",
     padding: 3,
     paddingTop: 50,
+    zIndex: 2,
   },
   listContainer: {
     backgroundColor: "white",
@@ -593,12 +595,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
-  },
-  item: {
-    height: 43.5,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
+    zIndex: 2,
   },
   instatsList: {
     paddingTop: 10,
@@ -608,7 +605,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
-    shadowRadius: 2,
   },
   instatsListEmpty1: {
     paddingTop: 10,
@@ -696,7 +692,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     height: 130,
     width: 480,
-    zIndex: 20,
+    zIndex: 30,
     backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   button: {
@@ -704,23 +700,19 @@ const styles = StyleSheet.create({
     width: 140,
     alignSelf: "flex-end",
     fontSize: 5,
+    zIndex: 2,
   },
   head: {
     height: 40,
     backgroundColor: "#f1f8ff",
     flexDirection: "row",
     marginTop: 5,
+    zIndex: -2,
   },
   headItems: {
     width: 140,
     paddingLeft: 20,
     alignSelf: "center",
-  },
-
-  test: {
-    width: 140,
-    color: "red",
-    backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   preloader: {
     backgroundColor: "blue",

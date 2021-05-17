@@ -10,6 +10,7 @@ import LoadingScreen from "../screens/LoadingScreen";
 import Dashboard from "../screens/Dashboard";
 import SignUp from "../screens/SignUp";
 import DayScreen from "../screens/DayScreen";
+import PersonnelScreen from "../screens/PersonnelScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,6 +45,11 @@ const LoginStack = () => (
       options={{
         header: () => null,
       }}
+    />
+    <Stack.Screen
+      name="PersonnelScreen"
+      component={PersonnelScreen}
+      options={{ title: "" }}
     />
     <Stack.Screen
       name="DayScreen"

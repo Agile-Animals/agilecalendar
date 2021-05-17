@@ -20,13 +20,13 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import Insats from "../../components/InsatsDay";
 import moment from "moment";
 
-export default class DayScreen extends Component {
+export default class PersonnelScreen extends Component {
   constructor(props) {
     super(props);
     this.firestoreRef = firebase
       .firestore()
       .collection("insatser")
-      .where("boende", "==", firebase.auth().currentUser.uid);
+      .where("helperID", "==", "29iAmOUm7OPnDZMSpQtGJ6P2Get1");
     this.state = {
       modalVisible: false,
       isLoading: true,
@@ -71,22 +71,15 @@ export default class DayScreen extends Component {
   getCollection = (querySnapshot) => {
     const insatser = [];
     querySnapshot.forEach((res) => {
-      const {
-        boende,
-        fromTime,
-        toTime,
-        date,
-        helperName,
-        insatsType,
-        freeText,
-      } = res.data();
+      const { boende, fromTime, toTime, date, helperID, insatsType, freeText } =
+        res.data();
       insatser.push({
         key: res.id,
         boende,
         fromTime,
         toTime,
         date,
-        helperName,
+        helperID,
         insatsType,
         freeText,
       });
@@ -133,13 +126,10 @@ export default class DayScreen extends Component {
         ) {
           return (
             <View key={this.state.insatser[i].key} style={styles.instatsList}>
-              <Pressable>
-                <Text>
-                  {" "}
-                  {this.state.insatser[i].fromTime} -
-                  {this.state.insatser[i].toTime}{" "}
-                </Text>
-              </Pressable>
+              <Text>
+                {this.state.insatser[i].fromTime} -
+                {this.state.insatser[i].toTime}{" "}
+              </Text>
             </View>
           );
         }
@@ -161,7 +151,7 @@ export default class DayScreen extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text category="h2" style={{ fontSize: 30 }}>
-            Dagvy
+            Dagens schema
           </Text>
         </View>
         <View
@@ -176,15 +166,6 @@ export default class DayScreen extends Component {
               <Button
                 title="Logga Ut"
                 onPress={() => this.logOut()}
-                type="outline"
-              />
-            </View>
-          </View>
-          <View style={styles.button}>
-            <View style={{ width: 120, backgroundColor: "black" }}>
-              <Button
-                title="VeckoVy"
-                onPress={() => this.props.navigation.navigate("HomeScreen")}
                 type="outline"
               />
             </View>
