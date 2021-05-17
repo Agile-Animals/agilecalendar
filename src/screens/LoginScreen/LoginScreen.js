@@ -81,7 +81,7 @@ const LoginScreen = ({ navigation }) => {
               <Text style={styles.buttonText}>Logga in</Text>
             </TouchableOpacity>
 
-            <Text style={styles.inlineText}>Create account</Text>
+            <Text style={styles.inlineText}>Skapa konto</Text>
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("Sign Up")}

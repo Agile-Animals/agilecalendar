@@ -52,7 +52,7 @@ export default function SignUp({ navigation }) {
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
-          <Text style={styles.text}>Create an account </Text>
+          <Text style={styles.text}>Skapa ny konto Här!  </Text>
 
           <ScrollView onBlur={Keyboard.dismiss}>
             <TextInput
