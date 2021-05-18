@@ -559,7 +559,9 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
+            <View
+              style={{ width: "100%", backgroundColor: "white", zindex: 2 }}
+            >
               <Text
                 style={styles.soptunna}
                 onLayout={(event) => {
