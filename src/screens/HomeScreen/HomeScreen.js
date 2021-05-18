@@ -94,7 +94,7 @@ export default class HomeScreen extends Component {
       today: moment().format("YYYY-MM-DD"),
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
-      scrollOfsetY: "",
+      scrollOfsetY: 0,
       initialScrollOffsetY: 0,
       layouts: [],
       insatsHeight: 0,
@@ -218,13 +218,12 @@ export default class HomeScreen extends Component {
     });
   }
 
-  // used to get the height of insatsblock on screen and set how far
+  // used to get the height of an insatsblock on screen and set how far
   // we need to scroll down to show 07:00 as the first timeslot
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
       initialScrollOffsetY: layout.height * 7,
-      scrollOfsetY: layout.height * 7,
     });
   }
 

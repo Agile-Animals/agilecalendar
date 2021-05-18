@@ -49,7 +49,7 @@ export default class Draggable extends Component {
               moment().startOf("isoWeek").format("YYYY") +
               ")."
           );
-        } else {
+        } else if (gesture.moveY > 239) {
           this.aday2 = moment(this.state.weekStart)
             .add(1, "day")
             .format("YYYY-MM-DD");
@@ -437,6 +437,8 @@ export default class Draggable extends Component {
     let doc = await updateDBRef.get();
     var newTimes = [];
     var pushToken = await doc.data().pushToken;
+    // this expo server is registered at both apple's and google's
+    // notification services, thus we don't have to
     fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
       headers: {
@@ -458,7 +460,7 @@ export default class Draggable extends Component {
     });
   }
 
-  // creates insats unless there already is one at the time and date
+  // creates insats unless there already is one at that time and date
   async storeInsats() {
     let wasEmpty = 0;
     let updated = 0;
