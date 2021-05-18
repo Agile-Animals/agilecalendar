@@ -32,7 +32,9 @@ export default class Insats extends Component {
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
-      onPanResponderGrant: (e, gesture) => {},
+      onPanResponderGrant: (e, gesture) => {
+        // console.log(e);
+      },
       onPanResponderTerminationRequest: (e, gesture) => false,
       onPanResponderMove: Animated.event(
         [null, { dx: this.state.pan.x, dy: this.state.pan.y }],
@@ -119,6 +121,9 @@ export default class Insats extends Component {
     }
   }
 
+  // handles creation/deleting of insats pushnotifications in the if statement
+  // and swapping of insatser in the else statement
+  // swapType and swapDate only ever have values when we are swapping.
   async sendNotification(swapType = "", swapDate = "") {
     const updateDBRef = firebase
       .firestore()
@@ -280,8 +285,6 @@ export default class Insats extends Component {
       });
   }
 
-  positionVar = "relative";
-
   setModalVisible = (visible) => {
     this.setState({ modalVisible: visible });
   };
@@ -347,6 +350,7 @@ let styles = StyleSheet.create({
     justifyContent: "center",
     shadowRadius: 2,
     zIndex: 20,
+    width: 140,
   },
 
   centeredView: {

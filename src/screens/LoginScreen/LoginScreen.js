@@ -8,12 +8,9 @@ import {
   ScrollView,
   Keyboard,
 } from "react-native";
-import { useForm, Controller } from "react-hook-form";
 import { signIn } from "../../API/firebaseMethods";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Button, Input, Text, ThemeProvider } from "react-native-elements";
+import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Dimensions } from "react-native";
 import { useWindowDimensions } from "react-native";
 import * as Notifications from "expo-notifications";
 
@@ -26,9 +23,6 @@ const LoginScreen = ({ navigation }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
-  const [text, onChangeText] = React.useState("Useless Text");
-  const [number, onChangeNumber] = React.useState(null);
   // function for pop out alert window if any requried information is missing
   const onSubmit = async () => {
     if (!password && !email) {

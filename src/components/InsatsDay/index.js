@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
-  PanResponder,
   Animated,
   Text,
   Modal,
@@ -10,8 +9,6 @@ import {
   Pressable,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Button, ThemeProvider } from "react-native-elements";
 import moment from "moment";
 
 export default class Insats extends Component {
@@ -50,13 +47,13 @@ export default class Insats extends Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
-                  <Text style={{ fontSize: 22 }}>{message}!</Text>
+                  <Text style={{ fontSize: 22 }}>{message}</Text>
                   <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
-                    {this.state.insats.toTime}!
+                    {this.state.insats.toTime}
                   </Text>
                   <Text style={{ fontSize: 17 }}>
-                    Datum: {this.state.insats.date}!
+                    Datum: {moment(this.state.insats.date).format("DD/MM/YYYY")}
                   </Text>
                 </View>
                 <Pressable

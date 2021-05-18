@@ -3,20 +3,12 @@ import {
   StyleSheet,
   Text,
   ActivityIndicator,
-  Alert,
   View,
-  Animated,
-  Pressable,
-  Modal,
-  ListItem,
-  useWindowDimensions,
   ScrollView,
-  SafeAreaView,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
-import { Button, ThemeProvider } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { Button } from "react-native-elements";
 import Insats from "../../components/InsatsDay";
 import moment from "moment";
 

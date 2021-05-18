@@ -1,7 +1,6 @@
 import "react-native-gesture-handler";
-import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { LoginStack } from "./src/navigation";
 import firebase from "./src/database/firebaseDb";
@@ -9,6 +8,7 @@ import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import { LogBox } from "react-native";
 
+// maybe remove this in live version?
 LogBox.ignoreLogs(["Setting a timer"]);
 
 Notifications.setNotificationHandler({
