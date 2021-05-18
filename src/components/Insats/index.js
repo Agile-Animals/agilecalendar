@@ -77,10 +77,12 @@ export default class Insats extends Component {
                   tmpTo,
                   tmpDate
                 );
+                let swappedInsats = this.state.layouts[i];
                 this.props.onSwap(
                   this.state.insats.key,
                   this.state.layouts[i].key
                 );
+                this.sendNotification(swappedInsats);
                 i = this.state.layouts.length + 2;
               } else {
                 i = this.state.layouts.length + 2;
@@ -88,7 +90,6 @@ export default class Insats extends Component {
             }
           }
         }
-
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
@@ -117,7 +118,7 @@ export default class Insats extends Component {
     }
   }
 
-  async sendNotification() {
+  async sendNotification(swappedInsats = {}) {
     const updateDBRef = firebase
       .firestore()
       .collection("users")
@@ -125,25 +126,51 @@ export default class Insats extends Component {
     let doc = await updateDBRef.get();
     var newTimes = [];
     var pushToken = await doc.data().pushToken;
-    fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-Encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to: pushToken,
-        data: { extractData: "Some data" },
-        title: "Insats borttagen:",
-        body:
-          this.state.insats.insatsType +
-          " " +
-          this.state.insats.fromTime +
-          "-" +
-          this.state.insats.toTime,
-      }),
-    });
+    if (swappedInsats === "") {
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: pushToken,
+          data: { extractData: "Some data" },
+          title: "Insats borttagen:",
+          body:
+            this.state.insats.insatsType +
+            " " +
+            this.state.insats.fromTime +
+            "-" +
+            this.state.insats.toTime +
+            " " +
+            this.state.insats.date,
+        }),
+      });
+    } else {
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: pushToken,
+          data: { extractData: "Some data" },
+          title: "Insatser bytta:",
+          body:
+            this.state.insats.insatsType +
+            " " +
+            moment(this.state.insats.date).format("DD-MM") +
+            ", " +
+            swappedInsats.insatsType +
+            " " +
+            moment(swappedInsats.date).format("DD-MM"),
+        }),
+      });
+    }
   }
 
   // removes insats from database and also removes its' values from layouts
