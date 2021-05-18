@@ -26,7 +26,7 @@ export default class Insats extends Component {
       layouts: props.layouts,
       scrollOfsetY: props.scrollOfsetY,
       modalVisible: false,
-      topPadding: 235, // should be dynamic
+      topPadding: 222, // should be dynamic
       helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // ID of personnel account on firestore
     };
 
@@ -77,12 +77,13 @@ export default class Insats extends Component {
                   tmpTo,
                   tmpDate
                 );
-                let swappedInsats = this.state.layouts[i];
+                let swapType = this.state.layouts[i].insatsType;
+                let swapDate = this.state.layouts[i].date;
                 this.props.onSwap(
                   this.state.insats.key,
                   this.state.layouts[i].key
                 );
-                this.sendNotification(swappedInsats);
+                this.sendNotification(swapType, swapDate);
                 i = this.state.layouts.length + 2;
               } else {
                 i = this.state.layouts.length + 2;
@@ -118,7 +119,7 @@ export default class Insats extends Component {
     }
   }
 
-  async sendNotification(swappedInsats = {}) {
+  async sendNotification(swapType = "", swapDate = "") {
     const updateDBRef = firebase
       .firestore()
       .collection("users")
@@ -126,7 +127,8 @@ export default class Insats extends Component {
     let doc = await updateDBRef.get();
     var newTimes = [];
     var pushToken = await doc.data().pushToken;
-    if (swappedInsats === "") {
+    if (swapType === "") {
+      // console.log("add/del");
       fetch("https://exp.host/--/api/v2/push/send", {
         method: "POST",
         headers: {
@@ -145,10 +147,11 @@ export default class Insats extends Component {
             "-" +
             this.state.insats.toTime +
             " " +
-            this.state.insats.date,
+            moment(this.state.insats.date).format("DD/MM/YYYY"),
         }),
       });
     } else {
+      // console.log("swap");
       fetch("https://exp.host/--/api/v2/push/send", {
         method: "POST",
         headers: {
@@ -163,11 +166,11 @@ export default class Insats extends Component {
           body:
             this.state.insats.insatsType +
             " " +
-            moment(this.state.insats.date).format("DD-MM") +
+            moment(this.state.insats.date).format("DD/MM") +
             ", " +
-            swappedInsats.insatsType +
+            swapType +
             " " +
-            moment(swappedInsats.date).format("DD-MM"),
+            moment(swapDate).format("DD/MM"),
         }),
       });
     }
@@ -190,7 +193,7 @@ export default class Insats extends Component {
       .collection("insatser")
       .doc(this.state.insats.key);
     dbRef.delete().then((res) => {
-      console.log("Item removed from database");
+      // console.log("Item removed from database");
     });
     this.sendNotification();
   }
@@ -312,7 +315,7 @@ export default class Insats extends Component {
                     {this.state.insats.toTime}
                   </Text>
                   <Text style={{ fontSize: 17 }}>
-                    Datum: {this.state.insats.date}
+                    Datum: {moment(this.state.insats.date).format("DD/MM/YYYY")}
                   </Text>
                 </View>
                 <Pressable

@@ -27,7 +27,8 @@ export default class Draggable extends Component {
       insatser: props.insatser,
       scrollOfsetY: props.scrollOfsetY,
       insatsHeight: props.insatsHeight,
-      topPadding: 235, // should be dynamic
+      aboveScheduleArea: 220,
+      topPadding: 222, // should be dynamic
       helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // ID of personnel account on firestore
     };
 
@@ -38,6 +39,8 @@ export default class Draggable extends Component {
         { useNativeDriver: false }
       ),
       onPanResponderRelease: (e, gesture) => {
+        // test to see how far you have to drag to get into the schedule area
+        // console.log(gesture.moveY);
         if (
           this.state.weekStart <
           moment().startOf("isoWeek").format("YYYY-MM-DD")
@@ -49,7 +52,7 @@ export default class Draggable extends Component {
               moment().startOf("isoWeek").format("YYYY") +
               ")."
           );
-        } else if (gesture.moveY > 239) {
+        } else if (gesture.moveY > this.state.aboveScheduleArea) {
           this.aday2 = moment(this.state.weekStart)
             .add(1, "day")
             .format("YYYY-MM-DD");
@@ -494,7 +497,7 @@ export default class Draggable extends Component {
             dbRef2.delete();
 
             await this.dbRef.add({
-              helperName: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
+              helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1",
               insatsType: this.state.insatsType,
               boende: firebase.auth().currentUser.uid,
               fromTime: this.state.fromTime,

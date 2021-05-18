@@ -41,8 +41,9 @@ export async function signIn(email, password, pushToken) {
     });
   } catch (err) {
     Alert.alert("Fel lösenord eller e-postadress.", err.message);
+    return -1;
   }
-  return 1;
+  return 0;
 }
 
 export async function loggingOut() {
@@ -50,5 +51,7 @@ export async function loggingOut() {
     await firebase.auth().signOut();
   } catch (err) {
     Alert.alert("Något gick fel.", err.message);
+    return -1;
   }
+  return 0;
 }

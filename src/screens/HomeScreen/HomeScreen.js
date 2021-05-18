@@ -132,9 +132,9 @@ export default class HomeScreen extends Component {
   };
 
   // basic firestore logout function
-  logOut() {
-    loggingOut();
-    this.props.navigation.replace("Login");
+  async logOut() {
+    let testLogout = await loggingOut();
+    if (testLogout === 0) this.props.navigation.replace("Login");
   }
 
   // used to set swedish names of days
@@ -154,7 +154,7 @@ export default class HomeScreen extends Component {
           }
           this.state.days[dayIndex] +=
             " " +
-            moment(this.state.weekStart).add(dayIndex, "day").format("MM-DD");
+            moment(this.state.weekStart).add(dayIndex, "day").format("DD/MM");
         }
       }
     }
@@ -224,6 +224,7 @@ export default class HomeScreen extends Component {
     this.setState({
       insatsHeight: layout.height,
       initialScrollOffsetY: layout.height * 7,
+      // scrollOfsetY: layout.height * 7,
     });
   }
 
@@ -422,7 +423,7 @@ export default class HomeScreen extends Component {
               <Button
                 style={{ zindex: 2 }}
                 title={
-                  "Nuvarande Vecka: " + moment().startOf("isoWeek").format("WW")
+                  "Vecka " + moment().startOf("isoWeek").format("WW") + " (nu)"
                 }
                 onPress={() =>
                   this.setWeek(
@@ -558,7 +559,7 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "black", zindex: 2 }}>
+            <View style={{ width: 140, backgroundColor: "white", zindex: 2 }}>
               <Text
                 style={styles.soptunna}
                 onLayout={(event) => {
@@ -722,7 +723,7 @@ const styles = StyleSheet.create({
     paddingLeft: 7,
     borderColor: "white",
     borderWidth: 2,
-    backgroundColor: "#ccc",
+    backgroundColor: "white",
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },

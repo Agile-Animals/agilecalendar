@@ -45,10 +45,10 @@ const LoginScreen = ({ navigation }) => {
       setPassword("");
     } else {
       const pushToken = await Notifications.getExpoPushTokenAsync();
-      await signIn(email, password, pushToken.data);
+      let loginTest = await signIn(email, password, pushToken.data);
       setEmail("");
       setPassword("");
-      navigation.navigate("Loading");
+      if (loginTest === 0) navigation.navigate("Loading");
     }
   };
   // return for input user email and password to be able to login
@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }) => {
           <ScrollView onBlur={Keyboard.dismiss}>
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your email"
+              placeholder="E-post"
               placeholderTextColor="white"
               value={email}
               onChangeText={(email) => setEmail(email)}
@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation }) => {
 
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your password"
+              placeholder="Lösenord"
               placeholderTextColor="white"
               value={password}
               onChangeText={(password) => setPassword(password)}
