@@ -14,5 +14,5 @@ web-build/
 coverage/\*\*/*
 coverage/
 coverage
-.idea/workspace.xml
-/.idea/
+/.idea/workspace.xml
+/.idea/\*
