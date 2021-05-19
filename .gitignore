@@ -7,7 +7,6 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
-.idea
 web-build/
 
 # macOS
@@ -16,3 +15,4 @@ coverage/\*\*/*
 coverage/
 coverage
 .idea/workspace.xml
+.idea/
