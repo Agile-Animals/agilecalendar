@@ -12,7 +12,7 @@ import {
 import firebase from "../../database/firebaseDb";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Button, ThemeProvider } from "react-native-elements";
-import moment from "moment";
+import moment, { relativeTimeRounding } from "moment";
 
 export default class Insats extends Component {
   constructor(props) {
@@ -25,13 +25,16 @@ export default class Insats extends Component {
       navigation: props.navigation,
       layouts: props.layouts,
       scrollOfsetY: props.scrollOfsetY,
-      dayColor: props.dayColor,
       modalVisible: false,
+      topPadding: 222, // should be dynamic
+      helperID: "29iAmOUm7OPnDZMSpQtGJ6P2Get1", // ID of personnel account on firestore
     };
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (e, gesture) => true,
-      onPanResponderGrant: (e, gesture) => {},
+      onPanResponderGrant: (e, gesture) => {
+        // console.log(e);
+      },
       onPanResponderTerminationRequest: (e, gesture) => false,
       onPanResponderMove: Animated.event(
         [null, { dx: this.state.pan.x, dy: this.state.pan.y }],
@@ -54,9 +57,11 @@ export default class Insats extends Component {
               gesture.x0 + gesture.dx <=
                 this.state.layouts[i].x + this.state.layouts[i].width &&
               gesture.y0 + gesture.dy + this.state.scrollOfsetY >=
-                this.state.layouts[i].y + 220 &&
+                this.state.layouts[i].y + this.state.topPadding &&
               gesture.y0 + gesture.dy + this.state.scrollOfsetY <=
-                this.state.layouts[i].y + this.state.layouts[i].height + 220
+                this.state.layouts[i].y +
+                  this.state.layouts[i].height +
+                  this.state.topPadding
             ) {
               if (this.state.insats.key != this.state.layouts[i].key) {
                 let tmpFrom = this.state.insats.fromTime;
@@ -74,10 +79,13 @@ export default class Insats extends Component {
                   tmpTo,
                   tmpDate
                 );
+                let swapType = this.state.layouts[i].insatsType;
+                let swapDate = this.state.layouts[i].date;
                 this.props.onSwap(
                   this.state.insats.key,
                   this.state.layouts[i].key
                 );
+                this.sendNotification(swapType, swapDate);
                 i = this.state.layouts.length + 2;
               } else {
                 i = this.state.layouts.length + 2;
@@ -85,7 +93,6 @@ export default class Insats extends Component {
             }
           }
         }
-
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5,
@@ -103,7 +110,6 @@ export default class Insats extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
     if (this.props.layouts !== prevProps.layouts) {
       this.setState({ layouts: this.props.layouts });
     }
@@ -112,6 +118,66 @@ export default class Insats extends Component {
     }
     if (this.props.scrollOfsetY !== prevProps.scrollOfsetY) {
       this.setState({ scrollOfsetY: this.props.scrollOfsetY });
+    }
+  }
+
+  // handles creation/deleting of insats pushnotifications in the if statement
+  // and swapping of insatser in the else statement
+  // swapType and swapDate only ever have values when we are swapping.
+  async sendNotification(swapType = "", swapDate = "") {
+    const updateDBRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(this.state.helperID);
+    let doc = await updateDBRef.get();
+    var newTimes = [];
+    var pushToken = await doc.data().pushToken;
+    if (swapType === "") {
+      // console.log("add/del");
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: pushToken,
+          data: { extractData: "Some data" },
+          title: "Insats borttagen:",
+          body:
+            this.state.insats.insatsType +
+            " " +
+            this.state.insats.fromTime +
+            "-" +
+            this.state.insats.toTime +
+            " " +
+            moment(this.state.insats.date).format("DD/MM/YYYY"),
+        }),
+      });
+    } else {
+      // console.log("swap");
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: pushToken,
+          data: { extractData: "Some data" },
+          title: "Insatser bytta:",
+          body:
+            this.state.insats.insatsType +
+            " " +
+            moment(this.state.insats.date).format("DD/MM") +
+            ", " +
+            swapType +
+            " " +
+            moment(swapDate).format("DD/MM"),
+        }),
+      });
     }
   }
 
@@ -132,8 +198,9 @@ export default class Insats extends Component {
       .collection("insatser")
       .doc(this.state.insats.key);
     dbRef.delete().then((res) => {
-      console.log("Item removed from database");
+      // console.log("Item removed from database");
     });
+    this.sendNotification();
   }
 
   // frees booked personnel when deleting insats
@@ -182,7 +249,6 @@ export default class Insats extends Component {
           if (item == fromTime + "," + toTime + "," + date) {
             timeIndex = cnt;
             found = 1;
-            console.log(item);
           } else {
             cnt++;
           }
@@ -192,11 +258,11 @@ export default class Insats extends Component {
           updateDBRef.set({
             times: newTimes,
           });
-          return 0;
         }
+        i = 6;
       }
     }
-    return -1;
+    return 0;
   }
 
   updateInsats(insats, newFrom, newTo, newDate) {
@@ -210,7 +276,7 @@ export default class Insats extends Component {
         fromTime: newFrom,
         toTime: newTo,
         date: newDate,
-        helperName: insats.helperName,
+        helperID: insats.helperID,
         insatsType: insats.insatsType,
         freeText: insats.freeText,
       })
@@ -224,8 +290,7 @@ export default class Insats extends Component {
   };
 
   render() {
-    const { message, id } = this.state;
-    const { modalVisible } = this.state;
+    const { message, id, modalVisible } = this.state;
     const panStyle = {
       transform: this.state.pan.getTranslateTransform(),
     };
@@ -247,14 +312,14 @@ export default class Insats extends Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
-                  <Text style={{ fontSize: 22 }}>{message}!</Text>
-                  {/* <Text style={{ fontSize: 17 }}>
+                  <Text style={{ fontSize: 22 }}>{message}</Text>
+                  <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
-                    {this.state.insats.toTime}!
-                  </Text> */}
-                  {/* <Text style={{ fontSize: 17 }}>
-                    Datum: {this.state.insats.date}!
-                  </Text> */}
+                    {this.state.insats.toTime}
+                  </Text>
+                  <Text style={{ fontSize: 17 }}>
+                    Datum: {moment(this.state.insats.date).format("DD/MM/YYYY")}
+                  </Text>
                 </View>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
@@ -279,12 +344,13 @@ let styles = StyleSheet.create({
     paddingBottom: 10,
     borderColor: "black",
     borderWidth: 2,
-    // change background to dayColor somehow
     backgroundColor: "white",
     shadowOpacity: 0.2,
     alignItems: "center",
     justifyContent: "center",
     shadowRadius: 2,
+    zIndex: 20,
+    width: 140,
   },
 
   centeredView: {
@@ -314,9 +380,6 @@ let styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
   },
   buttonClose: {
     backgroundColor: "#2196F3",

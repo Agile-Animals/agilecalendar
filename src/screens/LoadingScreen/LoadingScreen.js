@@ -6,7 +6,11 @@ export default function LoadingScreen({ navigation }) {
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        navigation.replace("HomeScreen");
+        if (user.uid === "29iAmOUm7OPnDZMSpQtGJ6P2Get1") {
+          navigation.replace("PersonnelScreen");
+        } else {
+          navigation.replace("HomeScreen");
+        }
       } else {
         navigation.replace("Login");
       }

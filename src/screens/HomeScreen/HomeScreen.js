@@ -3,22 +3,15 @@ import {
   StyleSheet,
   Text,
   ActivityIndicator,
-  Alert,
   View,
-  Animated,
-  Pressable,
   ImageBackground,
-  useWindowDimensions,
   ScrollView,
-  PanResponder,
-  TouchableOpacity,
 } from "react-native";
 import firebase from "../../database/firebaseDb";
 import { loggingOut } from "../../API/firebaseMethods";
 import Draggable from "../../components/Draggable";
 import Insats from "../../components/Insats";
-import { Button, ThemeProvider } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { Button } from "react-native-elements";
 import moment from "moment";
 
 export default class HomeScreen extends Component {
@@ -92,7 +85,8 @@ export default class HomeScreen extends Component {
       today: moment().format("YYYY-MM-DD"),
       weekStart: moment().startOf("isoWeek").format("YYYY-MM-DD"),
       weekEnd: moment().endOf("isoWeek").format("YYYY-MM-DD"),
-      scrollOfsetY: "",
+      scrollOfsetY: 0,
+      initialScrollOffsetY: 0,
       layouts: [],
       insatsHeight: 0,
     };
@@ -109,22 +103,15 @@ export default class HomeScreen extends Component {
   getCollection = (querySnapshot) => {
     const insatser = [];
     querySnapshot.forEach((res) => {
-      const {
-        boende,
-        fromTime,
-        toTime,
-        date,
-        helperName,
-        insatsType,
-        freeText,
-      } = res.data();
+      const { boende, fromTime, toTime, date, helperID, insatsType, freeText } =
+        res.data();
       insatser.push({
         key: res.id,
         boende,
         fromTime,
         toTime,
         date,
-        helperName,
+        helperID,
         insatsType,
         freeText,
       });
@@ -136,9 +123,9 @@ export default class HomeScreen extends Component {
   };
 
   // basic firestore logout function
-  logOut() {
-    loggingOut();
-    this.props.navigation.replace("Login");
+  async logOut() {
+    let testLogout = await loggingOut();
+    if (testLogout === 0) this.props.navigation.replace("Login");
   }
 
   // used to set swedish names of days
@@ -158,7 +145,7 @@ export default class HomeScreen extends Component {
           }
           this.state.days[dayIndex] +=
             " " +
-            moment(this.state.weekStart).add(dayIndex, "day").format("MM-DD");
+            moment(this.state.weekStart).add(dayIndex, "day").format("DD/MM");
         }
       }
     }
@@ -190,6 +177,7 @@ export default class HomeScreen extends Component {
         .format("YYYY-MM-DD"),
     });
     this.state.layouts = [];
+    this.scrollToInitialPosition();
   }
 
   // updates layouts array with the data of any insatser
@@ -201,7 +189,7 @@ export default class HomeScreen extends Component {
     fromTime,
     toTime,
     date,
-    helperName,
+    helperID,
     insatsType,
     freeText
   ) {
@@ -215,20 +203,23 @@ export default class HomeScreen extends Component {
       fromTime: fromTime,
       toTime: toTime,
       date: date,
-      helperName: helperName,
+      helperID: helperID,
       insatsType: insatsType,
       freeText: freeText,
     });
   }
 
-  // used to get the height of insatsblock on screen
+  // used to get the height of an insatsblock on screen and set how far
+  // we need to scroll down to show 07:00 as the first timeslot
   getLayoutHeight(layout) {
     this.setState({
       insatsHeight: layout.height,
+      initialScrollOffsetY: layout.height * 7,
+      // scrollOfsetY: layout.height * 7,
     });
   }
 
-  // renders all insatser that can be dragged as insatser components and empty <view> for
+  // renders all insatser that can be dragged as insatser components
   renderDays(time, day, index, dayIndex, dayColor) {
     for (let i = 0; i < 24; i++) {
       for (let i = 0; i < this.state.insatser.length; ++i) {
@@ -247,12 +238,13 @@ export default class HomeScreen extends Component {
                   this.state.insatser[i].fromTime,
                   this.state.insatser[i].toTime,
                   this.state.insatser[i].date,
-                  this.state.insatser[i].helperName,
+                  this.state.insatser[i].helperID,
                   this.state.insatser[i].insatsType,
                   this.state.insatser[i].freeText
                 );
               }}
               key={this.state.insatser[i].key}
+              style={{ elevation: 1 }}
             >
               <Insats
                 message={this.state.insatser[i].insatsType}
@@ -267,11 +259,49 @@ export default class HomeScreen extends Component {
         }
       }
     }
-    return (
-      <View style={styles.instatsListEmpty} key={index}>
-        <Text></Text>
-      </View>
-    );
+    if (dayIndex == 1) {
+      return (
+        <View style={styles.instatsListEmpty1} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 2) {
+      return (
+        <View style={styles.instatsListEmpty2} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 3) {
+      return (
+        <View style={styles.instatsListEmpty3} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 4) {
+      return (
+        <View style={styles.instatsListEmpty4} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 5) {
+      return (
+        <View style={styles.instatsListEmpty5} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 6) {
+      return (
+        <View style={styles.instatsListEmpty6} key={index}>
+          <Text></Text>
+        </View>
+      );
+    } else if (dayIndex == 7) {
+      return (
+        <View style={styles.instatsListEmpty7} key={index}>
+          <Text></Text>
+        </View>
+      );
+    }
   }
 
   // sets how far we have scrolled in the scrollview to keep y values correct when dragging insatser
@@ -301,6 +331,14 @@ export default class HomeScreen extends Component {
       this.state.layouts.splice(keyToSplice2, 1);
     }
   }
+
+  // Scrolls the ScrollView on HomeScreen as far as the value stored in initialScrollOffsetY
+  // whose value is changed in
+  scrollToInitialPosition = () => {
+    this.scrollViewRef.scrollTo({
+      y: this.state.initialScrollOffsetY,
+    });
+  };
 
   // render function
   render() {
@@ -359,6 +397,7 @@ export default class HomeScreen extends Component {
           <View style={styles.button}>
             <View style={{ width: 120, backgroundColor: "white" }}>
               <Button
+                style={{ width: 120, backgroundColor: "white" }}
                 title={
                   "Vecka " +
                   moment(this.state.weekStart).add(-1, "week").format("WW")
@@ -370,9 +409,27 @@ export default class HomeScreen extends Component {
           </View>
 
           <View style={styles.header}>
-            <Text category="h2" style={{ fontSize: 20 }}>
-              Vecka {moment(this.state.weekStart).format("WW")}
-            </Text>
+            <View style={{ width: 120, backgroundColor: "white" }}>
+              <Button
+                title={
+                  "Vecka " + moment().startOf("isoWeek").format("WW") + " (nu)"
+                }
+                onPress={() =>
+                  this.setWeek(
+                    moment().startOf("isoWeek").format("WW") -
+                      moment(this.state.weekStart).format("WW")
+                  )
+                }
+                type="outline"
+              />
+            </View>
+            <View style={styles.header}>
+              <Text style={{ fontSize: 18 }}>
+                {" "}
+                Du ser just nu vecka:{" "}
+                {moment(this.state.weekStart).format("WW")}{" "}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.button}>
@@ -420,9 +477,16 @@ export default class HomeScreen extends Component {
           })}
         </View>
 
-        <ScrollView onScroll={this.handleScroll} scrollEnabled={!dragging}>
+        <ScrollView
+          ref={(ref) => {
+            this.scrollViewRef = ref;
+          }}
+          onLayout={this.scrollToInitialPosition}
+          onScroll={this.handleScroll}
+          scrollEnabled={!dragging}
+        >
           <View style={styles.listContainer}>
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return (
                   <Text style={styles.instatsList} key={index}>
@@ -432,19 +496,19 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, today, index, 1, "monday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday2, index, 2, "tuesday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(
                   item,
@@ -456,36 +520,42 @@ export default class HomeScreen extends Component {
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday4, index, 4, "thursday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday5, index, 5, "friday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday6, index, 6, "saturday color");
               })}
             </View>
 
-            <View style={{ width: 140, backgroundColor: "#ff8c00" }}>
+            <View style={{ width: 140, backgroundColor: "white" }}>
               {this.state.times.map((item, index) => {
                 return this.renderDays(item, aday7, index, 7, "sunday color");
               })}
             </View>
 
-            <View style={{ width: 140 }}>
+            <View
+              style={{
+                width: "100%",
+                backgroundColor: "white",
+                elevation: -20,
+              }}
+            >
               <Text
+                style={styles.soptunna}
                 onLayout={(event) => {
                   this.getLayoutHeight(event.nativeEvent.layout);
                 }}
-                style={styles.instatsList}
               >
                 Soptunna
               </Text>
@@ -509,38 +579,90 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   listContainer: {
-    backgroundColor: "rgba(49, 118, 197, 1.0)",
+    backgroundColor: "white",
     width: "100%",
     flex: 1,
     flexDirection: "row",
     borderRadius: 10,
   },
-  item: {
-    height: 43.5,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   instatsList: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "rgba(49, 118, 197, 1.0)",
+    borderColor: "white",
     borderWidth: 2,
     backgroundColor: "#ccc",
     shadowOpacity: 0.2,
-    shadowRadius: 2,
   },
-  instatsListEmpty: {
+  instatsListEmpty1: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 7,
-    borderColor: "rgba(49, 118, 197, 1.0)",
+    borderColor: "white",
     borderWidth: 2,
-    backgroundColor: "#ccc",
+    backgroundColor: "#45bf15",
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    zIndex: -2,
+  },
+  instatsListEmpty2: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#399bc2",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  instatsListEmpty3: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#c4c1b6",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  instatsListEmpty4: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#c4b347",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  instatsListEmpty5: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#e3e63c",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  instatsListEmpty6: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#e89eb4",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  instatsListEmpty7: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "#eb7852",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
   moln: {
     marginTop: 43.33,
@@ -551,7 +673,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     height: 130,
     width: 480,
-    zIndex: 20,
+    zIndex: 2,
     backgroundColor: "rgba(49, 118, 197, 1.0)",
   },
   button: {
@@ -571,13 +693,17 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     alignSelf: "center",
   },
-
-  test: {
-    width: 140,
-    color: "red",
-    backgroundColor: "rgba(49, 118, 197, 1.0)",
-  },
   preloader: {
     backgroundColor: "blue",
+  },
+  soptunna: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 7,
+    borderColor: "white",
+    borderWidth: 2,
+    backgroundColor: "white",
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
 });

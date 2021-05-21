@@ -8,14 +8,13 @@ import {
   ScrollView,
   Keyboard,
 } from "react-native";
-import { useForm, Controller } from "react-hook-form";
 import { signIn } from "../../API/firebaseMethods";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Button, Input, Text, ThemeProvider } from "react-native-elements";
+import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Dimensions } from "react-native";
 import { useWindowDimensions } from "react-native";
-// function for user login 
+import * as Notifications from "expo-notifications";
+
+// function for user login
 const LoginScreen = ({ navigation }) => {
   const guidelineBaseWidth = 350;
   const guidelineBaseHeight = 680;
@@ -24,10 +23,7 @@ const LoginScreen = ({ navigation }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const SunIcon = (props) => <Icon {...props} name="sun-outline" />;
-  const [text, onChangeText] = React.useState("Useless Text");
-  const [number, onChangeNumber] = React.useState(null);
-// function for pop out alert window if any requried information is missing 
+  // function for pop out alert window if any requried information is missing
   const onSubmit = async () => {
     if (!password && !email) {
       Alert.alert("E-postadress och Lösenord saknas.");
@@ -42,13 +38,14 @@ const LoginScreen = ({ navigation }) => {
       setEmail("");
       setPassword("");
     } else {
-      await signIn(email, password);
+      const pushToken = await Notifications.getExpoPushTokenAsync();
+      let loginTest = await signIn(email, password, pushToken.data);
       setEmail("");
       setPassword("");
-      navigation.navigate("Loading");
+      if (loginTest === 0) navigation.navigate("Loading");
     }
   };
-// return for input user email and password to be able to login 
+  // return for input user email and password to be able to login
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -58,7 +55,7 @@ const LoginScreen = ({ navigation }) => {
           <ScrollView onBlur={Keyboard.dismiss}>
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your email"
+              placeholder="E-post"
               placeholderTextColor="white"
               value={email}
               onChangeText={(email) => setEmail(email)}
@@ -68,7 +65,7 @@ const LoginScreen = ({ navigation }) => {
 
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your password"
+              placeholder="Lösenord"
               placeholderTextColor="white"
               value={password}
               onChangeText={(password) => setPassword(password)}
@@ -78,7 +75,7 @@ const LoginScreen = ({ navigation }) => {
               <Text style={styles.buttonText}>Logga in</Text>
             </TouchableOpacity>
 
-            <Text style={styles.inlineText}>Create account</Text>
+            <Text style={styles.inlineText}>Skapa konto</Text>
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("Sign Up")}
@@ -91,7 +88,7 @@ const LoginScreen = ({ navigation }) => {
     </ScrollView>
   );
 };
-//styling here 
+//styling here
 const styles = StyleSheet.create({
   container: {
     height: "100%",

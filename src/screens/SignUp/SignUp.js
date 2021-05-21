@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { registration } from "../../API/firebaseMethods";
+import * as Notifications from "expo-notifications";
 
 export default function SignUp({ navigation }) {
   const [firstName, setFirstName] = useState("");
@@ -26,21 +27,22 @@ export default function SignUp({ navigation }) {
     setPassword("");
     setConfirmPassword("");
   };
-  // function for pop out alert window if any requried information is missing 
-  const handlePress = () => {
+  // function for pop out alert window if any requried information is missing
+  const handlePress = async () => {
     if (!firstName) {
-      Alert.alert("First name is required");
+      Alert.alert("Namn måste fyllas i.");
     } else if (!email) {
-      Alert.alert("Email field is required.");
+      Alert.alert("E-mail måste fyllas i.");
     } else if (!password) {
-      Alert.alert("Password field is required.");
+      Alert.alert("Lösenord måste fyllas i.");
     } else if (!confirmPassword) {
       setPassword("");
-      Alert.alert("Confirm password field is required.");
+      Alert.alert("Lösenord måste bekräftas.");
     } else if (password !== confirmPassword) {
-      Alert.alert("Password does not match!");
+      Alert.alert("Lösenorden är inte samma.");
     } else {
-      registration(email, password, lastName, firstName);
+      const pushToken = await Notifications.getExpoPushTokenAsync();
+      registration(email, password, lastName, firstName, pushToken.data);
       navigation.navigate("Loading");
       emptyState();
     }
@@ -50,19 +52,19 @@ export default function SignUp({ navigation }) {
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
-          <Text style={styles.text}>Create an account </Text>
+          <Text style={styles.text}>Skapa ny konto Här!  </Text>
 
           <ScrollView onBlur={Keyboard.dismiss}>
             <TextInput
               style={styles.textInput}
-              placeholder="First name"
+              placeholder="Namn"
               placeholderTextColor="white"
               value={firstName}
               onChangeText={(name) => setFirstName(name)}
             />
             <TextInput
               style={styles.textInput}
-              placeholder="Last name"
+              placeholder="Efternam"
               placeholderTextColor="white"
               value={lastName}
               onChangeText={(name) => setLastName(name)}
@@ -70,7 +72,7 @@ export default function SignUp({ navigation }) {
 
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your email"
+              placeholder="E-mail"
               placeholderTextColor="white"
               value={email}
               onChangeText={(email) => setEmail(email)}
@@ -80,7 +82,7 @@ export default function SignUp({ navigation }) {
 
             <TextInput
               style={styles.textInput}
-              placeholder="Enter your password"
+              placeholder="Lösenord"
               placeholderTextColor="white"
               value={password}
               onChangeText={(password) => setPassword(password)}
@@ -88,22 +90,22 @@ export default function SignUp({ navigation }) {
             />
             <TextInput
               style={styles.textInput}
-              placeholder="Retype your password to confirm"
+              placeholder="Skriv in samma lösenord igen"
               placeholderTextColor="white"
               value={confirmPassword}
               onChangeText={(password2) => setConfirmPassword(password2)}
               secureTextEntry={true}
             />
             <TouchableOpacity style={styles.button} onPress={handlePress}>
-              <Text style={styles.buttonText}>Sign Up</Text>
+              <Text style={styles.buttonText}>Skapa konto</Text>
             </TouchableOpacity>
 
-            <Text style={styles.inlineText}>Already have an account?</Text>
+            <Text style={styles.inlineText}>Har du redan ett konto?</Text>
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("Login")}
             >
-              <Text style={styles.buttonText}>Sign In</Text>
+              <Text style={styles.buttonText}>Logga in</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -111,7 +113,7 @@ export default function SignUp({ navigation }) {
     </ScrollView>
   );
 }
-// styling here 
+// styling here
 const styles = StyleSheet.create({
   container: {
     height: "100%",
