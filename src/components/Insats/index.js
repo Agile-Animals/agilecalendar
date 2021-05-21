@@ -312,14 +312,14 @@ export default class Insats extends Component {
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <View style={styles.modalText}>
-                  <Text style={{ fontSize: 22 }}>{message}</Text>
+                  {/* <Text style={{ fontSize: 22 }}>{message}</Text>
                   <Text style={{ fontSize: 17 }}>
                     Från: {this.state.insats.fromTime} - Till:{" "}
                     {this.state.insats.toTime}
                   </Text>
                   <Text style={{ fontSize: 17 }}>
                     Datum: {moment(this.state.insats.date).format("DD/MM/YYYY")}
-                  </Text>
+                  </Text> */}
                 </View>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
