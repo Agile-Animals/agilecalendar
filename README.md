@@ -6,6 +6,7 @@
 * [Main features](#main-features)
 * [Installation](#installation)
 * [Run the program](#Run-the-program)
+* [Use app on tablet](#Use-app-on-tablet)
 * [Contact](#contact)
 
 
@@ -56,6 +57,12 @@ Expo start
 2.  it will open a server for expo QR kod
 3.  Decide how to open by scanning the QR code or open the app via simulator 
 4.  then you would able to see the app while editing 
+
+
+
+## Use app on tablet
+
+För android processen är bara installera expo-applikationen och skannar sedan QR-koden genom att bara klicka på Skanna QR-kod-knappen.
 
 
 
