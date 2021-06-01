@@ -65,7 +65,9 @@ Expo start
 ## Contact
 
 Sumeia Jemal - sumeia.jemal.said@gmail.com
+
 Martin Larsson - martin.larsson90@hotmail.com
+
 Abo Khalaf, Muhamed Kheer - moody_kh_90@Hotmail.com
 
 Project Link: [https://github.com/Agile-Animals/agilecalendar.git](https://github.com/Agile-Animals/agilecalendar.git)
