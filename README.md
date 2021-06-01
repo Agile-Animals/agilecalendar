@@ -37,15 +37,15 @@ git clone https://github.com/Agile-Animals/agilecalendar.git
 ```
 2. Stand on the folder
 ```sh
-cd 
+cd agilecalendar
 ```
 3. install 
 ```sh
-npm install 
+npm install expo 
 ```
 4. 
 ```sh
-
+Expo start
 ```
 
 
@@ -53,31 +53,22 @@ npm install
 
 
 
-1.  
-2. 
-3. 
-4. 
-5. 
+1.  After start expo
+2.  it will open a server for expo QR kod
+3.  Decide how to open by scanning the QR code or open the app via simulator 
+4.  then you would able to see the app while editing 
 
-
-
-<!--  -->
-## 
-
-
-1. 
-2. 
-4. 
-5. 
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Sumeia jemal - sumeia.jemal.said@gmail.com
+Sumeia Jemal - sumeia.jemal.said@gmail.com
+Martin Larsson - martin.larsson90@hotmail.com
+Abo Khalaf, Muhamed Kheer - moody_kh_90@Hotmail.com
 
-Project Link: []()
+Project Link: [https://github.com/Agile-Animals/agilecalendar.git](https://github.com/Agile-Animals/agilecalendar.git)
 
 
 
